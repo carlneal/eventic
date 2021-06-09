@@ -1,0 +1,52 @@
+{
+    "devDependencies": {
+        "@adactive/bootstrap-tagsinput": "^0.8.2",
+        "@fortawesome/fontawesome-free": "^5.8.2",
+        "@fullcalendar/core": "^4.2.0",
+        "@fullcalendar/daygrid": "^4.2.0",
+        "@fullcalendar/timegrid": "^4.2.0",
+        "@symfony/webpack-encore": "^0.27.0",
+        "add-to-calendar-buttons": "^1.0.0",
+        "animate.css": "^3.7.2",
+        "autoprefixer": "^9.6.0",
+        "bazinga-translator": "^2.6.6",
+        "blazy": "^1.8.2",
+        "core-js": "^3.0.0",
+        "fontawesome-iconpicker": "^3.2.0",
+        "handlebars": "^4.4.5",
+        "jquery": "^3.4.1",
+        "jquery-confirm": "^3.3.4",
+        "jquery-datetimepicker": "^2.5.21",
+        "jquery-parallax.js": "^1.5.0",
+        "marker-clusterer": "^1.0.2",
+        "moment": "^2.24.0",
+        "moment-timezone": "^0.5.27",
+        "node-sass": "^4.12.0",
+        "nouislider": "^14.0.2",
+        "pace-progressbar": "^1.0.8",
+        "pnotify": "^4.0.0",
+        "popper.js": "^1.15.0",
+        "postcss-loader": "3.0.0",
+        "readmore-js": "3.0.0-beta-1",
+        "sass-loader": "7.0.1",
+        "select2": "^3.5.1",
+        "snazzy-info-window": "^1.1.1",
+        "summernote": "^0.8.12",
+        "typeahead.js": "^0.11.1",
+        "waypoints": "^4.0.1",
+        "webpack-notifier": "^1.6.0",
+        "wnumb": "^1.1.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    },
+    "dependencies": {
+        "kovarp-jquery-cookiebar": "^1.2.4",
+        "material-scrolltop": "^2.0.1"
+    }
+}

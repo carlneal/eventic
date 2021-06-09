@@ -1,0 +1,123 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^7.1.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "a2lix/translation-form-bundle": "^3.0",
+        "beberlei/doctrineextensions": "^1.2",
+        "cmen/google-charts-bundle": "^3.2",
+        "coresphere/console-bundle": "dev-master",
+        "debril/rss-atom-bundle": "^5.0",
+        "defuse/php-encryption": "^2.2",
+        "dompdf/dompdf": "^0.8.4",
+        "excelwebzone/recaptcha-bundle": "^1.5",
+        "exercise/htmlpurifier-bundle": "^3.0",
+        "friendsofsymfony/comment-bundle": "2.1.*",
+        "friendsofsymfony/jsrouting-bundle": "^2.4",
+        "friendsofsymfony/user-bundle": "~2.0",
+        "geoip2/geoip2": "^2.9",
+        "hwi/oauth-bundle": "^0.6.3",
+        "jms/translation-bundle": "^1.4",
+        "knplabs/doctrine-behaviors": "^1.6",
+        "knplabs/knp-paginator-bundle": "^3.0",
+        "knplabs/knp-time-bundle": "^1.9",
+        "liip/imagine-bundle": "^2.1",
+        "nelmio/cors-bundle": "^2.0",
+        "ninsuo/symfony-collection": "^2.1",
+        "paypal/rest-api-sdk-php": "*",
+        "payum/offline": "^1.5",
+        "payum/paypal-express-checkout-nvp": "^1.5",
+        "payum/payum-bundle": "^2.3",
+        "payum/stripe": "^1.5",
+        "php-http/guzzle6-adapter": "~1.1.1",
+        "php-http/httplug-bundle": "~1.13",
+        "phpoffice/phpspreadsheet": "^1.10",
+        "presta/sitemap-bundle": "^2.1",
+        "pugx/autocompleter-bundle": "^1.4",
+        "sensio/framework-extra-bundle": "^5.1",
+        "stof/doctrine-extensions-bundle": "^1.3",
+        "symfony/asset": "4.4.*",
+        "symfony/console": "4.4.*",
+        "symfony/dotenv": "4.4.*",
+        "symfony/expression-language": "4.4.*",
+        "symfony/flex": "^1.1",
+        "symfony/form": "4.4.*",
+        "symfony/framework-bundle": "4.4.*",
+        "symfony/http-client": "4.4.*",
+        "symfony/intl": "4.4.*",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/orm-pack": "*",
+        "symfony/process": "4.4.*",
+        "symfony/requirements-checker": "^1.1",
+        "symfony/security-bundle": "4.4.*",
+        "symfony/serializer-pack": "*",
+        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/translation": "4.4.*",
+        "symfony/twig-bundle": "4.4.*",
+        "symfony/validator": "4.4.*",
+        "symfony/web-link": "4.4.*",
+        "symfony/webpack-encore-bundle": "^1.6",
+        "symfony/yaml": "4.4.*",
+        "twig/extensions": "^1.5",
+        "vich/uploader-bundle": "^1.8",
+        "welp/mailchimp-bundle": "^1.2",
+        "willdurand/js-translation-bundle": "^2.6",
+        "yellowskies/qr-code-bundle": "^1.2"
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.2",
+        "symfony/debug-pack": "*",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "*",
+        "symfony/web-server-bundle": "4.3.*"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "requirements-checker": "script"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": "true",
+            "require": "4.4.*"
+        }
+    }
+}
