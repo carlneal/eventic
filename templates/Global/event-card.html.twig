@@ -1,0 +1,92 @@
+{% if eventDate is defined %}
+    {% set displayedEventDate = eventDate %}
+{% else %}
+    {% set displayedEventDate = event.getFirstOnSaleEventDate %}
+{% endif %}
+
+{% if customLink is defined %}
+    {% set link = customLink %}
+{% else %}
+    {% set link = path('event', { slug : event.slug }) %}
+{% endif %}
+
+<div class="card card-event">
+    <div class="img-wrap img-lazy-load" data-src="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}">
+        <a href="{{ link }}"></a>
+        <div class="loader"></div>
+    </div>
+    <div class="info-wrap">
+        {% if (not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE')) and hideFavoriteButton is not defined %}
+            <div class="event-favorite">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    {% if event.isAddedToFavoritesBy(app.user) %}
+                        <button class="event-favorites-remove" data-target="{{ path('dashboard_attendee_favorites_remove', { slug : event.slug }) }}" data-toggle="tooltip" title="{{ "Remove from favorites"|trans }}"><i class="fas fa-heart"></i></button>
+                        {% else %}
+                        <button class="event-favorites-add" data-target="{{ path('dashboard_attendee_favorites_add', { slug : event.slug }) }}" data-toggle="tooltip" title="{{ "Add to favorites"|trans }}"><i class="far fa-heart"></i></button>
+                        {% endif %}
+                    {% else %}
+                    <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" data-toggle="tooltip" title="{{ "Add to favorites"|trans }}"><i class="far fa-heart"></i></a>
+                    {% endif %}
+            </div>
+        {% endif %}
+        <div class="event-info">
+            <h5>
+                <a href="{{ link }}" class="text-dark">{{ event.name }}</a>
+            </h5>
+
+            <div class="text-black-50 small">
+                {% if displayedEventDate %}
+                    {% if displayedEventDate.venue %}
+                        {{ displayedEventDate.venue.name }}: {{ displayedEventDate.venue.city ~ ', ' ~ displayedEventDate.venue.country.name }}
+                    {% else %}
+                        {{ "Online"|trans }}
+                    {% endif %}
+                {% endif %}
+                &nbsp;
+            </div>
+            <div class="text-black-50 small">
+                {% if displayedEventDate %}
+                    {% if displayedEventDate.startdate %}
+                        {{ displayedEventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                    {% endif %}
+                {% endif %}
+                &nbsp;
+            </div>
+        </div>
+        {% if hidePrice is not defined %}
+            <div class="price-wrap">
+                {% if event.isFree %}
+                    <span class="price-new">{{ "Free"|trans }}</span>
+                {% else %}
+                    {% if displayedEventDate %}
+                        <span class="price-new">{{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ event.getCheapestTicket.getSalePrice }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if orderReference is defined %}
+            <div class="order-reference">
+                <a href="{{ path('dashboard_attendee_order_details', {reference: orderReference}) }}"><small>{{ "Order"|trans }} #{{ orderReference }}</small></a>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+    </div>
+    <span class="event-category">
+        {% if ticketName is defined %}
+            <b>{{ ticketName }}</b> <br>
+        {% endif %}
+        {% if ticketsCount is defined %}
+            {{ ticketsCount }} {{ ticketsCount > 1 ? "tickets"|trans : "ticket"|trans }}
+        {% else %}
+            {{ event.category.name }}
+        {% endif %}
+    </span>
+    {% if displayedEventDate %}
+        {% if displayedEventDate.startdate %}
+            <div class="event-date text-center">
+                <div class="event-month bg-primary text-light">{{ displayedEventDate.startdate|localizeddate('none', 'none', app.request.locale, null, "MMM")|upper }}</div>
+                <div class="event-day bg-white">{{ displayedEventDate.startdate|localizeddate('none', 'none', app.request.locale, null, "d") }}</div>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

@@ -1,0 +1,92 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Help center'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    <section class="section-intro help-center-hero-bg padding-y-lg padding-x-md">
+        <div class="row">
+            <div class="col-sm-6 mx-auto">
+                <article class="white text-center mb-5">
+                    <h1 class="display-4">{{ "How can we help?"|trans }}</h1>
+                    <form class="mb-3">
+                        <div class="input-icon">
+                            <i class="fa fa-search mt-2"></i>
+                            <input name="keyword" class="form-control" placeholder="{{ "Search for answers"|trans }}" type="text" value="{{ app.Request.get('keyword') }}">
+                        </div>
+                    </form>
+                    <p>{{ "Organizers, attendees, this support center is intended to quickly reply to your questions, if still don't find answers, please contact us, w e will be happy to receive your inquiry"|trans }}</p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="{{ services.getSetting("app_layout") }}">
+
+        <section class="padding-y-lg">
+            <div class="row">
+
+                {% if app.request.get('keyword') %}
+                    {% set searchresults = services.getHelpCenterArticles({"keyword":app.request.get('keyword')}).getQuery().getResult() %}
+                    <div class="col-12 mb-3">
+                        <article class="box h-100 padding-y-lg">
+                            <strong>{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': searchresults|length}) ~ " " ~ "for"|trans ~ ' "' ~ app.request.get('keyword') ~ '"' }}</strong>
+                            {% if searchresults|length %}
+                                <hr>
+                                {% for article in searchresults %}
+                                    <p><a href="{{ path('help_center_article', {slug: article.slug}) }}">{{ article.category.name }} <i class="fas fa-chevron-right ml-1 mr-1"></i> {{ article.title }}</a></p>
+                                {% endfor %}
+                            {% endif %}
+                        </article>
+                    </div>
+                {% else %}
+
+                    {% for category in services.getHelpCenterCategories({"parent": "none"}).getQuery().getResult() %}
+
+                        <div class="col-md-6 mb-3">
+                            <article class="box h-100 padding-y-lg">
+                                <figure class="itembox text-center">
+                                    <span class="mt-2 icon-wrap rounded icon-lg bg-primary"><i class="{{ category.icon }}  white"></i></span>
+                                    <figcaption class="text-wrap">
+                                        <h5 class="title">{{ category.name }}</h5>
+                                    </figcaption>
+                                </figure>
+
+                                <hr>
+
+                                {% for article in services.getHelpCenterArticles({"category":category.slug, "featured": true}).getQuery().getResult() %}
+                                    <p><a href="{{ path('help_center_article', {slug: article.slug}) }}">{{ article.title }}</a></p>
+                                    {% endfor %}
+
+                                <hr>
+
+                                <a class="btn btn-outline-primary btn-block" href="{{ path('help_center_category', { slug: category.slug }) }}">{{ "See more articles"|trans }}
+                                    {% if app.request.locale == 'ar' %}
+                                        <i class="fas fa-chevron-left mr-3"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-right ml-3"></i>
+                                    {% endif %}
+                                </a>
+
+                            </article>
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    {% include "Global/support-box.html.twig" %}
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+{% endblock %}

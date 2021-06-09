@@ -1,0 +1,231 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = organizer.name %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <main class="col-12">
+
+                    {% if is_granted('ROLE_ORGANIZER') %}
+                        {% if app.user.organizer == organizer %}
+                            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('<a href="'~ path('dashboard_organizer_profile') ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to edit your profile'|trans) } %}
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="shadow rounded overflow-hidden">
+
+                        {% if organizer.coverName %}<div class="organizer-profile-cover parallax-window" data-parallax="scroll" data-image-src="{{asset(organizer.getCoverPath)}}"></div>{% endif %}
+
+                        <div class="row">
+                            <div class="col-12 col-lg-4">
+                                <div class="organizer-profile-sidebar text-center {% if not organizer.coverName %}mt-3 mb-3{% endif %}">
+
+                                    <span class="avatar organizer-profile-logo" style="background: url('{{ organizer.logoName ? asset(organizer.getLogoPath) : organizer.getLogoPlaceholder }}');"></span>
+
+                                    <h4 class="font-weight-bold text-center my-5">{{ organizer.name }}</h4>
+
+                                    {% if organizer.hasSocialMedia %}
+
+                                        <ul class="list-inline mb-0">
+                                            {% if organizer.website %}
+                                                <li class="list-inline-item">
+                                                    <a href="{% if 'http://' not in organizer.website and 'https://' not in organizer.website %}http://{% endif %}{{ organizer.website }}"  class="display-inline-block mr-3" target="_blank"><i class="icon fas fa-globe fa-lg fa-fw"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            {% if organizer.email %}
+                                                <li class="list-inline-item">
+                                                    <a href="mailto:{{ organizer.email }}"  class="display-inline-block mr-3" target="_blank"><i class="icon fas fa-at fa-lg fa-fw"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            {% if organizer.phone %}
+                                                <li class="list-inline-item">
+                                                    <a href="tel:{{ organizer.phone }}" class="display-inline-block mr-3"><i class="icon fas fa-phone fa-lg fa-fw"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            {% if organizer.facebook %}
+                                                <li class="list-inline-item">
+                                                    <a href="{% if 'http://' not in organizer.facebook and 'https://' not in organizer.facebook %}http://{% endif %}{{ organizer.facebook }}" class="display-inline-block mr-3" target="_blank"><i class="icon fab fa-facebook-f fa-lg fa-fw"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            {% if organizer.twitter %}
+                                                <li class="list-inline-item">
+                                                    <a href="{% if 'http://' not in organizer.twitter and 'https://' not in organizer.twitter %}http://{% endif %}{{ organizer.twitter }}" class="display-inline-block mr-3" target="_blank"><i class="icon fab fa-twitter fa-lg fa-fw"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            {% if organizer.googleplus %}
+                                                <a href="{% if 'http://' not in organizer.googleplus and 'https://' not in organizer.googleplus %}http://{% endif %}{{ organizer.googleplus }}" class="display-inline-block mr-3" target="_blank"><i class="icon fab fa-google-plus fa-lg fa-fw"></i></a>
+                                                {% endif %}
+                                                {% if organizer.instagram %}
+                                                <a href="{% if 'http://' not in organizer.instagram and 'https://' not in organizer.instagram %}http://{% endif %}{{ organizer.instagram }}" class="display-inline-block mr-3" target="_blank"><i class="icon fab fa-instagram fa-lg fa-fw"></i></a>
+                                                {% endif %}
+                                                {% if organizer.linkedin %}
+                                                <a href="{% if 'http://' not in organizer.linkedin and 'https://' not in organizer.linkedin %}http://{% endif %}{{ organizer.linkedin }}" class="display-inline-block mr-3" target="_blank"><i class="icon fab fa-linkedin fa-lg fa-fw"></i></a>
+                                                {% endif %}
+                                        </ul>
+                                    {% endif %}
+
+                                    {% if organizer.description %}
+                                        <div class="py-4 px-4 text-muted line-height-2 readmore" data-collapsed-height="150" data-height-margin="20">
+                                            {{ organizer.description|raw|nl2br }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-8 bg-light">
+
+                                {% set publishedeventscount = services.getEvents({"count": true, elapsed: "all", organizer: organizer.slug}).getQuery().getSingleScalarResult() %}
+
+                                <div class="p-4 d-flex justify-content-end text-center">
+                                    <ul class="list-inline mb-0">
+                                        {% if organizer.categories|length %}
+                                            {% for category in organizer.categories %}
+                                                <li class="list-inline-item mr-3">
+                                                    <h5 class="font-weight-bold mb-0 d-block">
+                                                        <i class="{{ category.icon }}"></i>
+                                                    </h5>
+                                                    <small class="text-muted">
+                                                        {{ category.name }}
+                                                    </small>
+                                                </li>
+                                            {% endfor %}
+
+                                        {% endif %}
+                                        {% if organizer.country %}
+                                            <li class="list-inline-item mr-3">
+                                                <h5 class="font-weight-bold mb-0 d-block">
+                                                    <span class="flag flag-{{organizer.country.code|lower}}"></span>
+                                                </h5>
+                                                <small class="text-muted">
+                                                    {{ organizer.country.name }}
+                                                </small>
+                                            </li>
+                                        {% endif %}
+                                        <li class="list-inline-item mr-3">
+                                            <h5 class="font-weight-bold mb-0 d-block">{{ publishedeventscount }}</h5><small class="text-muted"> <i class="fas fa-calendar-alt fa-fw mr-1"></i>{{ "Events"|trans }}</small>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <h5 class="font-weight-bold mb-0 d-block">{{ organizer.followedby|length }}</h5><small class="text-muted"> <i class="fas fa-folder-plus mr-1"></i>{{ "Followers"|trans }}</small>
+                                        </li>
+                                        <li class="list-inline-item ml-3">
+                                            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE') %}
+                                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                    {% if organizer.isFollowedBy(app.user) %}
+                                                        <button class="organizer-unfollow btn btn-outline-primary btn-sm btn-block" data-target="{{ path('dashboard_attendee_following_remove', { slug : organizer.slug }) }}"><i class="fas fa-folder-minus"></i> {{ "Unfollow"|trans }}</button>
+                                                    {% else %}
+                                                        <button class="organizer-follow btn btn-outline-primary btn-sm btn-block" data-target="{{ path('dashboard_attendee_following_add', { slug : organizer.slug }) }}"><i class="fas fa-folder-plus"></i> {{ "Follow"|trans }}</button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary btn-sm btn-block"><i class="fas fa-folder-plus"></i> {{ "Follow"|trans }}</a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                {% set onsaleeventscount = services.getEvents({"count": true, elapsed: false, organizer: organizer.slug}).getQuery().getSingleScalarResult() %}
+                                {% set pasteventscount = services.getEvents({"count": true, elapsed: true, organizer: organizer.slug}).getQuery().getSingleScalarResult() %}
+                                <div class="py-4 px-4">
+                                    <ul class="nav nav-pills mb-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="pill" href="#organizer-onsale-events" role="tab" aria-controls="organizer-onsale-events" aria-selected="true">{{ "Events on sale"|trans }} ({{ onsaleeventscount }})</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="pill" href="#organizer-past-events" role="tab" aria-controls="organizer-past-events" aria-selected="false">{{ "Past events"|trans }} ({{ pasteventscount }})</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="organizer-onsale-events" role="tabpanel" aria-labelledby="organizer-onsale-events-tab">
+                                            {% if onsaleeventscount > 0 %}
+                                                {% for event in services.getEvents({elapsed: false, organizer: organizer.slug, limit: 10}).getQuery().getResult() %}
+                                                    {% include "Global/event-card.html.twig" with {event: event} %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% include "Global/message.html.twig" with { type: "info", message: ('No events on sale for now'|trans) } %}
+                                            {% endif %}
+                                            {% if onsaleeventscount > 10 %}
+                                                <a href="{{ path('events', { organizer: organizer.slug }) }}" class="btn btn-outline-primary mx-auto"><i class="fas fa-ticket-alt"></i> {{ "See all events on sale"|trans }}</a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="tab-pane fade" id="organizer-past-events" role="tabpanel" aria-labelledby="organizer-past-events">
+                                            {% if pasteventscount > 0 %}
+                                                {% for event in services.getEvents({elapsed: true, organizer: organizer.slug, limit: 10}).getQuery().getResult() %}
+                                                    {% include "Global/event-card.html.twig" with {event: event} %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% include "Global/message.html.twig" with { type: "info", message: ('No past events found'|trans) } %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if organizer.showvenuesmap and google_maps_api_key != "" %}
+                                    {% set venuescount = services.getVenues({"count": true, organizer: organizer.slug}).getQuery().getSingleScalarResult() %}
+                                    {% if venuescount %}
+                                        {% set venues = [] %}
+                                        {% for venue in services.getVenues({organizer: organizer.slug}).getQuery().getResult() %}
+                                            {% set venues = venues|merge([{"name": venue.name, "address":(venue.name ~ ": " ~venue.stringifyAddress), "lat": venue.lat, "lng": venue.lng, "link": (path('venue', { slug : venue.slug })), "image": (venue.images|length ? (asset(venue.images[0].getImagePath)): (venue.getImagePlaceholder) ) }]) %}
+                                        {% endfor %}
+
+                                        <div class="py-4 px-4">
+                                            <h4 class="mb-2"><i class="fas fa-compass mr-1"></i> {{ "Venues"|trans }}</h4>
+                                            <div id="venues-map" data-pin-path="{{ asset('assets/img/icons/pin.png') }}" data-venues="{{ venues|json_encode() }}" class="vh-90"></div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if organizer.youtubeurl %}
+                                    <div class="py-4 px-4">
+                                        <h4 class="mb-2"><i class="fab fa-youtube-square mr-1"></i> {{ "Video"|trans }}</h4>
+                                        <iframe width="100%" height="400" src="https://www.youtube.com/embed/{{organizer.youtubeurl|split('=')[1]}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                {% endif %}
+
+                                {% if organizer.showfollowers and organizer.followedby|length %}
+                                    <div class="py-4 px-4">
+                                        <h4 class="mb-2"><i class="fas fa-user-plus mr-1"></i> {{ "Followers"|trans }}</h4>
+                                        <div class="card border-0 card-body overflow-auto text-nowrap">
+                                            <div class="avatar-list py-4">
+                                                {% for user in organizer.followedby %}
+                                                    {% include "Global/user-avatar.html.twig" with { user: user, showusernametooltip: true } %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% set reviewscount = services.getReviews({"count": true, "organizer": organizer.slug}).getQuery().getSingleScalarResult() %}
+
+                                {% if organizer.showreviews and reviewscount %}
+                                    <div class="row mt-5 px-4">
+                                        <div class="col-12">
+                                            <h4 class="mb-2"><i class="fas fa-star mr-1"></i> {{ "Reviews"|trans }}</h4>
+                                        </div>
+                                        {% for review in services.getReviews({"organizer": organizer.slug, "limit": 8}).getQuery().getResult() %}
+                                            <div class="col-12 col-lg-6 py-4">
+                                                {% include "Global/user-review.html.twig" with { review : review, showuser: true, showevent: true } %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% if google_maps_api_key != "" %}
+        {{ encore_entry_script_tags('organizerprofile') }}
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap">
+        </script>
+        {% include "Global/organizer-info-box.html.twig" %}
+    {% endif %}
+{% endblock %}

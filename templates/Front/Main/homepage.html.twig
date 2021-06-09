@@ -1,0 +1,267 @@
+{% extends "Global/layout.html.twig" %}
+
+{% block title %}{{ services.getSetting("website_description_" ~ (app.request.get('_locale') ? app.request.get('_locale') : app.request.defaultLocale)) }}{% endblock %}
+
+{% block content %}
+
+    {% if herosettings.content == "events" and herosettings.events|length %}
+    <section class="section-main">
+        <div class="owl-init slider-main homepage-slider owl-carousel" data-items="1" data-dots="true" data-nav="true" data-autoplay="true" data-rtl="true">
+            {% for event in herosettings.events %}
+                <div class="item-slide img-lazy-load" data-src="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}">
+                    <div class="loader"></div>
+                    <div class="content-container">
+                        <div class="{{ services.getSetting("app_layout") }}">
+                            <div class="row-sm">
+                                <div class="col-md-12">
+
+                                    <h2 class="text-light mb-4">{{ event.name }}</h2>
+
+                                    {% if event.getFirstOnSaleEventDate %}
+                                        <h5 class="text-light mb-2"><i class="fas fa-map-marker-alt fa-fw"></i>
+                                            {% if event.getFirstOnSaleEventDate.venue %}
+                                                {{ event.getFirstOnSaleEventDate.venue.name }}: {{ event.getFirstOnSaleEventDate.venue.city ~ ', ' ~ event.getFirstOnSaleEventDate.venue.country.name }}
+                                            {% else %}
+                                                {{ "Online"|trans }}
+                                            {% endif %}
+                                        </h5>
+                                        {% if event.getFirstOnSaleEventDate.startdate %}
+                                            <h5 class="text-light mb-4"><i class="fas fa-clock fa-fw"></i> {{ event.getFirstOnSaleEventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</h5>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <a href="{{ path('event', { slug : event.slug }) }}" class="btn btn-light btn-lg"><i class="fas fa-ticket-alt fa-fw"></i> {{ "Buy tickets"|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+        {% if herosettings.content == "organizers" and herosettings.organizers|length %}
+        <section class="section-main">
+            <div class="owl-init slider-main homepage-slider owl-carousel" data-items="1" data-dots="true" data-nav="true" data-autoplay="true">
+                {% for user in herosettings.organizers %}
+                    {% if user.organizer.coverName %}
+                        <div class="item-slide img-lazy-load" data-src="{{ asset(user.organizer.getCoverPath) }}">
+                            <div class="loader"></div>
+                            <div class="content-container">
+                                <div class="{{ services.getSetting("app_layout") }}">
+                                    <div class="row-sm">
+                                        <div class="col-md-12">
+
+                                            <h2 class="text-light mb-4">{{ user.organizer.name }}</h2>
+                                            {% if user.organizer.description %}
+                                                <p class="text-light mb-4">{{ user.organizer.description|striptags }}</p>
+                                            {% endif %}
+                                            <a href="{{ path('events', { organizer : user.organizer.slug }) }}" class="btn btn-light btn-lg"><i class="fas fa-ticket-alt fa-fw"></i> {{ "Buy tickets"|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+            {% if herosettings.content == "custom" %}
+            <section class="section-intro bg-dark text-white text-center">
+                <div class="homepage-custom-hero-background d-flex flex-column img-lazy-load" {% if herosettings.customBackgroundName %}data-src="{{ herosettings.getCustomBackgroundPath }}"{% endif %}>
+                    <div class="{{ services.getSetting("app_layout") }} my-auto">
+
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12 text-center mx-auto">
+                                {% if herosettings.title %}
+                                    <h2 class="display-4 mt-3 mb-3">{{ herosettings.title }}</h2>
+                                {% endif %}
+                                {% if herosettings.paragraph %}
+                                    <h3 class="mb-5 font-weight-lighter">{{ herosettings.paragraph }}</h3>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if herosettings.showSearchBox %}
+                            <div class="row">
+                                <div class="col-lg-9 col-md-8 col-sm-12 mx-auto">
+                                    <div class="card">
+                                        <div class="card-body p30">
+                                            <form action="{{ path('events') }}">
+                                                <div class="form-row text-left">
+                                                    <div class="col-lg-3 col-sm-12">
+                                                        <label for="hero-search-category" class="form-label text-dark">{{ "Looking for"|trans }}</label>
+                                                        <select id="hero-search-category" class="select2" name="category" data-sort-options="1">
+                                                            <option value>{{ "Anything"|trans }}</option>
+                                                            {% for category in services.getCategories({}).getQuery().getResult() %}
+                                                                <option value="{{ category.slug }}">{{ category.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-12">
+                                                        <label for="hero-search-country" class="form-label text-dark">{{ "In"|trans }}</label>
+                                                        <select id="hero-search-country" class="select2" name="country" data-sort-options="1">
+                                                            <option value>{{ "Anywhere"|trans }}</option>
+                                                            {% for country in services.getCountries({}).getQuery().getResult() %}
+                                                                <option value="{{ country.slug }}">{{ country.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-12">
+                                                        <label for="hero-search-stardate" class="form-label text-dark">{{ "When"|trans }}</label>
+                                                        <select id="hero-search-stardate" class="select2" name="startdate">
+                                                            <option value>{{ "Anytime"|trans }}</option>
+                                                            <option value="today">{{ "Today"|trans }}</option>
+                                                            <option value="tomorrow">{{ "Tomorrow"|trans }}</option>
+                                                            <option value="thisweekend">{{ "This weekend"|trans }}</option>
+                                                            <option value="thisweek">{{ "This week"|trans }}</option>
+                                                            <option value="nextweek">{{ "Next week"|trans }}</option>
+                                                            <option value="thismonth">{{ "This month"|trans }}</option>
+                                                            <option value="nextmonth">{{ "Next month"|trans }}</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-sm-12 my-auto">
+                                                        <button class="btn btn-light btn-block" type="submit"><i class="fas fa-search"></i> {{ "Search"|trans }}</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+                {% if services.getSetting('homepage_show_search_box') == "yes" %}
+                    <section>
+                        <form action="{{ path('events') }}">
+                            <div class="row bg-gray m-0">
+                                <div class="col-md-4 p30 border-right-white">
+                                    <div class="form-group">
+                                        <label for="search-category" class="form-label text-dark">{{ "Looking for"|trans }}</label>
+                                        <select id="search-category" class="select2 bg-white" name="category" data-sort-options="1">
+                                            <option value>{{ "Anything"|trans }}</option>
+                                            {% for category in services.getCategories({}).getQuery().getResult() %}
+                                                <option value="{{ category.slug }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 p30 border-right-white">
+                                    <div class="form-group">
+                                        <label for="search-country" class="form-label text-dark">{{ "In"|trans }}</label>
+                                        <select id="search-country" class="select2 bg-white" name="country" data-sort-options="1">
+                                            <option value>{{ "Anywhere"|trans }}</option>
+                                            {% for country in services.getCountries({}).getQuery().getResult() %}
+                                                <option value="{{ country.slug }}">{{ country.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 p30">
+                                    <div class="form-group">
+                                        <label for="search-startdate" class="form-label text-dark">{{ "When" }}</label>
+                                        <select id="search-startdate" class="select2 bg-white" name="startdate">
+                                            <option value>{{ "Anytime"|trans }}</option>
+                                            <option value="today">{{ "Today"|trans }}</option>
+                                            <option value="tomorrow">{{ "Tomorrow"|trans }}</option>
+                                            <option value="thisweekend">{{ "This weekend"|trans }}</option>
+                                            <option value="thisweek">{{ "This week"|trans }}</option>
+                                            <option value="nextweek">{{ "Next week"|trans }}</option>
+                                            <option value="thismonth">{{ "This month"|trans }}</option>
+                                            <option value="nextmonth">{{ "Next month"|trans }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center mb-5">
+                                    <button class="btn btn-light" type="submit"><i class="fas fa-search"></i> {{ "Search"|trans }}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                {% endif %}
+
+                {% if services.getSetting('homepage_events_number') %}
+                    {% set homepageEvents = services.getEvents({"limit": services.getSetting('homepage_events_number')}).getQuery().getResult() %}
+                    {% if homepageEvents|length > 0 %}
+
+                        <section class="section-content padding-y-lg bg-white">
+                            <div class="{{ services.getSetting("app_layout") }}">
+                                <header class="section-headin mb-5">
+                                    <h4 class="title-section text-center text-muted text-uppercase">{{'Upcoming events' | trans}}</h4>
+                                </header>
+                                <div class="row-sm">
+                                    {% for event in homepageEvents %}
+                                        <div class="col-12 col-sm-6 col-lg-4">
+                                            {% include "Global/event-card.html.twig" with {event: event} %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endif %}
+
+                {% if services.getSetting('homepage_categories_number') > 0 %}
+                    <section class="section-content padding-y-lg">
+                        <div class="{{ services.getSetting("app_layout") }}">
+                            <header class="section-headin mb-5">
+                                <h4 class="title-section text-center text-muted text-uppercase">{{'Featured categories' | trans}}</h4>
+                            </header>
+                            <div class="row-sm">
+                                {% for category in services.getCategories({ "featured": true, "limit": services.getSetting('homepage_categories_number') }).getQuery().getResult() %}
+                                    <div class="col-md-3 col-sm-3">
+                                        {% include "Global/category-card.html.twig" %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% if services.getSetting('homepage_blogposts_number') > 0 %}
+                    {% set latestblogposts = services.getBlogPosts({"limit": services.getSetting('homepage_blogposts_number')}).getQuery().getResult() %}
+                    {% if latestblogposts|length %}
+                        <section class="section-content padding-y-lg bg-white">
+                            <div class="{{ services.getSetting("app_layout") }}">
+                                <header class="section-headin mb-5">
+                                    <h4 class="title-section text-center text-muted text-uppercase">{{'Lastest blog posts' | trans}}</h4>
+                                </header>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="owl-init owl-carousel" data-margin="15" data-items="5" data-dots="true" data-nav="false" data-autoplay="false">
+                                            {% for blogpost in latestblogposts %}
+                                                {% include "Global/blog-card.html.twig" with {blogpost: blogpost, thumbnailsize: [241, 241]} %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endif %}
+
+                {% if services.getSetting('homepage_show_call_to_action') == "yes" %}
+                    <section class="section-intro padding-y-lg">
+                        <div class="{{ services.getSetting("app_layout") }}">
+                            <div class="row">
+                                <div class="col-md-10 text-center">
+                                    <article class="text-dark text-center text-lg-left mb-3">
+                                        <h3>{{ "Are you ready to take your"|trans }} <b class="rotate-words">{% for category in services.getCategories({ "featured": true, "limit": 9 }).getQuery().getResult() %}{{ category.name|lower }}{% if not loop.last %}|{% endif %}{% endfor %}</b> {{ "event to the next level ?"|trans }}</h3>
+                                    </article>
+                                </div>
+                                <div class="col-md-2 text-center text-lg-right">
+                                    <a href="{{ path('dashboard_organizer_event_add') }}" class="btn btn-light"><i class="fas fa-calendar-plus"></i> {{ "Create my event"|trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+
+                {% endblock %}

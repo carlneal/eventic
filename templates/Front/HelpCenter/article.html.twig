@@ -1,0 +1,137 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = article.title %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"help_center": "Help center"|trans, (path("help_center_category", { slug: article.category.slug })): article.category.name, "current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 order-1 order-lg-0">
+                    <div class="card card-filter">
+                        <article class="card-group-item">
+                            <header class="card-header">
+                                <a class="" aria-expanded="true" href="#" data-toggle="collapse" data-target="#filter-keyword">
+                                    <i class="icon-action fa fa-chevron-down"></i>
+                                    <h6 class="title">{{ "Search help center"|trans }}</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="filter-keyword">
+                                <div class="card-body">
+                                    <form class="pb-3" action="{{ path('help_center') }}">
+                                        <input class="form-control mb-3" placeholder="{{ "Keyword"|trans }}" name="keyword" type="text">
+                                        <button type="submit" class="btn btn-outline-primary btn-block"><i class="fas fa-search"></i> {{ "Search"|trans }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="card-group-item">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#filter-event-type">
+                                    <i class="icon-action fa fa-chevron-down"></i>
+                                    <h6 class="title">{{ "Categories"|trans }}</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="filter-event-type">
+                                <div class="card-body">
+                                    <ul class="list list-unstyled">
+                                        {% set helpcentercategories = services.getHelpCenterCategories({}).getQuery().getResult() %}
+                                        {% for helpcentercategory in helpcentercategories %}
+                                            <li class="mb-2">
+                                                <a href="{{ path('help_center_category', {slug: helpcentercategory.slug}) }}" class="font-weight-semibold">
+                                                    {% if app.request.locale != 'ar' %}
+                                                        <i class="fas fa-angle-right ml-1 mr-1 pr-2"></i>
+                                                    {% endif %}
+                                                    {{ helpcentercategory.name }}
+                                                    {% if app.request.locale == 'ar' %}
+                                                        <i class="fas fa-angle-left ml-1 mr-1 pl-2"></i>
+                                                    {% endif %}
+                                                    <span class="float-right form-check-label">
+                                                        <span class="badge badge-primary">{{ helpcentercategory.articles|length }}</span>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="card-group-item">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#collapsePopular">
+                                    <i class="icon-action fa fa-chevron-down"></i>
+                                    <h6 class="title">{{ "Popular"|trans }}</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="collapsePopular">
+                                <div class="card-body">
+                                    {% set populararticles = services.getHelpCenterArticles({"limit": 5, "sort": "views", "otherthan": article.slug}).getQuery().getResult() %}
+                                    {% for article in populararticles %}
+                                        <article class="row align-items-center mb-3">
+                                            <div class="col-12">
+                                                <small class="text-muted">{{ article.category.name }}</small>
+                                                <h6 class="mb-0">
+                                                    <a href="{{ path('help_center_article', { slug : article.slug }) }}" class="text-1">{{ article.title }}</a>
+                                                </h6>
+                                            </div>
+                                        </article>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </article>
+                        <article class="card-group-item">
+                            <header class="card-header">
+                                <a href="#" data-toggle="collapse" data-target="#collapseTags">
+                                    <i class="icon-action fa fa-chevron-down"></i>
+                                    <h6 class="title">{{ "Tags"|trans }}</h6>
+                                </a>
+                            </header>
+                            <div class="filter-content collapse show" id="collapseTags">
+                                <div class="card-body">
+                                    {% for tag in services.getHelpCenterArticles({"selecttags": true}).getQuery().getOneOrNullResult()[1]|split(',') %}
+                                        <a href="{{ path('help_center', { keyword: tag }) }}" class="btn btn-sm btn-default mr-2 mb-2 mt-2">{{ tag }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </article>
+
+                    </div>
+                    {% if services.getSetting("newsletter_enabled") == "yes" and services.getSetting("mailchimp_api_key") and services.getSetting("mailchimp_list_id") %}
+                        {% include "Global/newsletter-box.html.twig" %}
+                    {% endif %}
+                </aside>
+                <div class="col-lg-9 order-0 order-lg-1">
+                    <div class="card box">
+                        <div class="card-body">
+                            <header class="section-heading mb-5">
+                                <h1 class="title-section">{{ article.title }}</h1>
+                            </header>
+                            <article>
+                                {{ article.content|raw|nl2br }}
+                            </article>
+                            {% if article.tags %}
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12 text-center text-lg-left">
+                                        {% for tag in article.tags|split(',') %}
+                                            <a href="{{ path('help_center', { keyword: tag }) }}" class="btn btn-sm btn-default mr-3 mb-3 mt-3">{{ tag }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <hr>
+                            {% include "Global/support-box.html.twig" %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

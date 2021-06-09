@@ -1,0 +1,75 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Homepage settings' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            {{ form_row(form.content) }}
+                            <div id="events">
+                                {{ form_row(form.events) }}
+                            </div>
+                            <div id="organizers">
+                                {{ form_row(form.organizers) }}
+                            </div>
+                            <div id="custom">
+                                {{ form_row(form.customBackgroundFile) }}
+                                {{ form_row(form.translations) }}
+                                {{ form_row(form.show_search_box) }}
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+
+            $("input[name='homepage_hero_settings[content]']").change(function () {
+                if ($('#homepage_hero_settings_content_1').is(':checked')) {
+                    $('#events').show();
+                    $('#organizers').hide();
+                    $('#custom').hide();
+                } else if ($('#homepage_hero_settings_content_2').is(':checked')) {
+                    $('#events').hide();
+                    $('#organizers').show();
+                    $('#custom').hide();
+                } else if ($('#homepage_hero_settings_content_3').is(':checked')) {
+                    $('#events').hide();
+                    $('#organizers').hide();
+                    $('#custom').show();
+                } else {
+                    $('#events').hide();
+                    $('#organizers').hide();
+                    $('#custom').hide();
+                }
+            });
+            $("input[name='homepage_hero_settings[content]']").trigger('change');
+
+        });
+    </script>
+
+{% endblock %}

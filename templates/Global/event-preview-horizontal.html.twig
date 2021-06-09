@@ -1,0 +1,61 @@
+{% if handlebarstemplate is defined %}
+    {% verbatim %}
+        <div class="card">
+            <div class="card-body">
+                <figure class="itemside">
+                    <div class="aside">
+                        <div class="img-wrap img-sm"><a href="{{ link}}"><img src="{{ image}}"></a></div>
+                    </div>
+                    <figcaption class="text-wrap">
+                        <h6 class="title mb-2"><a href="{{ link}}">{{ text}}</a></h6>
+                        <div class="text-black-50 small mb-1">{{ date}}</div>
+                        <div class="text-black-50 small">{{ venue}}</div>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    {% endverbatim %}
+{% elseif eventticket is defined or eventdate is defined or event is defined %}
+    {% if eventticket is defined %}
+        {% set event = eventticket.eventdate.event %}
+        {% set eventdate = eventticket.eventdate %}
+    {% elseif eventdate is defined %}
+        {% set event = eventdate.event %}
+    {% endif %}
+    <figure class="media h-100">
+        <div class="img-wrap my-auto"><img src="{{ asset('assets/img/loader.svg') }}" data-src="{{ asset(event.getImagePath) }}" class="img-thumbnail img-sm img-lazy-load"></div>
+        <figcaption class="media-body my-auto {% if app.request.locale == "ar" %}ml-2{% endif %}">
+            <a href="{{ path('event', { slug: event.slug }) }}">
+                <h6 class="title mb-2">{{ event.name }}</h6>
+            </a>
+            {% if eventticket is defined %}
+                <dl class="dlist-inline small">
+                    <dt></dt>
+                    <dd class="mr-0">{{ eventticket.name }} {% if eventticket.description %}<i class="fas fa-info-circle text-primary ml-2" data-toggle="tooltip" title="{{ eventticket.description }}"></i>{% endif %}</dd>
+                </dl>
+            {% endif %}
+            {% if eventdate is defined %}
+                <dl class="dlist-inline small">
+                    <dt>{{ "When"|trans }}</dt>
+                    <dd>{{ eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</dd>
+                </dl>
+                <dl class="dlist-inline small">
+                    <dt>{{ "Where"|trans }}</dt>
+                    <dd>
+                        {% if eventdate.venue %}
+                            {{ eventdate.venue.name }}: {{ eventdate.venue.stringifyAddress }}
+                        {% else %}
+                            {{ "Online"|trans }}
+                        {% endif %}
+                    </dd>
+                </dl>
+            {% endif %}
+            {% if hideorganizer is not defined %}
+                <dl class="dlist-inline small">
+                    <dt>{{ "Organizer"|trans }}</dt>
+                    <dd><a href="{{ path('organizer', { slug :event.organizer.slug }) }}" taget="_blank">{{ event.organizer.name }}</a></dd>
+                </dl>
+            {% endif %}
+        </figcaption>
+    </figure>
+{% endif %}

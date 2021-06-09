@@ -1,0 +1,23 @@
+.card {
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+.card-hover:hover {
+    -webkit-box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+    box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+
+.blog-post-card .card-body {
+    padding: 0.5rem;
+}
+
+.blog-post-card h5 {
+    font-size: 0.90625rem;
+}
+
+.blog-post-card img {
+    border-radius: 0.25rem;
+}

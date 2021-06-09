@@ -1,0 +1,26 @@
+<article class="card-group-item">
+    <div class="card-body p-0">
+        <article class="box bg-primary">
+            <figure class="itemside mb-4">
+                <div class="aside align-self-center">
+                    <span class="icon-wrap icon-sm round bg-white">
+                        <i class="fas fa-mail-bulk text-primary"></i>
+                    </span>
+                </div>
+                <figcaption class="text-wrap">
+                    <h5 class="title text-white">{{"Subscribe to our newsletter"|trans}}</h5>
+                </figcaption>
+            </figure>
+            <div class="form-row">
+                <div class="form-group col mb-0">
+                    <input id="newsletter-email" type="email" class="newsletter-email form-control rounded-0 border-0 line-height-1" placeholder="{{ "Email address"|trans }}" required="true">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col mb-0">
+                    <button id="newsletter-subscribe" data-target="{{ path('newsletter_subscribe') }}" type="button" class="btn btn-dark justify-content-center w-100 rounded-0">{{ "Subscribe"|trans|upper }}</button>
+                </div>
+            </div>
+        </article>
+    </div>
+</article>

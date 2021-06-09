@@ -1,0 +1,42 @@
+@media (min-width: 992px) {
+    .pt-lg-5, .py-lg-5 {
+        padding-top: 6rem !important;
+    }
+}
+
+.nav-pills-vertical-styled {
+    flex-direction: column;
+    margin: 0 0 32px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+
+    .nav-link {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 13px 16px;
+        background-color: #fff;
+        border: 0;
+        border-bottom: 1px solid #ddd;
+        border-radius: 0;
+        color: #616161;
+        transition: background-color .2s ease;
+
+        &:hover {
+            background-color: #f6f6f6;
+        }
+
+        &.active {
+            background-color: $gray;
+            font-weight: 600;
+            color: $primary;
+        }
+
+        &:last-of-type {
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            border-bottom: 0;
+        }
+
+    }
+}

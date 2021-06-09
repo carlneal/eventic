@@ -1,0 +1,24 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Event categories'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                {% for category in services.getCategories({"sort": "translations.name", "order": "DESC"}).getQuery().getResult() %}
+                    <div class="col-sm-6 col-md-4">
+                        {% include "Global/category-card.html.twig" with {category: category} %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% trans_default_domain 'FOSCommentBundle' %}
+
+<ul>
+    {% for error in errors %}
+        <li class="invalid-feedback">{{ error }}</li>
+        {% endfor%}
+</ul>

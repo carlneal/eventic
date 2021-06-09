@@ -1,0 +1,174 @@
+<div class="table-responsive">
+    <table class="table table-hover table-vcenter">
+        <thead>
+            <tr>
+                <th style="width:35%;">{{'Event' | trans}}</th>
+                    {% if is_granted('ROLE_ADMINISTRATOR') %}
+                    <th>{{'Organizer' | trans}}</th>
+                    {% endif %}
+                <th>{{'Sales' | trans}}</th>
+                <th>{{'Status' | trans}}</th>
+                <th>{{'Attendance' | trans}}</th>
+                <th class="text-center"><i class="fas fa-cog"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for event in events %}
+
+                <tr>
+                    <td>
+                        <a class="fancybox" href="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                            <img src="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" class="img-thumbnail img-50-50" />
+                        </a>
+                        <a href="{{ path('event', { slug : event.slug }) }}" data-toggle="tooltip" title="{{ "View event"|trans }}">{{ event.name }}</a>
+                        <span class="small text-muted ml-1">#{{ event.reference }}</span>
+                    </td>
+                    {% if is_granted('ROLE_ADMINISTRATOR') %}
+                        <td>
+                            <a href="{{ path('organizer', { slug : event.organizer.slug }) }}" data-toggle="tooltip" title="{{ "View organizer"|trans }}">{{ event.organizer.name }}</a>
+                        </td>
+                    {% endif %}
+                    <td>
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <strong>{{ event.getTotalSalesPercentage }}%</strong>
+                            </div>
+                            <div class="float-right">
+                                <small class="text-muted">{{ event.getTotalOrderElementsQuantitySum }} {{ "ticket(s) sold"|trans }}</small>
+                            </div>
+                        </div>
+                        <div class="progress progress-xs">
+                            <div class="progress-bar bg-yellow" role="progressbar" style="width: {{ event.getTotalSalesPercentage }}%" aria-valuenow="{{ event.getTotalSalesPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ event.stringifyStatusClass }}">{{ event.stringifyStatus|trans }}</span>
+                        {% if event.deletedAt %}
+                            <br>
+                            <br>
+                            <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="mx-auto chart-circle chart-circle-xs" data-value="{{ event.getTotalCheckInPercentage/100 }}" data-thickness="3">
+                            <div class="chart-circle-value">{{ event.getTotalCheckInPercentage }}%</div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="item-action dropdown">
+                            <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <span class="dropdown-item cursor-pointer" data-toggle="modal" data-target="#event-{{ event.reference }}-dates"><i class="dropdown-icon fas fa-chart-line fa-fw text-muted"></i> {{ "Statistics"|trans }}</span>
+                                {% if is_granted('ROLE_ADMINISTRATOR') %}
+                                    <span data-title="{{ event.name }}" data-url="{{ path('dashboard_administrator_event_details', { slug : event.slug }) }}" class="dropdown-item ajax-loading"><i class="dropdown-icon fas fa-file-alt fa-fw text-muted"></i> {{ "Details"|trans }}</span>
+                                    <a href="{{ path('dashboard_administrator_orders', { event : event.slug, status: 1 }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-users fa-fw text-muted"></i> {{ "Attendees"|trans }}</a>
+                                    <a href="{{ path('dashboard_administrator_reviews', { event : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-star fa-fw text-muted"></i> {{ "Reviews"|trans }} </a>
+                                    {% if event.deletedAt %}
+                                        <a href="{{ path('dashboard_administrator_event_restore', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-trash-restore fa-fw text-muted"></i> {{ "Restore"|trans }}</a>
+                                        <span data-target="{{ path('dashboard_administrator_event_delete_permanently', { slug : event.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the event and all its related information PERMANENTLY"|trans }}"><i class="dropdown-icon far fa-calendar-times fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                    {% else %}
+                                        <a href="{{ path('dashboard_administrator_event_delete', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
+                                    {% endif %}
+                                {% elseif is_granted('ROLE_ORGANIZER') %}
+
+                                    {% if not event.isFree %}
+                                        <span class="dropdown-item cursor-pointer" data-toggle="modal" data-target="#event-{{ event.reference }}-payout-request"><i class="dropdown-icon fas fa-file-invoice-dollar fa-fw text-muted"></i> {{ "Request payout"|trans }}</span>
+                                    {% endif %}
+
+                                    <span data-title="{{ event.name }}" data-url="{{ path('dashboard_organizer_event_details', { slug : event.slug }) }}" class="dropdown-item ajax-loading"><i class="dropdown-icon fas fa-file-alt fa-fw text-muted"></i> {{ "Details"|trans }}</span>
+                                    <a href="{{ path('dashboard_organizer_event_edit', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                    <a href="{{ path('dashboard_organizer_orders', { event : event.slug, status: 1 }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-users fa-fw text-muted"></i> {{ "Attendees"|trans }}</a>
+                                    <a href="{{ path('dashboard_organizer_reviews', { event : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-star fa-fw text-muted"></i> {{ "Reviews"|trans }} </a>
+                                    {% if event.published %}
+                                        <a href="{{ path('dashboard_organizer_event_draft', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye-slash fa-fw text-muted"></i> {{ "Draft"|trans }}</a>
+                                    {% else %}
+                                        <a href="{{ path('dashboard_organizer_event_publish', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-eye fa-fw text-muted"></i> {{ "Publish"|trans }} </a>
+                                    {% endif %}
+                                    {% if event.deletedAt %}
+                                        <span data-target="{{ path('dashboard_organizer_event_delete_permanently', { slug : event.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the event and all its related information PERMANENTLY"|trans }}"><i class="dropdown-icon far fa-calendar-times fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                    {% else %}
+                                        <a href="{{ path('dashboard_organizer_event_delete', { slug : event.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            <div class="modal fade" id="event-{{ event.reference }}-dates">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ event.name }}: {{ "Event dates"|trans }}</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            {% for eventDate in event.eventdates %}
+                                <div>
+                                    <b class="float-left">{{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</b>
+                                    {% if is_granted("ROLE_ADMINISTRATOR") %}
+                                        <a href="{{ path("dashboard_administrator_event_date_statistics", {eventDateReference: eventDate.reference, eventSlug: event.slug}) }}" class="float-right">{{ "View stats"|trans }}</a>
+                                    {% elseif is_granted("ROLE_ORGANIZER") %}
+                                        <a href="{{ path("dashboard_organizer_event_date_statistics", {eventDateReference: eventDate.reference, eventSlug: event.slug}) }}" class="float-right">{{ "View stats"|trans }}</a>
+                                    {% endif %}
+                                    <div class="clearfix"></div>
+                                </div>
+                                {% if not loop.last %}<hr>{% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if not event.isFree %}
+                <div class="modal fade" id="event-{{ event.reference }}-payout-request">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">{{ event.name }}: {{ "Payout request"|trans }}</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                {% include "Global/message.html.twig" with { type: "info", message: ('Once the payout request submitted, the event date will be locked and the sales will be suspended for the specific event date. If you wish, you can wait until the start date of the event date before requesting the payout. You can cancel the payout request any time before it is processed'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                                <hr>
+
+                                {% for eventDate in event.eventdates %}
+                                    {% if not eventDate.isFree %}
+                                        <div>
+                                            <b class="float-left">{{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</b>
+
+                                            {% if eventDate.isFree %}
+                                                <span class="badge badge-info float-right">{{ "Free"|trans }}</span>
+                                            {% elseif eventDate.getSales <= 0 %}
+                                                <span class="badge badge-info float-right">{{ "No sales yet"|trans }}</span>
+                                            {% elseif eventDate.payoutRequested %}
+                                                <a href="{{ path("dashboard_organizer_payout_requests", {eventdate: eventDate.reference}) }}" class="float-right"><i class="fas fa-file-invoice-dollar"></i> {{ "Payout already requested"|trans }}</a>
+                                            {% else %}
+                                                <a href="{{ path("dashboard_organizer_event_date_request_payout", {eventDateReference: eventDate.reference}) }}" class="float-right"><i class="fas fa-file-invoice-dollar"></i> {{ "Request payout"|trans }}</a>
+                                            {% endif %}
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endif %}
+                                    {% if not loop.last %}<hr>{% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+    </div>
+
+{% endfor %}
+</tbody>
+</table>
+</div>

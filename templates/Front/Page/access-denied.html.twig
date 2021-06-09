@@ -1,0 +1,22 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Access denied'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <div class="col-sm-12">
+                    {% include "Global/message.html.twig" with { type: "danger", message: ('Access is denied. You may not have the appropriate permissions to access this resource.'|trans), icon: "fas fa-ban" } %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

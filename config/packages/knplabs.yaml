@@ -1,0 +1,13 @@
+knp_doctrine_behaviors:
+    translatable: true
+
+knp_paginator:
+    page_range: 5
+    default_options:
+        page_name: page
+        sort_field_name: sort
+        sort_direction_name: direction
+        distinct: true
+    template:
+        pagination: 'Global/pagination.html.twig'
+        sortable: 'Global/sortable.html.twig'

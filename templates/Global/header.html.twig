@@ -1,0 +1,179 @@
+<section class="header-main sticky-top">
+    <div class="{{ services.getSetting("app_layout") }}">
+        <div class="row align-items-center">
+            <div class="col-6 col-lg-3 order-0 order-lg-0 header-logo-wrapper">
+                <div class="brand-wrap">
+                    <a href="{{ path('homepage') }}">
+                        <img class="logo img-fluid" src="{{ asset(services.getAppLayoutSettings.getLogoPath) }}" alt="{{ services.getSetting("website_name") }}">
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 order-2 order-lg-1 mt-3 mb-3 mt-lg-0 mb-lg-0 header-search-wrapper">
+                <form action="{{ path('events') }}" class="search-wrap">
+                    <div class="input-icon">
+                        <i class="fa fa-search"></i>
+                        <input name="keyword" class="form-control top-search" placeholder="{{ "Search for events"|trans }}" type="text">
+                    </div>
+                </form>
+            </div>
+            <div class="col-6 col-lg-4 text-right order-1 order-lg-2 header-actions-wrapper">
+                <div class="widgets-wrap d-flex justify-content-end">
+
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
+                        {% if is_granted('ROLE_ATTENDEE') %}
+
+                            <div class="widget-header dropdown">
+                                <a href="#" class="icontext badge-notification badge-notification-left" data-toggle="dropdown" {% if app.request.locale == "ar" %}data-offset="150,10"{% else %}data-offset="20,10"{% endif %} data-badge="{{ app.user.getTicketsInCartQuantitySum }}">
+                                    <div class="icon-wrap icon-xs bg-primary round text-white"><i class="fas fa-shopping-cart"></i></div>
+                                    <div class="text-wrap {% if app.request.locale == "ar" %}ml-1{% endif %}">
+                                        <span>{{ "Cart"|trans }} <i class="fas fa-caret-down"></i></span>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right p-3" style="width: 280px;">
+                                    {% if app.user.cartelements|length %}
+
+                                        {% for cartelement in app.user.cartelements %}
+
+                                            <figure class="itemside badge-notification badge-notification-right" data-badge="{{ cartelement.quantity }}">
+                                                <div class="aside">
+                                                    <div class="img-wrap img-sm"><img src="{{ asset(cartelement.eventticket.eventdate.event.getImagePath) }}"></div>
+                                                </div>
+                                                <figcaption class="text-wrap">
+                                                    <h6 class="title mb-2"><a href="{{ path('event', { slug: cartelement.eventticket.eventdate.event.slug }) }}">{{ cartelement.eventticket.eventdate.event.name }}</a></h6>
+                                                        {% if cartelement.eventticket.eventdate.startdate %}
+                                                        <div class="text-black-50 small mb-1">
+                                                            {{ cartelement.eventticket.eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if cartelement.eventticket.eventdate.venue %}
+                                                        <div class="text-black-50 small">{{ cartelement.eventticket.eventdate.venue.name }}: {{ cartelement.eventticket.eventdate.venue.stringifyAddress }}</div>
+                                                    {% endif %}
+                                                </figcaption>
+                                            </figure>
+
+                                            <div class="dropdown-divider mt-4 mb-4"></div>
+
+                                        {% endfor %}
+
+                                        <a href="{{ path('dashboard_attendee_cart') }}" class="btn btn-outline-dark btn-block"><i class="fas fa-cart-arrow-down"></i> {{ "View cart"|trans }}</a>
+
+                                    {% else %}
+                                        {% include "Global/message.html.twig" with { icon: "fas fa-shopping-cart", type: "info", message: ('Your cart is empty'|trans) } %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                        <div class="widget-header dropdown">
+                            <a href="#" class="ml-3 icontext" data-toggle="dropdown" onclick="openDashboardSideNav()">
+                                {% if is_granted('ROLE_ADMINISTRATOR') %}
+                                    <span class="avatar">
+                                        <i class="far fa-user"></i>
+                                    </span>
+                                {% else %}
+                                    {% include "Global/user-avatar.html.twig" with { user : app.user } %}
+                                {% endif %}
+                                <div class="text-wrap {% if app.request.locale == "ar" %}ml-1{% endif %}">
+                                    <span>{{ app.user.username }} <i class="fas fa-caret-down"></i></span>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-left dropdown-menu-arrow header-user-dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('dashboard_index') }}">
+                                    {% if is_granted("ROLE_POINTOFSALE") %}
+                                        <i class="fas fa-ticket-alt fa-fw"></i> {{'Events on sale'|trans}}
+                                    {% elseif is_granted("ROLE_SCANNER") %}
+                                        <i class="fas fa-calendar-alt fa-fw"></i> {{'Events list'|trans}}
+                                    {% else %}
+                                        <i class="fas fa-tachometer-alt fa-fw"></i> {{'Dashboard'|trans}}
+                                    {% endif %}
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}"><i class="fas fa-sign-out-alt fa-fw"></i> {{ "Sign out"|trans }}</a>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        <div class="widget-header">
+                            <a href="{{ path('fos_user_security_login') }}">
+                                <div class="icon-wrap icon-xs bg-primary round text-secondary d-lg-none d-xl-none">
+                                    <i class="fas fa-sign-in-alt text-light fa-sm fa-fw"></i>
+                                </div>
+                                <span class="d-none d-lg-block">{{ "Sign in"|trans }}</span>
+                            </a>
+                        </div>
+
+                        <div class="widget-header">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="icon-wrap icon-xs bg-primary round text-secondary d-lg-none d-xl-none">
+                                    <i class="fas fa-user-plus text-light fa-sm fa-fw"></i>
+                                </div>
+                                <span class="d-none d-lg-inline">{{ "Sign up"|trans }}</span>
+                            </a>
+                            <div class="dropdown-menu {% if app.request.locale == "ar" %}registration-dropdown dropdown-menu-left{% else %}dropdown-menu-right{% endif %} dropdown-menu-arrow">
+                                <a href="{{ path('fos_user_registration_register_attendee') }}" class="dropdown-item"><i class="fas fa-user fa-fw"></i> {{ "Attendee"|trans }}</a>
+                                <a href="{{ path('fos_user_registration_register_organizer') }}" class="dropdown-item"><i class="fas fa-calendar-plus fa-fw"></i> {{ "Organizer"|trans }}</a>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    <div class="widget-header d-lg-none">
+                        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="icon-bar top-bar"></span>
+                            <span class="icon-bar middle-bar"></span>
+                            <span class="icon-bar bottom-bar"></span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<header class="section-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white {% if app.request.get("_route") == "homepage" and herosettings is defined and herosettings.content != "none" %}border-0{% endif %}">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="collapse navbar-collapse" id="main_nav">
+                <ul class="navbar-nav nav-fill w-100">
+
+                    {% for menuElement in services.getMenus({"slug" : "header-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                        {% set link = "#0" %}
+                        {% if menuElement.customLink %}
+                            {% set link = menuElement.customLink %}
+                        {% endif %}
+                        {% if menuElement.link %}
+                            {% set link = services.changeLinkLocale(app.request.locale, menuElement.link) %}
+                        {% endif %}
+                        {% if link == "categories_dropdown" %}
+                            <li class="nav-item dropdown dropdown-hover  {% if app.request.get('_route') == "categories" %}active{% endif %}">
+                                <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="{{ menuElement.icon }} fa-fw"></i> {{ menuElement.label }}</a>
+                                <div class="dropdown-menu dropdown-menu-arrow">
+                                    {% for category in services.getCategories({ "featured": true, "limit": 9 }).getQuery().getResult() %}
+                                        <a href="{{ path('events', { category: category.slug }) }}" class="dropdown-item"><i class="{{ category.icon }} fa-fw"></i> {{ category.name }}</a>
+                                    {% endfor %}
+                                    <a href="{{ path('categories') }}" class="dropdown-item"><i class="fas fa-folder-open fa-fw"></i> {{ "All categories"|trans }}</a>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ link }}">
+                                    {% if menuElement.icon %}
+                                        <i class="{{ menuElement.icon }} fa-fw"></i>
+                                    {% endif %}
+                                    {% if menuElement.label %}
+                                        {{ menuElement.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

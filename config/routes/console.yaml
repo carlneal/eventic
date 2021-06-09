@@ -1,0 +1,3 @@
+coresphere_console:
+    resource: .
+    type: extra

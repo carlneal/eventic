@@ -1,0 +1,25 @@
+hwi_oauth:
+    firewall_names: [main]
+    connect:
+        account_connector: hwi_oauth_user_provider
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook: facebook_id
+            google: google_id
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           '%env(FB_ID)%'
+            client_secret:       '%env(FB_SECRET)%'
+            infos_url:           https://graph.facebook.com/me?fields=id,email,first_name,last_name,location,picture
+            scope:               "email"
+            paths:
+                email:           email
+            options:
+                csrf: true
+        google:
+            type:                google
+            client_id:           '%env(GOOGLE_ID)%'
+            client_secret:       '%env(GOOGLE_SECRET)%'
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"

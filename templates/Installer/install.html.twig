@@ -1,0 +1,236 @@
+<html lang="en">
+    <head>
+        <!--[if IE]>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <![endif]-->
+        <meta charset="utf-8">
+        <meta name="robots" content="noindex,nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Setup Wizard | Eventic</title>
+        <link rel="shortcut icon" href="{{ asset('assets/img/installer/favicon.png') }}">
+
+        {{ encore_entry_link_tags('app') }}
+        {{ encore_entry_link_tags('app.orange') }}
+        {{ encore_entry_link_tags('installer') }}
+
+    </head>
+    <body>
+
+        <div class="container h-100 mt-5 mb-5">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="col-12">
+                    <div class="mb-5 text-center">
+                        <p><img src="{{ asset('assets/img/installer/logo.png') }}" /></p>
+                    </div>
+                    <div id="steps">
+                        <div class="step-app">
+                            <ul class="step-steps">
+                                <li><a href="#step0"><strong><i class="fas fa-tasks"></i> Setup Wizard</strong></a></li>
+                                <li><a href="#step1"><strong><i class="fas fa-server"></i> Server</strong></a></li>
+                                <li><a href="#step2"><strong><i class="fas fa-folder-open"></i> Writable Directories</strong></a></a></li>
+                                <li><a href="#step3"><strong><i class="fas fa-database"></i> Database</strong></a></a></li>
+                                <li><a href="#step4"><strong><i class="fas fa-save"></i> Done</strong></a></a></li>
+                            </ul>
+                            <div class="step-content card">
+                                <div class="step-tab-panel" id="step0">
+                                    <p>Welcome to Eventic, the ultimate Ticket Sales & Event Management platform.</p>
+                                    <p>This wizard will help you to set up Eventic.</p>
+                                    <p>Click <i>Next</i> to begin the setup process.</p>
+                                </div>
+                                <div class="step-tab-panel" id="step1" data-test-passed="{{ requirementsOk ? '1' : '0' }}" >
+                                    <p>The following extensions are required to run the platform.</p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="float-left">Minimum Php version: 7.1.3</span>
+                                            <i class="float-right far fa-{{ phpOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Ctype</span>
+                                            <i class="float-right far fa-{{ ctypeOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">iconv</span>
+                                            <i class="float-right far fa-{{ iconvOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">JSON</span>
+                                            <i class="float-right far fa-{{ jsonOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">PCRE</span>
+                                            <i class="float-right far fa-{{ pcreOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Session</span>
+                                            <i class="float-right far fa-{{ sessionOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">SimpleXML</span>
+                                            <i class="float-right far fa-{{ SimpleXMLOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Tokenizer</span>
+                                            <i class="float-right far fa-{{ tokenizerOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">intl</span>
+                                            <i class="float-right far fa-{{ intlOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">OpenSSL</span>
+                                            <i class="float-right far fa-{{ opensslOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">DOM</span>
+                                            <i class="float-right far fa-{{ domOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">mbstring</span>
+                                            <i class="float-right far fa-{{ mbstringOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">curl</span>
+                                            <i class="float-right far fa-{{ curlOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">fileinfo</span>
+                                            <i class="float-right far fa-{{ fileinfoOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">gd</span>
+                                            <i class="float-right far fa-{{ gdOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">libXML</span>
+                                            <i class="float-right far fa-{{ libxmlOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">XML</span>
+                                            <i class="float-right far fa-{{ xmlOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">XMLReader</span>
+                                            <i class="float-right far fa-{{ xmlreaderOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">XMLWriter</span>
+                                            <i class="float-right far fa-{{ xmlwriterOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Zip</span>
+                                            <i class="float-right far fa-{{ zipOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">ZLib</span>
+                                            <i class="float-right far fa-{{ zlibOk ? 'check-circle text-success' : 'times-circle text-danger' }} fa-lg"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="step-tab-panel" id="step2" data-test-passed="{{ folderPermissions ? '1' : '0' }}">
+                                    <p>The following directories and files must be writable (775 permission).</p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="float-left">/var/cache/</span>
+                                            <i class="float-right far fa-{{ cacheFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">/var/log/</span>
+                                            <i class="float-right far fa-{{ logFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">/public/media/</span>
+                                            <i class="float-right far fa-{{ mediaFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">/public/uploads/</span>
+                                            <i class="float-right far fa-{{ uploadsFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">/sessions/</span>
+                                            <i class="float-right far fa-{{ sessionsFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">/assets/js/translations/</span>
+                                            <i class="float-right far fa-{{ jsTranslationsFolderWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">.env</span>
+                                            <i class="float-right far fa-{{ envWritable ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="step-tab-panel" id="step3" data-test-passed="0">
+                                    <div class="form-group">
+                                        <label for="type">Type</label>
+                                        <input type="text" class="form-control" id="type" disabled value="mysql">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="host">Host (with port if any)</label>
+                                        <input type="text" class="form-control" id="host" name="type">
+                                        <p class="text-danger mt-1 d-none"><i class="fas fa-exclamation-circle"></i> Please enter the database host</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username">
+                                        <p class="text-danger mt-1 d-none"><i class="fas fa-exclamation-circle"></i> Please enter the database username</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Database name</label>
+                                        <input type="text" class="form-control" id="name" name="name">
+                                        <p class="text-danger mt-1 d-none"><i class="fas fa-exclamation-circle"></i> Please enter the database name</p>
+                                    </div>
+                                    <button id="test-database-connection" type="submit" class="btn btn-primary"><i class="fas fa-exchange-alt"></i> Test connection</button>
+                                    <h6 id="testing-database-connection" class="d-none"><i class="fas fa-spinner fa-spin"></i> Testing database connection...</h6>
+                                    <h6 id="database-connection-error" class="text-danger mt-3 d-none"></h6>
+                                    <h6 id="database-connection-success" class="text-success mt-3 d-none"><i class="far fa-check-circle"></i> Connection successful</h6>
+                                </div>
+
+                                <div class="step-tab-panel" id="step4">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="float-left">Server Configuration</span>
+                                            <i class="float-right far fa-{{ requirementsOk ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Writable Directories</span>
+                                            <i class="float-right far fa-{{ folderPermissions ? 'check-circle text-success' : 'times-circle text-danger'}} fa-lg"></i>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="float-left">Database Connection</span>
+                                            <i class="float-right far fa-check-circle text-success fa-lg"></i>
+                                        </li>
+                                    </ul>
+                                    <br>
+                                    <p>Once the installation process is over, your platform homepage will be displayed. You can log in the administrator dashboard by using the default credentials:</p>
+                                    <ul>
+                                        <li>Login: <strong>administrator</strong></li>
+                                        <li>Password: <strong>azer1234</strong></li>
+                                    </ul>
+                                    <p>Make sure to secure your administrator account by changing the default password</p>
+                                </div>
+                            </div>
+                            <div class="step-footer">
+                                <button data-direction="prev" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Previous</button>
+                                <button id="next-step" data-direction="next" class="btn btn-primary">Next <i class="fas fa-chevron-right"></i></button>
+                                <button id="finish-step" data-save-configuration-path="{{ path('installer_save_conviguration') }}" data-test-database-connection-path="{{ path('installer_test_database_connection') }}" data-direction="finish" class="btn btn-primary"><i class="fas fa-check"></i> Save and Finish</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script id="top-search-result-template" type="text/x-handlebars-template">
+            {% include "Global/event-preview-horizontal.html.twig" with { handlebarstemplate: true } %}
+        </script>
+
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('installer') }}
+
+    </body>
+</html>

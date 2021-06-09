@@ -1,0 +1,144 @@
+.custom-file-input ~ .custom-file-label::after {
+    content: "تصفح";
+}
+
+.header-main .search-wrap input[type="text"] {
+    text-align: right !important;
+    padding-left: initial !important;
+    padding-right: 2.25rem !important;
+}
+
+.registration-dropdown {
+    right: auto !important;
+}
+
+.card-event .event-date {
+    left: auto !important;
+    right: 10px !important;
+}
+
+.card-event .event-category {
+    right: auto !important;
+    left: -10px !important;
+}
+
+.card-event .price-wrap {
+    float: left !important;
+    right: auto !important;
+    left: 10px !important;
+}
+
+.card-event .event-info {
+    float: right !important;
+}
+
+.card-event .event-favorite {
+    right: auto !important;
+    left: 5px !important;
+}
+
+.breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    content: "\f053" !important;
+}
+
+.icon-action {
+    float: left !important;
+}
+
+.filter-online-container .form-check-input, .location-based-filters .form-check-input{
+    margin-right: auto !important;
+}
+
+#filter-date .form-check-input, #filter-venue-type .form-check-input{
+    float: right !important;
+    margin-right: auto !important;
+}
+
+#filter-date .form-check-label, #filter-venue-type .form-check-label{
+    float: left !important;
+    padding: 0 !important;
+}
+
+.event-description dd{
+    margin-right: 0 !important;
+}
+
+.event-description dd *{
+    color: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: 2 !important;
+}
+
+.dlist-align dt {
+    float: right !important;
+}
+
+.rtl .dlist-align dd.text-right {
+    margin-left: auto !important;
+    margin-right: 120px !important;
+    text-align: left !important;
+}
+
+.photos-gallery figure {
+    float: right !important;
+}
+
+.list-icon .icon {
+    left: auto !important;
+    right: 0 !important;
+    margin-right: auto !important;
+    margin-left: 15px;
+}
+
+.add-to-calendar-checkbox~a:before {
+    margin-right: auto !important;
+    margin-left: .5em !important;
+}
+
+.dlist-border > dd {
+    margin-left: auto !important;
+    margin-right: 230px !important;
+    border-left: none !important;
+    border-right: 1px solid #f1f3f7 !important;
+    padding-left: auto !important;
+    padding-right: 50px !important;
+}
+
+.dlist-align dd {
+    margin-left: auto !important;
+    margin-right: 120px !important;
+}
+
+#filter-event-type .form-check-label {
+    float: left !important;
+}
+
+.dashboard-sidebar .badge, .dropdown .badge {
+    float: left !important;
+}
+
+.touchspin-integer {
+    padding-right: 40px !important;
+}
+
+.select2-container-multi .select2-search-choice-close {
+    right: auto !important;
+}
+
+.rtl .custom-control, [dir="rtl"] .custom-control {
+    margin-right: inherit !important;
+    margin-left: 1rem !important;
+}
+
+@media (min-width: 1301px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: 2rem !important;
+        padding-left: 2rem !important;
+    }
+}
+
+.filter-content .form-check {
+    padding-left: 0 !important;
+}

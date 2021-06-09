@@ -1,0 +1,47 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Maintenance mode'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block stylesheets %}
+
+    <style>
+        footer .footer-top, footer .footer-bottom > div:first-of-type, header.section-header, .header-search-wrapper, .header-actions-wrapper {
+            display :none;
+        }
+        .header-logo-wrapper {
+            margin: 0 auto;
+        }
+        .section-content {
+            min-height: 85vh;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg-white d-flex h-100">
+        <div class="{{ services.getSetting("app_layout") }} align-self-center">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card box">
+                        <div class="card-body">
+                            <div class="row d-block text-center">
+                                {% if customMessage %}
+                                    <h6>{{ customMessage }}</h6>
+                                {% else %}
+                                    <p class="h3">{{ "%websiteName% is undergoing a scheduled maintenance."|trans({"%websiteName%": services.getSetting('website_name')}) }}</p>
+                                    <p></p>
+                                    <p class="h3">{{ "We will be back shortly."|trans }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

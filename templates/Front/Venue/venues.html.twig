@@ -1,0 +1,230 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Venues'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+
+            <div class="box shadow-none bg-gray mb-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3 text-center text-lg-left mb-3 mb-lg-0">
+                        <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': venues.getTotalItemCount}) }}</span>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 offset-lg-3 text-center text-lg-right">
+                        <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
+                            <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
+                                {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "desc"|trans ~ ')', "v.createdAt", {"direction": "desc", "criteria": "v.createdAt"}) }}
+                                {{ knp_pagination_sortable(venues, "Creation date"|trans ~ ' (' ~ "asc"|trans ~ ')', "v.createdAt", {"direction": "asc", "criteria": "v.createdAt"}) }}
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <aside class="col-lg-3 order-2 order-lg-1">
+
+                    <div class="card card-filter">
+                        <form method="get">
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-keyword">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Keyword"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-keyword">
+                                    <div class="card-body">
+                                        <input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}" placeholder="{{ "Venue name..."|trans }}">
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-country">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Country"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-country">
+                                    <div class="card-body">
+
+                                        <select id="filter-country-select" class="form-control select2" name="country" data-sort-options="1">
+                                            <option value="">&nbsp;</option>
+                                            {% for country in services.getCountries({}).getQuery().getResult() %}
+                                                <option value="{{ country.slug }}">{{ country.name }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-venue-type">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Venue type"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-venue-type">
+                                    <div class="card-body">
+
+                                        {% for venuetype in services.getVenuesTypes({ 'hasvenues': true, 'limit': 5, 'sort': 'venuescount', 'order': 'DESC' }).getQuery().getResult() %}
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-checkbox form-check-input">
+                                                    <input type="checkbox" class="custom-control-input" id="venue-type-{{ loop.index }}" name="venuetypes[]" value="{{ venuetype.slug }}">
+                                                    <label class="custom-control-label" for="venue-type-{{ loop.index }}">{{ venuetype.name }}</label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ venuetype.venues|length }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-seated-guests">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Seated guests"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-seated-guests">
+                                    <div class="card-body">
+                                        <div class="range-slider mb-3" data-min="1" data-max="10000" data-start-left="{{ app.request.get('minseatedguests') ?? "1" }}" data-start-right="{{ app.request.get('maxseatedguests') ?? "9999" }}"></div>
+                                        <div class="row ranger-slider-inputs">
+                                            <div class="col-12 col-sm-6">
+                                                <label for="minseatedguests">{{"Min"|trans }}</label>
+                                                <input id="minseatedguests" name="minseatedguests" type="text" class="form-control range-slider-min-input" value="{{ app.request.get('minseatedguests') }}" placeholder="{{ "Min"|trans }}">
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label for="maxseatedguests">{{"Max"|trans }}</label>
+                                                <input id="maxseatedguests" name="maxseatedguests" type="text" class="form-control range-slider-max-input" value="{{ app.request.get('maxseatedguests') }}" placeholder="{{ "Max"|trans }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-standing-guests">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Standing guests"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-standing-guests">
+                                    <div class="card-body">
+                                        <div class="range-slider mb-3" data-min="1" data-max="10000" data-start-left="{{ app.request.get('minstandingguests') ?? "1" }}" data-start-right="{{ app.request.get('maxstandingguests') ?? "9999" }}"></div>
+                                        <div class="row ranger-slider-inputs">
+                                            <div class="col-12 col-sm-6">
+                                                <label for="minstandingguests">{{"Min"|trans }}</label>
+                                                <input id="minstandingguests" name="minstandingguests" type="text" class="form-control range-slider-min-input" value="{{ app.request.get('minstandingguests') }}" placeholder="{{ "Min"|trans }}">
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <label for="maxstandingguests">{{"Max"|trans }}</label>
+                                                <input id="maxstandingguests" name="maxstandingguests" type="text" class="form-control range-slider-max-input" value="{{ app.request.get('maxstandingguests') }}" placeholder="{{ "Max"|trans }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            {#<article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#collapse33">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">Price range</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="collapse33">
+                                    <div class="card-body">
+                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-primary btn-sm pl-2 pr-2">
+                                                <input type="radio" name="options" id="option1" autocomplete="off" checked> $
+                                            </label>
+                                            <label class="btn btn-primary btn-sm pl-2 pr-2">
+                                                <input type="radio" name="options" id="option2" autocomplete="off"> $$
+                                            </label>
+                                            <label class="btn btn-primary btn-sm pl-2 pr-2">
+                                                <input type="radio" name="options" id="option3" autocomplete="off"> $$$
+                                            </label>
+                                            <label class="btn btn-primary btn-sm pl-2 pr-2">
+                                                <input type="radio" name="options" id="option2" autocomplete="off"> $$$$
+                                            </label>
+                                            <label class="btn btn-primary btn-sm pl-2 pr-2">
+                                                <input type="radio" name="options" id="option3" autocomplete="off"> $$$$$
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>#}
+
+                            <article class="card-group-item">
+                                <div class="card-body">
+                                    <button class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i> {{ "Search"|trans }}</button>
+                                </div>
+                            </article>
+                        </form>
+                    </div>
+                    {% if services.getSetting("newsletter_enabled") == "yes" and services.getSetting("mailchimp_api_key") and services.getSetting("mailchimp_list_id") %}
+                        {% include "Global/newsletter-box.html.twig" %}
+                    {% endif %}
+
+                </aside>
+                <div class="col-lg-9 order-1 order-lg-2">
+                    {% if venues.getTotalItemCount > 0 %}
+                        {% for venue in venues %}
+                            {% include "Global/venue-card.html.twig" with {'venue': venue} %}
+                        {% endfor %}
+                    {% else %}
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No venues found'|trans), icon: "fas fa-exclamation-circle" } %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if venues.getTotalItemCount > 0 %}
+                {{ knp_pagination_render(venues, null, {}, {'align': 'center'}) }}
+            {% endif %}
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            if (getURLParameter('country')) {
+                $('#filter-country-select option').each(function () {
+                    if ($(this).val() == getURLParameter('country'))
+                    {
+                        $(this).prop('selected', true).trigger('change');
+                    }
+                });
+            }
+
+            if (getURLArrayParameter('venuetypes[]')) {
+                for (var i = 0; i < getURLArrayParameter('venuetypes[]').length; i++) {
+                    console.log(getURLArrayParameter('venuetypes[]'));
+                    $('input[name="venuetypes[]"][value="' + getURLArrayParameter('venuetypes[]')[i] + '"]').prop('checked', 'checked');
+                }
+            }
+
+        });
+
+    </script>
+
+{% endblock %}

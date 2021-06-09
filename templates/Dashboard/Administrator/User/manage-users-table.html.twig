@@ -1,0 +1,91 @@
+<div class="table-responsive">
+    <table class="table table-hover table-vcenter text-nowrap">
+        <thead>
+            <tr>
+                <th class="text-center"><i class="fas fa-sitemap"></i></th>
+                <th>{{'Name' | trans}}</th>
+                <th>{{'Username' | trans}} / {{'Email' | trans}}</th>
+                <th>{{'Registration date' | trans}}</th>
+                <th>{{'Last login' | trans}}</th>
+                <th>{{'Status' | trans}}</th>
+                <th class="text-center"><i class="fas fa-cog"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for user in users %}
+
+                <tr>
+                    <td class="text-center text-sm">
+                        {{ user.getRole|trans }}
+                    </td>
+                    <td class="text-sm">
+                        {% include "Global/user-avatar.html.twig" with { user: user } %}
+                        <span>{{ user.getCrossRoleName }}</span>
+                        {% if user.country %}
+                            <span class="flag flag-{{user.country.code|lower}} ml-2 mb-2"></span>
+                        {% endif %}
+                    </td>
+                    <td class="text-sm">
+                        {{ user.username }}<br>{{ user.email }}
+                    </td>
+                    <td class="text-sm">
+                        {{ user.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}
+                        {% if user.facebookId %}
+                            <i class="fab fa-facebook-f fa-sm btn-facebook ml-2 p-2" title="Facebook Id: {{ user.facebookId }}" data-toggle="tooltip"></i>
+                        {% endif %}
+                        {% if user.googleId %}
+                            <i class="fab fa-google fa-sm btn-youtube ml-2 p-2" title="Google Id: {{ user.googleId }}" data-toggle="tooltip"></i>
+                        {% endif %}
+                    </td>
+                    <td class="text-sm">
+                        {% if user.lastLogin %}
+                            {{ user.lastLogin|ago}}</small>
+                        {% else %}
+                            {{ "N/A"|trans }}
+                        {% endif %}
+                    </td>
+                    <td class="text-sm">
+                        {% if user.enabled %}
+                            <span class="badge badge-success"><i class="fas fa-user-check fa-fw"></i> {{ "Enabled"|trans }}</span>
+                        {% else %}
+                            <span class="badge badge-danger"><i class="fas fa-user-slash fa-fw"></i> {{ "Disabled"|trans }}</span>
+                        {% endif %}
+                        {% if user.deletedAt %}
+                            <br>
+                            <br>
+                            <span class="badge badge-danger"><i class="fas fa-times fa-fw"></i> {{ "Deleted"|trans }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <div class="item-action dropdown">
+                            <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <span data-title="{{ "User information"|trans }}" data-url="{{ path('dashboard_administrator_user_information', { slug : user.slug }) }}" class="dropdown-item ajax-loading"><i class="dropdown-icon fas fa-file-alt fa-fw text-muted"></i> {{ "More information"|trans }}</span>
+                                {% if user.hasRole('ROLE_ORGANIZER') %}
+                                    <a href="{{ path('organizer', {slug: (user.organizer.slug)}) }}" class="dropdown-item"><i class="dropdown-icon far fa-id-card fa-fw text-muted"></i> {{ "Organizer profile"|trans }}</a>
+                                {% endif %}
+                                {% if user.hasRole('ROLE_ATTENDEE') %}
+                                    <a href="{{ path('dashboard_administrator_user_empty_cart', {slug: (user.slug)}) }}" class="dropdown-item"><i class="dropdown-icon fas fa-shopping-cart fa-fw text-muted"></i> {{ "Empty cart"|trans }} <span class="badge badge-warning float-right" data-toggle="tooltip" title="{{ "%cartElementsCount% event(s) currently in cart"|trans({"%cartElementsCount%": user.cartelements|length}) }}">{{ user.cartelements|length }}</span></a>
+                                    {% endif %}
+                                <a href="{{ path('dashboard_index', {'_switch_user': (user.username)}) }}" class="dropdown-item"><i class="dropdown-icon fas fa-user-secret fa-fw text-muted"></i> {{ "Impersonate"|trans }}</a>
+                                {% if user.enabled %}
+                                    <a href="{{ path('dashboard_administrator_user_disable', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-user-slash fa-fw text-muted"></i> {{ "Disable"|trans }}</a>
+                                {% else %}
+                                    <a href="{{ path('dashboard_administrator_user_enable', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-user-check fa-fw text-muted"></i> {{ "Enable"|trans }} </a>
+                                {% endif %}
+                                {% if user.deletedAt %}
+                                    <a href="{{ path('dashboard_administrator_user_restore', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-trash-restore fa-fw text-muted"></i> {{ "Restore"|trans }}</a>
+                                    <span data-target="{{ path('dashboard_administrator_user_delete_permanently', { slug : user.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the user and all its related information (orders, events...) PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-user-times fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                {% else %}
+                                    <a href="{{ path('dashboard_administrator_user_delete', { slug : user.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-times fa-fw text-muted"></i> {{ "Delete"|trans }} </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

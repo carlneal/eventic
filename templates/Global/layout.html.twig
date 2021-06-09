@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.get('_locale') }}">
+    <head>
+        <!--[if IE]>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <![endif]-->
+        <meta charset="utf-8" />
+        <meta name="robots" content="index, follow, all" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>{% block title %}{% endblock %} | {{ services.getSetting("website_name") }}</title>
+        <meta property="og:site_name" content="{{ services.getSetting("website_name") }}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@{{ services.getSetting("website_slug") }}" />
+        {% block meta_dynamic_seo %}
+            <meta name="description" content="{{ services.getSetting("website_description_" ~ app.request.locale) }}" />
+            <meta name="keywords" content="{{ services.getSetting("website_keywords_" ~ app.request.locale) }}" />
+            <meta property="og:title" content="{{ services.getSetting("website_name") }}" />
+            <meta property="og:image" content="{{ absolute_url(asset(services.getAppLayoutSettings.getOgImagePath)) }}" />
+            <meta property="og:description" content="{{ services.getSetting("website_description_" ~ app.request.locale) }}" />
+            <meta name="twitter:title" content="{{ services.getSetting("website_name") }}" />
+            <meta name="twitter:image" content="{{ absolute_url(asset(services.getAppLayoutSettings.getOgImagePath)) }}" />
+            <meta name="twitter:image:alt" content="{{ services.getSetting("website_description_" ~ app.request.locale) }}" />
+            <meta name="twitter:description" content="{{ services.getSetting("website_description_" ~ app.request.locale) }}" />
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ absolute_url(asset(services.getAppLayoutSettings.getFaviconPath)) }}" />
+        <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}" />
+
+        <meta name="apple-mobile-web-app-title" content="{{ services.getSetting("website_name") }}" />
+        <meta name="twitter:site" content="@{{ services.getSetting("website_name") }}" />
+        <meta name="application-name" content="{{ services.getSetting("website_name") }}" />
+        <meta name="msapplication-tooltip" content="{{ services.getSetting("website_description_" ~ app.request.locale) }}" />
+
+        {# Google analytics code added in the app parameters #}
+        {% if services.getSetting('google_analytics_code') != "" and services.getSetting('google_analytics_code') is not null %}
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ services.getSetting('google_analytics_code') }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag('js', new Date());
+
+                gtag('config', '{{ services.getSetting('google_analytics_code') }}');
+            </script>
+        {% endif %}
+
+        {{ encore_entry_link_tags('app') }}
+
+        {# i18n lang specific styles #}
+        {% if app.request.locale == "fr" %}
+            {{ encore_entry_link_tags('app.fr') }}
+        {% elseif app.request.locale == "ar" %}
+            {{ encore_entry_link_tags('app.ar') }}
+        {% elseif app.request.locale == "es" %}
+            {{ encore_entry_link_tags('app.es') }}
+        {% endif %}
+
+        {# Application theme #}
+        {{ encore_entry_link_tags('app.'~services.getSetting('app_theme')) }}
+
+        {% block stylesheets %}
+        {% endblock %}
+
+        {# Custom css code added in the app parameters #}
+        {% if services.getSetting('custom_css') != "" and services.getSetting('custom_css') is not null %}
+            <style>
+                {{ services.getSetting('custom_css')|raw }}
+            </style>
+        {% endif %}
+
+    </head>
+    <body class="bg-gray {% if app.request.locale == "ar" %}rtl{% endif %}" data-currency-ccy="{{ services.getSetting('currency_ccy') }}" data-currency-symbol="{{ services.getSetting('currency_symbol') }}" data-currency-position="{{ services.getSetting('currency_position') }}" data-timezone="{{ date_timezone }}" {% if services.getSetting('show_cookie_policy_bar') == "yes" %}data-cookie-bar-page-link="{{ path('page', { slug : services.getSetting('cookie_policy_page_slug') }) }}" {% endif %} {% if services.getEnv('DEMO_MODE') == "1" %}data-demo-mode="1"{% endif %}>
+
+        {% include "Global/header.html.twig" %}
+
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('You are connected as "%username%'|trans({'%username%' : app.user.username})~ '", <a href="'~ path('dashboard_index', {'_switch_user': '_exit'}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to return to your dashboard'|trans) } %}
+        {% endif %}
+
+    {% block content %}{% endblock %}
+
+    {% include "Global/footer.html.twig" %}
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {% include "Global/dashboard-items-sidenav.html.twig" %}
+    {% endif %}
+
+    {{ encore_entry_script_tags('app') }}
+
+    {% block javascripts %}
+    {% endblock %}
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-message" data-type="{{ type }}" data-message="{{ message|trans }}"></div>
+        {% endfor %}
+    {% endfor %}
+
+    <script id="top-search-result-template" type="text/x-handlebars-template">
+        {% include "Global/event-preview-horizontal.html.twig" with { handlebarstemplate: true } %}
+    </script>
+
+    {% if services.getSetting("show_back_to_top_button") == "yes" %}
+        <a class="material-scrolltop cursor-pointer btn btn-sm btn-primary"></a>
+    {% endif %}
+
+</body>
+</html>

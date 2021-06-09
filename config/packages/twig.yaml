@@ -1,0 +1,15 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes: ['Global/bootstrap-4-forms-layout.html.twig']
+    date:
+        format: "%date_format%"
+        timezone: "%date_timezone%"
+    globals:
+        services: '@App\Service\AppServices'
+        locales: "%locales%"
+        google_maps_api_key: "%google_maps_api_key%"
+        date_format: "%date_format%"
+        date_format_date_only: "%date_format_date_only%"
+        date_timezone: "%date_timezone%"

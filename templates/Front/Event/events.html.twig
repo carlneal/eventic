@@ -1,0 +1,374 @@
+{% extends "Global/layout.html.twig" %}
+
+{% if category != "all" %}
+    {% set pagetitle = category.name %}
+{% else %}
+    {% set pagetitle = 'Events'|trans %}
+{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('events') }}
+{% endblock %}
+
+{% block content %}
+
+    {% if category != "all" %}
+        {% set navigation = [{"events": ("Events"|trans), "current" : (pagetitle)}] %}
+    {% else %}
+        {% set navigation = [{"current" : (pagetitle)}] %}
+    {% endif %}
+
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content bg-white padding-y">
+        <div class="{{ services.getSetting("app_layout") }}">
+
+            {% set eventsoncalendar = [] %}
+            {% set eventsonmap = [] %}
+
+            {% for event in events %}
+                {% for eventdate in event.eventdates %}
+                    {% if eventdate.isOnSale %}
+                        {% if eventdate.venue and services.getSetting("show_map_button") == "yes" %}
+                            {% if eventdate.venue.lat and eventdate.venue.lng %}
+                                {% if eventsonmap|length == 0 %}
+                                    {% set eventsonmap = eventsonmap|merge([{"name": event.name, "image": event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder, "address": (eventdate.venue.name ~ ": " ~eventdate.venue.stringifyAddress),"date": (eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)), "price": (eventdate.isFree ? "Free"|trans : eventdate.getCheapestTicket.getSalePrice), "lat":eventdate.venue.lat, "lng":eventdate.venue.lng, "link": (path('event', { slug: event.slug })) }]) %}
+                                {% else %}
+                                    {% for eventonmap in eventsonmap %}
+                                        {% if eventonmap.lat != eventdate.venue.lat and eventonmap.lng != eventdate.venue.lng %}
+                                            {% set eventsonmap = eventsonmap|merge([{"name": event.name, "image": event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder, "address": (eventdate.venue.name ~ ": " ~eventdate.venue.stringifyAddress),"date": (eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)), "price": (eventdate.isFree ? "Free"|trans : eventdate.getCheapestTicket.getSalePrice), "lat":eventdate.venue.lat, "lng":eventdate.venue.lng, "link": (path('event', { slug: event.slug })) }]) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+
+                        {% if services.getSetting("show_calendar_button") == "yes" %}
+                            {% set eventsoncalendar = eventsoncalendar|merge([{"title": event.name, "start":eventdate.startdate|date('Y-m-d H:i'), "end": (eventdate.enddate ? eventdate.enddate|date('Y-m-d H:i') : ''), "url": (path('event', {slug : event.slug})) }]) %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            {% if eventsonmap|length > 0 and services.getSetting("show_map_button") == "yes" and google_maps_api_key != "" %}
+                <div id="events-map" data-pin-path="{{ asset('assets/img/icons/pin.png') }}" data-events="{{ eventsonmap|json_encode() }}" class="mb-4 collapse vh-90"></div>
+            {% endif %}
+            {% if eventsoncalendar|length > 0 and services.getSetting("show_calendar_button") == "yes" %}
+                <div id="events-calendar" data-default-date="{{ "now"|date('Y-m-d') }}" data-events="{{ eventsoncalendar|json_encode() }}" class="mb-4 collapse"></div>
+            {% endif %}
+
+            <div class="box shadow-none bg-gray mb-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
+                        <span class="center-lg-y text-muted">{{ "%resultsCount% event(s) found"|trans({'%resultsCount%': events.getTotalItemCount}) }}</span>
+                    </div>
+                    {% if events.getTotalItemCount > 0 %}
+                        <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                            {% if eventsonmap|length > 0 and services.getSetting("show_map_button") == "yes" and google_maps_api_key != "" %}
+                                <a href="#events-map" class="btn btn-primary has-tooltip" data-toggle="collapse" title="{{"Show events on map"|trans}}" aria-expanded="false" aria-controls="events-map"><i class="fas fa-map-marked-alt fa-fw"></i></a>
+                                {% endif %}
+                                {% if eventsoncalendar|length > 0 and services.getSetting("show_calendar_button") == "yes" %}
+                                <a href="#events-calendar" class="btn btn-primary has-tooltip" data-toggle="collapse" title="{{"Show events calendar"|trans}}" aria-expanded="false" aria-controls="events-calendar"><i class="far fa-calendar fa-fw"></i></a>
+                                {% endif %}
+                                {% if services.getSetting("show_rss_feed_button") == "yes" %}
+                                <a href="{{ services.getSetting("website_url")~"/rss" }}" class="btn btn-primary" data-toggle="tooltip" title="{{"Events RSS feed"|trans}}" target="_blank"><i class="fas fa-rss fa-fw"></i></a>
+                                {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <aside class="col-lg-3 order-2 order-lg-1">
+                    <div class="card card-filter">
+                        <form method="get">
+                            <article class="card-group-item">
+                                <header class="card-header">
+                                    <a href="#" data-toggle="collapse" data-target="#filter-keyword">
+                                        <i class="icon-action fa fa-chevron-down"></i>
+                                        <h6 class="title">{{ "Keyword"|trans }}</h6>
+                                    </a>
+                                </header>
+                                <div class="filter-content collapse show" id="filter-keyword">
+                                    <div class="card-body">
+                                        <input id="keyword" name="keyword" type="text" class="form-control" value="{{ app.request.get('keyword') }}">
+                                    </div>
+                                </div>
+                            </article>
+                            {% if services.getSetting("show_category_filter") == "yes" %}
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <a href="#" data-toggle="collapse" data-target="#filter-category">
+                                            <i class="icon-action fa fa-chevron-down"></i>
+                                            <h6 class="title">{{ "Category"|trans }}</h6>
+                                        </a>
+                                    </header>
+                                    <div class="filter-content collapse show" id="filter-category">
+                                        <div class="card-body">
+                                            <select id="category" name="category" class="select2" data-sort-options="1">
+                                                <option value="">&nbsp;</option>
+                                                {% for category in services.getCategories({}).getQuery().getResult() %}
+                                                    <option value="{{ category.slug }}">{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+                            {% if services.getSetting("show_location_filter") == "yes" %}
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <a href="#" data-toggle="collapse" data-target="#filter-location">
+                                            <i class="icon-action fa fa-chevron-down"></i>
+                                            <h6 class="title">{{ "Location"|trans }}</h6>
+                                        </a>
+                                    </header>
+                                    <div class="filter-content collapse show" id="filter-location">
+                                        <div class="card-body">
+                                            <div class="custom-control custom-checkbox form-check-input">
+                                                <div class="form-check mb-4 filter-online-container">
+                                                    <input type="checkbox" class="custom-control-input" id="filter-online-only" name="onlineonly" value="1">
+                                                    <label class="custom-control-label" for="filter-online-only">{{ "Online events only"|trans }}</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="location-based-filters">
+                                                {% set userLocation = services.locateUser() %}
+                                                {% if userLocation %}
+                                                    <div class="custom-control custom-checkbox form-check-input">
+                                                        <div class="form-check mb-4">
+                                                            <input type="checkbox" class="custom-control-input" id="filter-local-only" name="localonly" value="1">
+                                                            <label class="custom-control-label" for="filter-local-only">{{ "Local events only"|trans }}</label>
+                                                        </div>
+                                                    </div>
+                                                    <p id="user-country" class="text-muted">{{ "Events in %countryname%"|trans({"%countryname%" : userLocation['country'].name}) }} <span class="flag flag-{{userLocation['country'].code|lower}} ml-2"></span></p>
+                                                    {% endif %}
+                                                <div id="filter-country-container" class="mt-4">
+                                                    <label for="country">{{ "Country"|trans }}</label>
+                                                    <select id="country" class="select2" name="country" data-sort-options="1">
+                                                        <option value="">&nbsp;</option>
+                                                        {% for country in services.getCountries({}).getQuery().getResult() %}
+                                                            <option value="{{ country.slug }}">{{ country.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div id="filter-location-container" class="mt-4">
+                                                    <label for="location">{{ "State / City"|trans }}</label>
+                                                    <input id="location" name="location" type="text" class="form-control" value="{{ app.request.get('location') }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+                            {% if services.getSetting("show_date_filter") == "yes" %}
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <a href="#" data-toggle="collapse" data-target="#filter-date">
+                                            <i class="icon-action fa fa-chevron-down"></i>
+                                            <h6 class="title">{{ "Date"|trans }}</h6>
+                                        </a>
+                                    </header>
+                                    <div class="filter-content collapse show" id="filter-date">
+                                        <div class="card-body">
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-today" name="startdate" value="today">
+                                                    <label class="custom-control-label" for="date-today">{{ "Today"|trans }}</label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdate" : ("now"|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-tomorrow" name="startdate" value="tomorrow">
+                                                    <label class="custom-control-label" for="date-tomorrow">{{ "Tomorrow"|trans }}</label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdate" : ("now"|date_modify("+1 day")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-thisweekend" name="startdate" value="thisweekend">
+                                                    <label class="custom-control-label" for="date-thisweekend">
+                                                        {{ "This weekend"|trans }}
+                                                    </label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdatemin" : ("now"|date_modify("saturday this week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday this week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-thisweek" name="startdate" value="thisweek">
+                                                    <label class="custom-control-label" for="date-thisweek">
+                                                        {{ "This week"|trans }}
+                                                    </label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdatemin" : ("now"|date_modify("monday this week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday this week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-nextweek" name="startdate" value="nextweek">
+                                                    <label class="custom-control-label" for="date-nextweek">
+                                                        {{ "Next week"|trans }}
+                                                    </label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdatemin" : ("now"|date_modify("monday next week")|date("Y-m-d")), "startdatemax" : ("now"|date_modify("sunday next week")|date("Y-m-d"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-thismonth" name="startdate" value="thismonth">
+                                                    <label class="custom-control-label" for="date-thismonth">
+                                                        {{ "This month"|trans }}
+                                                    </label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdatemin" : ("now"|date("Y-m-01")), "startdatemax" : ("now"|date("Y-m-t"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input" id="date-nextmonth" name="startdate" value="nextmonth">
+                                                    <label class="custom-control-label" for="date-nextmonth">
+                                                        {{ "Next month"|trans }}
+                                                    </label>
+                                                </div>
+                                                <span class="float-right form-check-label">
+                                                    <span class="badge badge-light round">{{ services.getEvents({"count": true, "startdatemin" : ("now"|date_modify("+1 month")|date("Y-m-01")), "startdatemax" : ("now"|date_modify("+1 month")|date("Y-m-t"))}).getQuery().getSingleScalarResult() }}</span>
+                                                </span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="form-check">
+                                                <div class="float-left custom-control custom-radio form-check-input">
+                                                    <input type="radio" class="custom-control-input datepicker" id="date-pickadate" name="startdate" value="all">
+                                                    <label class="custom-control-label" for="date-pickadate">
+                                                        {{ "Pick a date"|trans }}
+                                                    </label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+                            {% if services.getSetting("show_ticket_price_filter") == "yes" %}
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <a href="#" data-toggle="collapse" data-target="#filter-price">
+                                            <i class="icon-action fa fa-chevron-down"></i>
+                                            <h6 class="title">{{ "Ticket price"|trans }}</h6>
+                                        </a>
+                                    </header>
+                                    <div class="filter-content collapse show" id="filter-seated-guests">
+                                        <div class="card-body">
+
+                                            <div class="custom-control custom-checkbox form-check-input ml-0 mb-4">
+                                                <input type="checkbox" class="custom-control-input" id="free-events-only" name="freeonly" value="1">
+                                                <label class="custom-control-label" for="free-events-only">
+                                                    {{ "Free events only"|trans }}
+                                                </label>
+                                            </div>
+
+                                            <div class="events-price-range-slider-wrapper">
+                                                <div class="range-slider mb-3" data-min="0" data-max="10000" data-start-left="{{ app.request.get('pricemin') ?? "0" }}" data-start-right="{{ app.request.get('pricemax') ?? "10000" }}"></div>
+                                                <div class="row ranger-slider-inputs">
+                                                    <div class="col-12 col-sm-6">
+                                                        <label for="pricemin">{{"Min"|trans }}</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">{{ services.getSetting('currency_symbol') }}</span>
+                                                            </div>
+                                                            <input id="pricemin" name="pricemin" type="text" class="form-control range-slider-min-input" value="{{ app.request.get('pricemin') }}" placeholder="{{ "Min"|trans }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-sm-6">
+                                                        <label for="pricemax">{{"Max"|trans }}</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">{{ services.getSetting('currency_symbol') }}</span>
+                                                            </div>
+                                                            <input id="pricemax" name="pricemax" type="text" class="form-control range-slider-max-input" value="{{ app.request.get('pricemax') }}" placeholder="{{ "Max"|trans }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+                            {% if services.getSetting("show_audience_filter") == "yes" %}
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <a href="#" data-toggle="collapse" data-target="#filter-audience">
+                                            <i class="icon-action fa fa-chevron-down"></i>
+                                            <h6 class="title">{{"Audience"|trans }}</h6>
+                                        </a>
+                                    </header>
+                                    <div class="filter-content collapse show" id="filter-audience">
+                                        <div class="card-body">
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                {% for audience in services.getAudiences({}).getQuery().getResult() %}
+                                                    <label class="btn btn-light btn-sm py-2 px-3" data-toggle="tooltip" title="{{ audience.name }}">
+                                                        <input type="radio" name="audience" id="{{ audience.slug }}" value="{{ audience.slug }}">
+                                                        <img src="{{ asset(audience.getImagePath) }}" class="img-15-15" alt="{{ audience.name }}">
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            {% endif %}
+                            <article class="card-group-item">
+                                <div class="card-body">
+                                    <button class="btn btn-block btn-outline-primary"><i class="fas fa-search"></i> {{ "Search"|trans }}</button>
+                                </div>
+                            </article>
+                        </form>
+                    </div>
+                    {% if services.getSetting("newsletter_enabled") == "yes" and services.getSetting("mailchimp_api_key") and services.getSetting("mailchimp_list_id") %}
+                        {% include "Global/newsletter-box.html.twig" %}
+                    {% endif %}
+                </aside>
+                <div class="col-lg-9 order-1 order-lg-2">
+                    {% if events.getTotalItemCount > 0 %}
+                        <div class="row">
+                            {% for event in events %}
+                                <div class="col-12 col-sm-6 col-lg-6 mb-3">
+                                    {% include "Global/event-card.html.twig" with {event: event} %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No events found'|trans), icon: "fas fa-exclamation-circle" } %}
+                    {% endif %}
+                    {{ knp_pagination_render(events, null, {}, {'align': 'center'}) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('events') }}
+    {% if services.getSetting("show_map_button") == "yes" and google_maps_api_key != "" %}
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_maps_api_key}}&callback=initMap">
+        </script>
+        {% include "Global/event-info-box.html.twig" %}
+    {% endif %}
+{% endblock %}

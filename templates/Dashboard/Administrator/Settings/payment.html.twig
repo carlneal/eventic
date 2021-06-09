@@ -1,0 +1,109 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Payment settings' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="b mb-0 float-lg-left">{{ "Global payment settings"|trans }}</h6>
+                            <a href="{{ path('dashboard_administrator_currency') }}" class="btn btn-primary ml-3 float-lg-right"><i class="fas fa-coins"></i> {{ 'Manage currencies'|trans }}</a>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'name': 'payment_settings'}) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <h6 class="b mb-0 float-lg-left">{{ "Payment gateways"|trans }}</h6>
+                            <a href="{{ path('dashboard_administrator_settings_payment_gateways_add') }}" class="btn btn-primary ml-3 float-lg-right" data-toggle="tooltip" title="{{'Add a new payment gateway' | trans}}"><i class="fas fa-plus"></i></a>
+                        </div>
+                        <div class="card-body">
+
+                            {% set paymentgateways = services.getPaymentGateways({"enabled": "all"}).getQuery().getResult() %}
+
+                            {% if paymentgateways|length %}
+
+                                <table class="table table-hover table-vcenter text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'Name'|trans}}</th>
+                                            <th>{{'Logo'|trans}}</th>
+                                            <th>{{'Status'|trans}}</th>
+                                            <th>{{'Order of appearance'|trans}}</th>
+                                            <th class="text-center"><i class="fas fa-cog"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for paymentgateway in paymentgateways %}
+
+                                            <tr>
+                                                <td>
+                                                    {{ paymentgateway.name }}
+                                                </td>
+                                                <td>
+                                                    <a class="fancybox" href="{{ asset(paymentgateway.getLogoPath) }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                                                        <img src="{{ asset(paymentgateway.getLogoPath) }}" class="img-thumbnail img-50-50" />
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {% if paymentgateway.enabled %}
+                                                        <span class="badge badge-success"><i class="fas fa-eye fa-fw"></i> {{ "Enabled"|trans }}</span>
+                                                    {% else %}
+                                                        <span class="badge badge-danger"><i class="fas fa-eye-slash fa-fw"></i> {{ "Disabled"|trans }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ paymentgateway.number }}</td>
+                                                <td class="text-center">
+                                                    <div class="item-action dropdown">
+                                                        <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="{{ path('dashboard_administrator_settings_payment_gateways_edit', { slug : paymentgateway.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            {% else %}
+                                {% include "Global/message.html.twig" with { type: "info", message: ('No payment gateways found'|trans), icon: "fas fa-exclamation-circle" } %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+            $('#form_ticket_fee_pos').closest('.form-group').hide();
+            $('#form_pos_ticket_price_percentage_cut').closest('.form-group').hide();
+        });
+    </script>
+
+{% endblock %}

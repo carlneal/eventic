@@ -1,0 +1,10 @@
+jms_translation:
+    locales: ['en', 'fr', 'es', 'ar']
+    source_language: 'en'
+    configs:
+        app:
+            dirs: ["%kernel.project_dir%/templates", "%kernel.project_dir%/src"]
+            output_dir: "%kernel.project_dir%/translations"
+            excluded_names: ["*TestCase.php", "*Test.php"]
+            output_format: "xliff"
+            keep: true

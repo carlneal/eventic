@@ -1,0 +1,32 @@
+.alert {
+    color: #fff;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.alert-icon {
+    padding-left: 3rem;
+}
+
+.alert-icon > i {
+    color: inherit !important;
+    font-size: 1rem;
+    position: absolute;
+    left: 1rem;
+}
+
+.alert-danger {
+    background-color: $danger;
+}
+
+.alert-success {
+    background-color: $success;
+}
+
+.alert-info {
+    background-color: $info;
+}
+
+.alert-warning {
+    background-color: $warning;
+}

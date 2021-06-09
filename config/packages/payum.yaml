@@ -1,0 +1,11 @@
+payum:
+    security:
+        token_storage:
+            App\Entity\PaymentToken: { doctrine: orm }
+    storages:
+        App\Entity\Payment: { doctrine: orm }
+    dynamic_gateways:
+        config_storage:
+            App\Entity\PaymentGateway: { doctrine: orm }
+        encryption:
+            defuse_secret_key: '%env(PAYUM_CYPHER_KEY)%'

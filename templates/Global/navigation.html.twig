@@ -1,0 +1,22 @@
+<section class="section-pagetop bg-gray">
+    <div class="{{ services.getSetting("app_layout") }} clearfix">
+        <h4 class="title-page dark b float-xl-left mb-0">{{ navigation|last['current'] }}</h4>
+
+        <nav class="float-xl-right mt-2 mt-xl-0">
+            <ol class="breadcrumb text-white">
+                <li class="breadcrumb-item"><a href="{{ path('homepage') }}" class="dark"><i class="fas fa-home"></i></a></li>
+                        {% for li in navigation %}
+                            {% for routename, pagetitle in li if routename != "current" %}
+                                {% if '/' in routename %}
+                                    {% set href = routename %}
+                                {% else %}
+                                    {% set href = path(routename) %}
+                                {% endif %}
+                        <li class="breadcrumb-item"><a href="{{ href }}" class="dark">{{pagetitle}}</a></li>
+                        {% endfor %}
+                    {% endfor %}
+                <li class="breadcrumb-item active" aria-current="page">{{ navigation|last['current'] }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2021-01-17T06:39:54Z" source-language="en" target-language="fr" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="8be3c943b1609fffbfc51aad666d0a04adf83c9d" resname="Password">
+        <source>Password</source>
+        <target>Mot de passe</target>
+        <jms:reference-file line="53">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Form\RegistrationType.php\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7ceacdcaab4c898f58352ac7759cc808a85290da" resname="Privacy policy">
+        <source>Privacy policy</source>
+        <target>Politique de confidentialité</target>
+        <jms:reference-file line="93">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="88">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="a6a1d25b018c9318540556e3fe374fdf8b23aff8" resname="Terms of service">
+        <source>Terms of service</source>
+        <target>Conditions d'utilisation</target>
+        <jms:reference-file line="89">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="84">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ca4f9dcf204e2037bfe5884867bead98bd9cbaf8" resname="Welcome">
+        <source>Welcome</source>
+        <target>Bienvenu</target>
+        <jms:reference-file line="21">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\email.html.twig\</jms:reference-file>
+        <jms:reference-file line="20">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0f0f04f09c17d10081eb4993fa863550ecc9d33d" resname="change_password.flash.success">
+        <source>change_password.flash.success</source>
+        <target>Le mot de passe a été modifié.</target>
+      </trans-unit>
+      <trans-unit id="a5eba05921c11add89e9b68570149da22499c604" resname="change_password.submit">
+        <source>change_password.submit</source>
+        <target>Modifier le mot de passe</target>
+        <jms:reference-file line="26">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\ChangePassword\change_password.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1388ed24b682f8d7500fbec20ac5824f26cc834f" resname="form.current_password">
+        <source>form.current_password</source>
+        <target>Mot de passe actuel</target>
+      </trans-unit>
+      <trans-unit id="7e6b12a7deb5f7315f025b8c49121130cd7798ad" resname="form.email">
+        <source>form.email</source>
+        <target>Adresse e-mail</target>
+        <jms:reference-file line="58">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="58">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="09f2c646a76d41b0af987f6fcf2407e95e6d65e4" resname="form.group_name">
+        <source>form.group_name</source>
+        <target>Nom du groupe</target>
+      </trans-unit>
+      <trans-unit id="210f8b7cbd19367b2ca1332f3cd00b7a06f7e0a0" resname="form.new_password">
+        <source>form.new_password</source>
+        <target>Nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="9c550aa2c68f9be72e8c34c90d6c359178ab9a25" resname="form.new_password_confirmation">
+        <source>form.new_password_confirmation</source>
+        <target>Répéter le nouveau mot de passe</target>
+      </trans-unit>
+      <trans-unit id="6d384fb8ef3ca9318f0f9d983868842a211770f8" resname="form.password">
+        <source>form.password</source>
+        <target>Mot de passe</target>
+        <jms:reference-file line="65">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="65">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="30de94712c8550862006ed6a664870c398c9482d" resname="form.password_confirmation">
+        <source>form.password_confirmation</source>
+        <target>Répéter le mot de passe</target>
+        <jms:reference-file line="72">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="72">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="dff086700fdd62e031af5de308be31fcada4d7c7" resname="form.username">
+        <source>form.username</source>
+        <target>Nom d'utilisateur</target>
+        <jms:reference-file line="51">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-attendee.html.twig\</jms:reference-file>
+        <jms:reference-file line="51">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\register-organizer.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4e0b1d3f135337a4f6615d13711fed97e3d92080" resname="group.edit.submit">
+        <source>group.edit.submit</source>
+        <target>Mettre à jour le groupe</target>
+      </trans-unit>
+      <trans-unit id="6328fbc0d29c53b1b6f7847fd2b9d5d8f273e7c8" resname="group.flash.created">
+        <source>group.flash.created</source>
+        <target>Le groupe a été créé.</target>
+      </trans-unit>
+      <trans-unit id="7309eadba21f923125caa6a810c61f5549ebfb79" resname="group.flash.deleted">
+        <source>group.flash.deleted</source>
+        <target>Le groupe a été supprimé.</target>
+      </trans-unit>
+      <trans-unit id="2c64bc0f147b8af193de5c584e0a538bc2d06b7f" resname="group.flash.updated">
+        <source>group.flash.updated</source>
+        <target>Le groupe a été mis à jour.</target>
+      </trans-unit>
+      <trans-unit id="2d2e27384f5da5d1cf49104ef74d80de2d989e3c" resname="group.new.submit">
+        <source>group.new.submit</source>
+        <target>Créer le groupe</target>
+      </trans-unit>
+      <trans-unit id="aff7ccb3f34b577634ce0be987c2b84674fb1085" resname="group.show.name">
+        <source>group.show.name</source>
+        <target>Nom du groupe</target>
+      </trans-unit>
+      <trans-unit id="3ed6a1235bf3e6337f499ec08dd3a1d6768b0c57" resname="layout.logged_in_as">
+        <source>layout.logged_in_as</source>
+        <target>Connecté en tant que %username%</target>
+      </trans-unit>
+      <trans-unit id="360d5f783c46f5e90f1b24010cb6bf03626ec35b" resname="layout.login">
+        <source>layout.login</source>
+        <target>Connexion</target>
+      </trans-unit>
+      <trans-unit id="80a0b95340202d0b8c88ba8bd10b315ecdd1feba" resname="layout.logout">
+        <source>layout.logout</source>
+        <target>Déconnexion</target>
+      </trans-unit>
+      <trans-unit id="4c9ff1aeeca94547d4ddc976d841143fc0a13aa7" resname="layout.register">
+        <source>layout.register</source>
+        <target>Inscription</target>
+      </trans-unit>
+      <trans-unit id="9741ffbcf8dbb31e1a2d32bd25cb0ccc5a6dea54" resname="profile.edit.submit">
+        <source>profile.edit.submit</source>
+        <target>Mettre à jour</target>
+      </trans-unit>
+      <trans-unit id="a067e7e04712aa036ad446379831d4a5fd00c27d" resname="profile.flash.updated">
+        <source>profile.flash.updated</source>
+        <target>Le profil a été mis à jour.</target>
+      </trans-unit>
+      <trans-unit id="6f2b87ab0da336a9cb633f397ff7f86ab7ea522b" resname="profile.show.email">
+        <source>profile.show.email</source>
+        <target>Adresse e-mail</target>
+      </trans-unit>
+      <trans-unit id="0d6307def2ec4ecb26978118bb2deca9d566945c" resname="profile.show.username">
+        <source>profile.show.username</source>
+        <target>Nom d'utilisateur</target>
+      </trans-unit>
+      <trans-unit id="1fa5b2873fe30be026b854f6a51503b86c6ac81a" resname="registration.back">
+        <source>registration.back</source>
+        <target>Retour à la page d'origine.</target>
+        <jms:reference-file line="20">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\confirmed.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="85a4eff0132a6f92eae3057837f285b3aedf38b8" resname="registration.check_email">
+        <source>registration.check_email</source>
+        <target>Un e-mail a été envoyé à l'adresse %email%. Il contient un lien d'activation sur lequel il vous faudra cliquer afin d'activer votre compte.</target>
+        <jms:reference-file line="18">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\check_email.html.twig\</jms:reference-file>
+        <jms:reference-file line="5">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\check_email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7a0a8fbc70fe82997f8a2ff89090f523ee63f72a" resname="registration.confirmed">
+        <source>registration.confirmed</source>
+        <target>Félicitations %username%, votre compte est maintenant activé.</target>
+        <jms:reference-file line="18">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\confirmed.html.twig\</jms:reference-file>
+        <jms:reference-file line="5">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\confirmed.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="6362bc7b7a8f72b782ffd590744ab069327bbe4a" resname="registration.email.message">
+        <source>registration.email.message</source>
+        <target xml:space="preserve">Bonjour %username% !
+
+Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%
+
+Ce lien ne peut être utilisé qu'une seule fois pour valider votre compte.
+
+Cordialement,
+L'équipe
+</target>
+        <jms:reference-file line="11">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="10df4e23ec43b671aafea0a3a9ebc8dcc92b1bd0" resname="registration.email.subject">
+        <source>registration.email.subject</source>
+        <target>Bienvenue %username% !</target>
+        <jms:reference-file line="5">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Registration\email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="49aab1b844c4ff643f7d76ea29c1a74d603adf05" resname="registration.flash.user_created">
+        <source>registration.flash.user_created</source>
+        <target>L'utilisateur a été créé avec succès.</target>
+      </trans-unit>
+      <trans-unit id="4ef79d57e94b4b74349d6533a231e09dc5be0ce2" resname="registration.submit">
+        <source>registration.submit</source>
+        <target>Créer un compte</target>
+      </trans-unit>
+      <trans-unit id="40c1a483571045e24d606bf00361cfd4d021ba05" resname="resetting.check_email">
+        <source>resetting.check_email</source>
+        <target xml:space="preserve">Un e-mail a été envoyé. Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.
+Remarque : Vous ne pouvez demander un nouveau mot de passe que toutes les %tokenLifetime% heures.
+
+Si vous ne recevez pas un email, vérifiez votre dossier spam ou essayez à nouveau.
+</target>
+        <jms:reference-file line="20">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\check_email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="70c8836a0e3b8dadb494b8de56ebed18939359b5" resname="resetting.email.message">
+        <source>resetting.email.message</source>
+        <target xml:space="preserve">Bonjour %username% !
+
+Pour réinitialiser votre mot de passe, merci de vous rendre sur %confirmationUrl%
+
+Cordialement,
+L'équipe
+</target>
+        <jms:reference-file line="10">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="126cf13058808d8948cc673c7933c6c1ce27841d" resname="resetting.email.subject">
+        <source>resetting.email.subject</source>
+        <target>Réinitialisation de votre mot de passe</target>
+        <jms:reference-file line="4">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\email.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="023f97331ab0db9cae04d202498b337a0d0a1f25" resname="resetting.flash.success">
+        <source>resetting.flash.success</source>
+        <target>Le mot de passe a été réinitialisé avec succès.</target>
+      </trans-unit>
+      <trans-unit id="e1470b3c202d9a4fa8e1afa7ed8695917f060ccd" resname="resetting.request.submit">
+        <source>resetting.request.submit</source>
+        <target>Réinitialiser le mot de passe</target>
+        <jms:reference-file line="27">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\request.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7ad41bf8fb30013eb0f31ca027ca8d1dc7a3d96f" resname="resetting.request.username">
+        <source>resetting.request.username</source>
+        <target>Nom d'utilisateur ou adresse e-mail</target>
+        <jms:reference-file line="24">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\request.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="921fd7a5cc7f9e46eab31822855a22d9808b0477" resname="resetting.reset.submit">
+        <source>resetting.reset.submit</source>
+        <target>Modifier le mot de passe</target>
+        <jms:reference-file line="23">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Resetting\reset.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="62d5564c383b885ff0de25abd24a41080499970b" resname="security.login.password">
+        <source>security.login.password</source>
+        <target>Mot de passe</target>
+        <jms:reference-file line="53">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Security\login.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="d074ed9a0eb75b7f17ef2274c21d4c3d12d91634" resname="security.login.remember_me">
+        <source>security.login.remember_me</source>
+        <target>Se souvenir de moi</target>
+        <jms:reference-file line="59">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Security\login.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="79c180ac5e987e195d1dfeda857a114ed692d07f" resname="security.login.submit">
+        <source>security.login.submit</source>
+        <target>Connexion</target>
+      </trans-unit>
+      <trans-unit id="64e1b2aaf6156a7e34a13fbc38801e89478efff8" resname="security.login.username">
+        <source>security.login.username</source>
+        <target>Nom d'utilisateur</target>
+        <jms:reference-file line="44">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\bundles\FOSUserBundle\Security\login.html.twig\</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

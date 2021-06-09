@@ -1,0 +1,101 @@
+{% extends "Global/layout.html.twig" %}
+{% form_theme form '@EWZRecaptcha/Form/ewz_recaptcha_widget.html.twig' %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% set pagetitle = 'Take your events to the next level'|trans({}, 'messages') %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h1 class="card-title text-center">{{ pagetitle }}</h1>
+                </div>
+                <div class="col-xl-5 offset-xl-1 d-none d-xl-block">
+                    <img src="{{ asset('assets/img/illustrations/register-organizer.png') }}" class="img-fluid" />
+                </div>
+                <div class="col-xl-4 col-12">
+                    {{ form_start(form, {'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+
+                    {{ form_errors(form) }}
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="far fa-id-card"></i> </span>
+                        </div>
+                        {{ form_widget(form.organizer.name) }}
+                        {{ form_errors(form.organizer.name) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-user"></i> </span>
+                        </div>
+                        {{ form_widget(form.firstname) }}
+                        {{ form_errors(form.firstname) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-user"></i> </span>
+                        </div>
+                        {{ form_widget(form.lastname) }}
+                        {{ form_errors(form.lastname) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-user-tag"></i> </span>
+                        </div>
+                        {{ form_widget(form.username) }}
+                        {{ form_errors(form.username) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-envelope"></i> </span>
+                        </div>
+                        {{ form_widget(form.email) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-user-lock"></i> </span>
+                        </div>
+                        {{ form_widget(form.plainPassword.first) }}
+                        {{ form_errors(form.plainPassword.first) }}
+                    </div>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0"> <i class="fas fa-user-lock"></i> </span>
+                        </div>
+                        {{ form_widget(form.plainPassword.second) }}
+                        {{ form_errors(form.plainPassword.second) }}
+                    </div>
+                    {% if services.getSetting('google_recaptcha_enabled') == "yes" %}
+                        <div class="form-group">
+                            {{ form_widget(form.recaptcha) }}
+                            {{ form_errors(form.recaptcha) }}
+                        </div>
+                    {% endif %}
+                    <div class="mb-3 text-sm text-center">
+                        {% if services.getSetting('show_terms_of_service_page') == "yes" %}
+                            <span class="text-muted">{{ "By clicking the Sign Up button, I agree to"|trans({}, 'messages') }}</span>
+                            <a href="{{ path('page', { slug : services.getSetting('terms_of_service_page_slug') }) }}">{{ "Terms of service"|trans }}</a>
+                        {% endif %}
+                        {% if services.getSetting('show_privacy_policy_page') == "yes" %}
+                            <span class="text-muted">{{ "and"|trans({}, 'messages') }}</span>
+                            <a href="{{ path('page', { slug : services.getSetting('privacy_policy_page_slug') }) }}">{{ "Privacy policy"|trans }}</a>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">{{ "Create Account"|trans({}, 'messages') }}</button>
+                    </div>
+                    <p class="text-center">{{ "Already have an account?"|trans({}, 'messages') }} <a href="{{ path('fos_user_security_login') }}">{{ "Sign in"|trans({}, 'messages') }}</a></p>
+                        {{ form_widget(form._token) }}
+                        {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

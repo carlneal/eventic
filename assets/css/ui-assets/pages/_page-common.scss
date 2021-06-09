@@ -1,0 +1,46 @@
+body *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    transition: .3s background;
+}
+
+body *::-webkit-scrollbar {
+    cursor: pointer;
+}
+
+body *::-webkit-scrollbar-thumb {
+    background: #ced4da;
+}
+
+body *:hover::-webkit-scrollbar-thumb {
+    background: #adb5bd;
+}
+
+
+.section-pagetop{
+    padding:20px 0; background-repeat:no-repeat; background-size:cover;
+}
+
+.pagination>li>a, .pagination>li>span {
+    margin: 0 5px;
+}
+
+a {
+    transition: ease all 250ms;
+}
+
+.requires-confirmation:hover, .ajax-loading:hover {
+    cursor: pointer;
+}
+
+.section-content {
+    min-height: 50vh;
+}
+
+.page-item.active .page-link {
+    color: #fff !important;
+}
+
+.page-link {
+    color: #999 !important;
+}

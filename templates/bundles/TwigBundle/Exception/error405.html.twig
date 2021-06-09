@@ -1,0 +1,78 @@
+{% set pagetitle = '405 - ' ~ 'Method Not Supported'|trans %}
+
+<!DOCTYPE html>
+<html lang="{{ app.request.get('_locale') }}">
+    <head>
+        <title>{{ pagetitle }} | {{ services.getSetting("website_name") }}</title>
+        <link rel="shortcut icon" href="{{ absolute_url(asset(services.getAppLayoutSettings.getFaviconPath)) }}" />
+
+        {# Google analytics code added in the app parameters #}
+        {% if services.getSetting('google_analytics_code') != "" and services.getSetting('google_analytics_code') is not null %}
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ services.getSetting('google_analytics_code') }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag('js', new Date());
+
+                gtag('config', '{{ services.getSetting('google_analytics_code') }}');
+            </script>
+        {% endif %}
+
+        {{ encore_entry_link_tags('app') }}
+
+        {# i18n lang specific styles #}
+        {% if app.request.locale == "fr" %}
+            {{ encore_entry_link_tags('app.fr') }}
+        {% elseif app.request.locale == "ar" %}
+            {{ encore_entry_link_tags('app.ar') }}
+        {% endif %}
+
+        {# Application theme #}
+        {{ encore_entry_link_tags('app.'~services.getSetting('app_theme')) }}
+
+        {# Custom css code added in the app parameters #}
+        {% if services.getSetting('custom_css') != "" and services.getSetting('custom_css') is not null %}
+            <style>
+                {{ services.getSetting('custom_css')|raw }}
+            </style>
+        {% endif %}
+
+    </head>
+
+    <body class="vh-100 {% if app.request.locale == "ar" %}rtl{% endif %}" data-currency-ccy="{{ services.getSetting('currency_ccy') }}" data-currency-symbol="{{ services.getSetting('currency_symbol') }}" data-currency-position="{{ services.getSetting('currency_position') }}" data-timezone="{{ date_timezone }}" {% if services.getSetting('show_cookie_policy_bar') == "yes" %}data-cookie-bar-page-link="{{ path('page', { slug : services.getSetting('cookie_policy_page_slug') }) }}" {% endif %} {% if services.getEnv('DEMO_MODE') == "1" %}data-demo-mode="1"{% endif %}>
+
+        <div class="container h-100">
+            <div class="row align-items-center h-100">
+                <div class="col-lg-6 mx-auto">
+                    <img src="{{ asset('assets/img/illustrations/403-405.png') }}" class="img-fluid" />
+                </div>
+                <div class="col-lg-6 mx-auto">
+                    <div class="jumbotron">
+                        <h1>
+                            {{ pagetitle }}
+                        </h1>
+                        <h4>
+                            {{ "The request method is known by the server but is not supported by the target resource"|trans }}
+                        </h4>
+                        <a href="{{ path('homepage') }}" class="btn btn-primary mt-3">
+                            <i class="fas fa-home fa-fw"></i> {{ "return to the homepage"|trans }}
+                        </a>
+                        <button type="button" onclick="window.history.back();" class="btn btn-outline-dark mt-3">
+                            <i class="fas fa-undo"></i> {{ "Go back"|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script id="top-search-result-template" type="text/x-handlebars-template">
+            {% include "Global/event-preview-horizontal.html.twig" with { handlebarstemplate: true } %}
+        </script>
+
+        {{ encore_entry_script_tags('app') }}
+
+    </body>
+</html>

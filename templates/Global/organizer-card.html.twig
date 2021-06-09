@@ -1,0 +1,13 @@
+<div class="card">
+    <figure class="itemside">
+        <div class="aside">
+            <div class="img-wrap img-sm d-flex">
+                <img class="img-100-100 align-self-center" src="{{ organizer.logoName ? asset(organizer.getLogoPath) : organizer.getLogoPlaceholder }}" alt="{{ organizer.name }}">
+            </div>
+        </div>
+        <figcaption class="p-2 align-self-center">
+            <h6 class="tit le">{{ organizer.name }}</h6>
+            <a href="{{ path('organizer', { slug : organizer.slug }) }}">{{ "More details"|trans }}</a>
+        </figcaption>
+    </figure>
+</div>

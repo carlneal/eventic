@@ -1,0 +1,12 @@
+<div id="dashboard-sidenav" class="dashboard-sidenav d-lg-none d-xl-none">
+    <a href="javascript:void(0)" class="dashboard-sidenav-close" onclick="closeDashboardSideNav()">&times;</a>
+    <span class="dashboard-sidenav-username"><i class="far fa-user"></i> {{ app.user.username }}</span>
+    <ul class="nav nav-pills nav-pills-vertical-styled overflow-auto" >
+        {% include "Dashboard/sidebar-links.html.twig" %}
+        <li class="nav-item">
+            <a href="{{ path('fos_user_security_logout') }}" class="nav-link">
+                <i class="fas fa-sign-out-alt fa-fw"></i> {{'Sign out'|trans}}
+            </a>
+        </li>
+    </ul>
+</div>

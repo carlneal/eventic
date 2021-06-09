@@ -1,0 +1,140 @@
+# Installer routes
+
+app_installer:
+    resource: '../src/Controller/Installer'
+    prefix: /installer
+    name_prefix: 'installer_'
+    trailing_slash_on_root: false
+
+# Dashboard routes
+
+app_dashboard_main:
+    resource: '../src/Controller/Dashboard/Main'
+    prefix: /{_locale}/dashboard
+    name_prefix: 'dashboard_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+app_dashboard_admin:
+    resource: '../src/Controller/Dashboard/Administrator'
+    prefix: /{_locale}/dashboard/administrator
+    name_prefix: 'dashboard_administrator_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+app_dashboard_organizer:
+    resource: '../src/Controller/Dashboard/Organizer'
+    prefix: /{_locale}/dashboard/organizer
+    name_prefix: 'dashboard_organizer_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+# Change the shared controller name prefixes manually
+app_dashboard_shared:
+    resource: '../src/Controller/Dashboard/Shared'
+    prefix: /{_locale}/dashboard
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+app_dashboard_attendee:
+    resource: '../src/Controller/Dashboard/Attendee'
+    prefix: /{_locale}/dashboard/attendee
+    name_prefix: 'dashboard_attendee_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+app_dashboard_point_of_sale:
+    resource: '../src/Controller/Dashboard/PointOfSale'
+    prefix: /{_locale}/dashboard/pointofsale
+    name_prefix: 'dashboard_pointofsale_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+app_dashboard_scanner:
+    resource: '../src/Controller/Dashboard/Scanner'
+    prefix: /{_locale}/dashboard/scanner
+    name_prefix: 'dashboard_scanner_'
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+# Front routes
+
+app_front:
+    resource: '../src/Controller/Front'
+    prefix: /{_locale}/
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+# Api routes
+
+app_api:
+    resource: '../src/Controller/Api'
+    prefix: /{_locale}/api/
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+# Bundles routes
+
+JMSTranslationBundle_ui:
+    resource: "@JMSTranslationBundle/Controller/"
+    type:     annotation
+    prefix:   /_trans
+
+fos_user:
+    resource: 'routes/fos_user/'
+    type:     directory
+    prefix: /{_locale}/
+    requirements:
+        _locale: '%locales%'
+    trailing_slash_on_root: false
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing-sf4.xml"
+
+payum_all:
+    resource: "@PayumBundle/Resources/config/routing/all.xml"
+
+presta_sitemap:
+    resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
+
+rss_atom_bundle:
+    resource: "@DebrilRssAtomBundle/Resources/config/routing.yml"
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
+
+bazinga_js_translation:
+    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
+
+fos_comment_api:
+    type: rest
+    resource: "@FOSCommentBundle/Resources/config/routing.yml"
+    prefix: /api
+    defaults: { _format: html }
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+facebook_login:
+    path: /login/check-facebook
+
+google_login:
+    path: /login/check-google

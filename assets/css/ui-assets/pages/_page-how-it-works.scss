@@ -1,0 +1,59 @@
+.how-it-works-page .tab-content {
+    box-shadow: 0 1px 5px rgba(85, 85, 85, 0.15);
+
+    .card {
+        border-radius: 0;
+    }
+
+    .card-header {
+        padding: 15px 16px;
+        border-radius: 0;
+        background-color: #f6f6f6;
+
+        h5 {
+            margin: 0;
+
+            button {
+                display: block;
+                width: 100%;
+                padding: 0;
+                border: 0;
+                font-weight: 700;
+                color: rgba(0,0,0,.87);
+                text-align: left;
+                white-space: normal;
+
+                &:hover,
+                    &:focus,
+                    &:active,
+                    &:hover:active {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+
+    .card-body {
+        p {
+            color: #616161;
+
+            &:last-of-type {
+                margin: 0;
+            }
+        }
+    }
+}
+
+.how-it-works-page .accordion {
+    > .card {
+        &:not(:first-child) {
+            border-top: 0;
+        }
+    }
+}
+
+.how-it-works-page .collapse.show {
+    .card-body {
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+}

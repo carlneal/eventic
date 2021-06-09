@@ -1,0 +1,35 @@
+<div class="user-review-wrapper mb-5">
+    {% if showevent is defined %}
+        <a href="{{ path('event', { slug : review.event.slug }) }}">
+            <img src="{{ review.event.imageName ? asset(review.event.getImagePath) : review.event.getImagePlaceholder }}" class="img-thumbnail img-100-100" /> {{ review.event.name }}
+        </a>
+    {% endif %}
+    {% if showuser is defined %}
+        <div class="mt-3">
+            {% include "Global/user-avatar.html.twig" with { user: review.user } %}
+            <h6 class="user-fullname display-inline-block">{{ review.user.getFullName }}</h6>
+        </div>
+    {% endif %}
+    <div class="rating-wrap mt-3">
+        <ul class="rating-stars">
+            <li style="width:{{review.getRatingPercentage}}%" class="stars-active">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </li>
+            <li>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+            </li>
+        </ul>
+        <div class="label-rating">{{ review.getRating }} {{"out of 5 stars"|trans|lower}}</div>
+    </div>
+    <small class="text-muted mt-1">{{ review.createdat|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</small>
+    <h6 class="mt-4 font-weight-bold">{{ review.headline }}</h6>
+    <p class="mt-2 text-sm readmore" data-collapsed-height="200" data-height-margin="20">{{ review.details }}</p>
+</div>

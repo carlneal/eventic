@@ -1,0 +1,10 @@
+.custom-file-input ~ .custom-file-label::after {
+    content: "Parcourir";
+}
+
+@media (min-width: 1301px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+}

@@ -1,0 +1,78 @@
+{% extends "Global/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% set pagetitle = 'Sign in'|trans({}, 'messages') %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <div class="col-12 col-lg-4 offset-lg-4">
+                    <div class="col-12 mb-5">
+                        <h1 class="card-title text-center">{{ pagetitle }}</h1>
+                    </div>
+                    {% if services.getSetting("social_login_facebook_enabled") == "yes" or services.getSetting("social_login_google_enabled") == "yes" %}
+                        <p>
+                            {% if services.getSetting("social_login_facebook_enabled") == "yes" %}
+                                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i> &nbsp; {{ 'Sign in via Facebook'|trans({}, 'messages') }}</a>
+                            {% endif %}
+                            {% if services.getSetting("social_login_google_enabled") == "yes" %}
+                                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}" class="btn btn-block btn-google-plus"> <i class="fab fa-google"></i> &nbsp; {{ 'Sign in via Google'|trans({}, 'messages') }}</a>
+                            {% endif %}
+                        </p>
+                        <p class="divider-text">
+                            <span>{{ 'OR'|trans({}, 'messages') }}</span>
+                        </p>
+                    {% endif %}
+                    {% if error %}
+                        {% include "Global/message.html.twig" with { message: (error.messageKey|trans(error.messageData, 'security')), type: "danger", icon: "fas fa-exclamation-circle" } %}
+                    {% endif %}
+                    <form action="{{ path("fos_user_security_check") }}" method="post">
+                        {% if csrf_token %}
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                        {% endif %}
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text border-0"> <i class="fa fa-user"></i> </span>
+                                </div>
+                                <input name="_username" value="{{ last_username }}" class="form-control" placeholder="{{ 'security.login.username'|trans }}" type="text" autocomplete="username">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text border-0"> <i class="fa fa-lock"></i> </span>
+                                </div>
+                                <input name="_password" class="form-control" placeholder="{{ 'security.login.password'|trans }}" type="password" autocomplete="current-password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="remember_me" name="_remember_me" value="on">
+                                <label class="custom-control-label" for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+                            </div>
+                        </div>
+
+                        {% if app.request.get('_target_path') is not null %}
+                            <input type="hidden" name="_target_path" value="{{ app.request.get('_target_path') }}" />
+                        {% endif %}
+
+                        <div class="form-group">
+                            <button type="submit" name="_submit" class="btn btn-primary btn-block">{{ pagetitle }}</button>
+                        </div>
+                        <p class="text-center"><a href="{{ path('fos_user_resetting_request') }}">{{ 'Forgot your password ?'|trans({}, 'messages') }}</a></p>
+                        <p class="text-center">{{ 'Not a member yet ?'|trans({}, 'messages') }} <a href="{{ path('fos_user_registration_register_attendee') }}" class="text-primary _600">{{ 'Sign up'|trans({}, 'messages') }}</a></p>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

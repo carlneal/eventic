@@ -1,0 +1,108 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Manage currencies' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "dashboard_administrator_settings_payment": ('Payment settings' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': currencies.getTotalItemCount}) }}</span>
+                            </div>
+
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                                <a href="{{ path('dashboard_administrator_currency_add') }}" class="btn btn-primary ml-3"><i class="fas fa-plus"></i> {{'Add a new currency'|trans}}</a>
+                            </div>
+                        </div>
+                        <form>
+                            <div class="row mt-4">
+                                <div class="col-sm-12 col-lg-5 mb-3 mb-lg-0">
+                                    <label for="keyword">{{ "Ccy"|trans }}</label>
+                                    <input id="keyword" name="ccy" type="text" class="form-control bg-white" value="{{ app.request.get('ccy') }}">
+                                </div>
+                                <div class="col-sm-12 col-lg-5 mb-3 mb-lg-0">
+                                    <label for="keyword">{{ "Symbol"|trans }}</label>
+                                    <input id="keyword" name="symbol" type="text" class="form-control bg-white" value="{{ app.request.get('symbol') }}">
+                                </div>
+                                <div class="col-sm-12 col-lg-2 text-right mb-3 mb-lg-0">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> {{'Search' | trans}}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    {% if currencies.getTotalItemCount > 0 %}
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-vcenter text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{'Ccy' | trans}}</th>
+                                                    <th>{{'Symbol' | trans}}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for currency in currencies %}
+
+                                                    <tr>
+                                                        <td>
+                                                            {{ currency.ccy }}
+                                                            {% if currency.ccy == services.getSetting('currency_ccy') %}
+                                                                <span class="badge badge-success">{{ "Currenctly active" }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {{ currency.symbol }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="item-action dropdown">
+                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a href="{{ path('dashboard_administrator_currency_edit', { ccy : currency.ccy }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                                                    <span data-target="{{ path('dashboard_administrator_currency_delete', { ccy : currency.ccy }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the currency PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{ knp_pagination_render(currencies, null, {}, {'align': 'center'}) }}
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No currencies found'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

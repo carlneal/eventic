@@ -1,0 +1,26 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = page.title %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current": (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ page.content|raw|nl2br }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,169 @@
+<footer class="section-footer border-top-gray">
+    <div class="{{ services.getSetting("app_layout") }}">
+        <section class="footer-top padding-top">
+            <div class="row">
+                <aside class="col-sm-6 col-lg-3">
+                    <h5 class="title text-dark">{{ services.getMenus({"slug" : "first-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}</h5>
+                    <ul class="list-unstyled">
+                        {% for menuElement in services.getMenus({"slug" : "first-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            <li class="mb-1">
+                                {% set link = "#0" %}
+                                {% if menuElement.customLink %}
+                                    {% set link = menuElement.customLink %}
+                                {% endif %}
+                                {% if menuElement.link %}
+                                    {% set link = services.changeLinkLocale(app.request.locale, menuElement.link) %}
+                                {% endif %}
+                                <a href="{{ link }}">
+                                    {% if menuElement.icon %}
+                                        <i class="{{ menuElement.icon }} fa-fw"></i>
+                                    {% endif %}
+                                    {% if menuElement.label %}
+                                        {{ menuElement.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </aside>
+                <aside class="col-sm-6 col-lg-3">
+                    <h5 class="title text-dark">{{ services.getMenus({"slug" : "second-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}</h5>
+                    <ul class="list-unstyled">
+                        {% for menuElement in services.getMenus({"slug" : "second-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            <li class="mb-1">
+                                {% set link = "#0" %}
+                                {% if menuElement.customLink %}
+                                    {% set link = menuElement.customLink %}
+                                {% endif %}
+                                {% if menuElement.link %}
+                                    {% set link = services.changeLinkLocale(app.request.locale, menuElement.link) %}
+                                {% endif %}
+                                <a href="{{ link }}">
+                                    {% if menuElement.icon %}
+                                        <i class="{{ menuElement.icon }} fa-fw"></i>
+                                    {% endif %}
+                                    {% if menuElement.label %}
+                                        {{ menuElement.label }}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </aside>
+                <aside class="col-sm-6 col-lg-3">
+                    <h5 class="title text-dark">{{ services.getMenus({"slug" : "third-footer-section-menu"}).getQuery().getOneOrNullResult().getHeader() }}</h5>
+                    <ul class="list-unstyled">
+                        {% for menuElement in services.getMenus({"slug" : "third-footer-section-menu"}).getQuery().getOneOrNullResult().getMenuElements() %}
+                            {% set link = "#0" %}
+                            {% if menuElement.customLink %}
+                                {% set link = menuElement.customLink %}
+                            {% endif %}
+                            {% if menuElement.link %}
+                                {% set link = services.changeLinkLocale(app.request.locale, menuElement.link) %}
+                            {% endif %}
+                            {% if link == "footer_categories_section" %}
+                                {% for category in services.getCategories({ "featured": true, "limit": 4 }).getQuery().getResult() %}
+                                    <li class="mb-1"><a href="{{ path('events', { category: category.slug }) }}">{{ category.name }}</a></li>
+                                    {% endfor %}
+                                {% else %}
+                                <li class="mb-1">
+                                    <a href="{{ link }}">
+                                        {% if menuElement.icon %}
+                                            <i class="{{ menuElement.icon }} fa-fw"></i>
+                                        {% endif %}
+                                        {% if menuElement.label %}
+                                            {{ menuElement.label }}
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </aside>
+                <aside class="col-sm-6 col-lg-3">
+                    <article>
+                        {% if services.getSetting("contact_phone") != "" or services.getSetting("contact_fax") != "" or services.getSetting("facebook_url") != "" or services.getSetting("instagram_url") != "" or services.getSetting("youtube_url") != "" or services.getSetting("twitter_url") != "" %}
+                            <h5 class="title text-dark">{{ "Contact Us"|trans }}</h5>
+                        {% endif %}
+
+                        {% if services.getSetting("contact_phone") != "" or services.getSetting("contact_fax") != "" %}
+                            <p>
+                                <strong>{{ "Phone"|trans }}: </strong> {{ services.getSetting("contact_phone") }} <br>
+                                <strong>{{ "Fax"|trans }}:</strong> {{ services.getSetting("contact_fax") }}
+                            </p>
+                        {% endif %}
+
+                        {% if services.getSetting("facebook_url") != "" or services.getSetting("instagram_url") != "" or services.getSetting("youtube_url") != "" or services.getSetting("twitter_url") != "" %}
+                            <div class="btn-group white">
+                                {% if services.getSetting("facebook_url") != "" %}
+                                    <a class="btn btn-facebook" title="{{ "Facebook"|trans }}" target="_blank" href="{{ services.getSetting("facebook_url") }}"><i class="fab fa-facebook-f fa-fw"></i></a>
+                                    {% endif %}
+                                    {% if services.getSetting("instagram_url") != "" %}
+                                    <a class="btn btn-instagram" title="{{ "Instagram"|trans }}" target="_blank" href="{{ services.getSetting("instagram_url") }}"><i class="fab fa-instagram fa-fw"></i></a>
+                                    {% endif %}
+
+                                {% if services.getSetting("youtube_url") != "" %}
+                                    <a class="btn btn-youtube" title="{{ "Youtube"|trans }}" target="_blank" href="{{ services.getSetting("youtube_url") }}"><i class="fab fa-youtube fa-fw"></i></a>
+                                    {% endif %}
+
+                                {% if services.getSetting("twitter_url") != "" %}
+                                    <a class="btn btn-twitter" title="{{ "Twitter"|trans }}" target="_blank" href="{{ services.getSetting("twitter_url") }}"><i class="fab fa-twitter fa-fw"></i></a>
+                                    {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <div class="clearfix"></div>
+
+
+
+                        {% if app.request.get('_route') and locales|split('|')|length > 2 %}
+                            <h5 class="title mt-4 display-inline-block"><i class="fas fa-globe"></i> {{ "Language"|trans }}</h5>
+                            <div class="dropdown display-inline-block ml-5">
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="text-dark">
+                                    {{ app.request.locale|getLangName }} <span class="flag flag-{{ app.request.locale|getLangFlag }} ml-2"></span>&nbsp;<i class="fas fa-caret-down"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    {% for locale in locales|split('|') if locale != "" and locale != app.request.locale %}
+                                        <a class="dropdown-item" href="{{ path(app.request.get('_route'), app.request.get('_route_params')|merge({'_locale' : locale})) }}">
+                                            {{ locale|getLangName }}
+                                            <span class="flag flag-{{ locale|getLangFlag }} float-right mr-2"></span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+                    </article>
+                </aside>
+            </div>
+            <br>
+        </section>
+        <section class="footer-bottom row">
+            <div class="col-sm-12">
+                <p class="text-center text-dark">
+                    {% if services.getSetting('show_terms_of_service_page') == "yes" %}
+                        <a href="{{ path('page', { slug : services.getSetting('terms_of_service_page_slug') }) }}" class="text-dark">{{ "Terms of service"|trans }}</a>
+                        <span class="text-gray">|</span>
+                    {% endif %}
+                    {% if services.getSetting('show_privacy_policy_page') == "yes" %}
+                        <a href="{{ path('page', { slug : services.getSetting('privacy_policy_page_slug') }) }}" class="text-dark">{{ "Privacy policy"|trans }}</a>
+                        <span class="text-gray">|</span>
+                    {% endif %}
+                    {% if services.getSetting('show_cookie_policy_page') == "yes" %}
+                        <a href="{{ path('page', { slug : services.getSetting('cookie_policy_page_slug') }) }}" class="text-dark">{{ "Cookie policy"|trans }}</a>
+                        <span class="text-gray">|</span>
+                    {% endif %}
+                    {% if services.getSetting('show_gdpr_compliance_page') == "yes" %}
+                        <a href="{{ path('page', { slug : services.getSetting('gdpr_compliance_page_slug') }) }}" class="text-dark">{{ "GDPR compliance"|trans }}</a>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-sm-12">
+                <p class="text-dark-50 text-center">
+                    {{ "Copyright"|trans }} &copy;  {{ "now"|date('Y') }}
+                </p>
+            </div>
+        </section>
+    </div>
+</footer>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2021-01-17T06:39:54Z" source-language="en" target-language="fr" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="61cc55aa0453184734c3fa0b621eda6fa874bd83" resname="Add">
+        <source>Add</source>
+        <target state="new">Ajouter</target>
+        <jms:reference-file line="44">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="102037ed9e6335c042e8362a7ad06f12b9140538" resname="Add a new event date">
+        <source>Add a new event date</source>
+        <target state="new">Ajouter une nouvelle date d'événement</target>
+        <jms:reference-file line="48">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="fb2a1c59097a9b066a7b9b94c6f141ea8c08a614" resname="Add a new ticket">
+        <source>Add a new ticket</source>
+        <target state="new">Ajouter un nouveau billet</target>
+        <jms:reference-file line="51">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b722837b6dff556fb441f5b8c5b426ff5b660d84" resname="An error has occured">
+        <source>An error has occured</source>
+        <target>Une erreur est survenue</target>
+        <jms:reference-file line="17">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="a0393902db1f516ef5f95f6830938558a88fb23c" resname="April">
+        <source>April</source>
+        <target>Avril</target>
+        <jms:reference-file line="35">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="69d97c5797dc7d211aaa4e9229db5c8466d4edef" resname="August">
+        <source>August</source>
+        <target>Août</target>
+        <jms:reference-file line="39">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <source>Cancel</source>
+        <target>Annuler</target>
+        <jms:reference-file line="13">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="bbfa773e5a63a5ea58c9b6207e608ca0120e592a" resname="Close">
+        <source>Close</source>
+        <target>Fermer</target>
+        <jms:reference-file line="8">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="04a212215ef9fbf686d280802eb81ee7a6e681cd" resname="Confirm">
+        <source>Confirm</source>
+        <target>Confirmer</target>
+        <jms:reference-file line="12">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="9f088da791b4bb00d143cdf08f1cd2a3bbd41498" resname="Confirmation required">
+        <source>Confirmation required</source>
+        <target>Confirmation requise</target>
+        <jms:reference-file line="11">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="65640c6577c9c72497525e656127b5bd1deb6f85" resname="December">
+        <source>December</source>
+        <target>Décembre</target>
+        <jms:reference-file line="43">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b48758e9e49dcbe125241a63c83c784b138fa146" resname="Duplicate this event date">
+        <source>Duplicate this event date</source>
+        <target state="new">Dupliquer cette date d'événement</target>
+        <jms:reference-file line="50">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4c12d0086358f4a7f3ad441d826fa6592c7cbe33" resname="Duplicate this ticket">
+        <source>Duplicate this ticket</source>
+        <target state="new">Dupliquer ce billet</target>
+        <jms:reference-file line="53">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c94d3175a6560565410511df2cebab9cda96027e" resname="Email address">
+        <source>Email address</source>
+        <target>Adresse e-mail</target>
+        <jms:reference-file line="28">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="5c3a35ef85f22d508f90171bdcb2e6d820731d20" resname="February">
+        <source>February</source>
+        <target>Février</target>
+        <jms:reference-file line="33">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="6db9d02fed8a18231667eaf3b636c81d2c0e7f8e" resname="Insert at least 3 characters">
+        <source>Insert at least 3 characters</source>
+        <target>Insérez au moins 3 caractères</target>
+        <jms:reference-file line="16">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7a22d73d336abd6281d4dd71080220a230cb79de" resname="January">
+        <source>January</source>
+        <target>Janvier</target>
+        <jms:reference-file line="32">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="df97a42549e5c0e1753b985126565531cc9f3c56" resname="July">
+        <source>July</source>
+        <target>Juillet</target>
+        <jms:reference-file line="38">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="a9db906761699b31567727716eaa6fd19ae5f5d5" resname="June">
+        <source>June</source>
+        <target>Juin</target>
+        <jms:reference-file line="37">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="dfe60ca92e8c3f1e3611add8c83e8c92a5aeb6f6" resname="Load more">
+        <source>Load more</source>
+        <target>Charger plus</target>
+        <jms:reference-file line="29">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b04ba49f848624bb97ab094a2631d2ad74913498" resname="Loading...">
+        <source>Loading...</source>
+        <target>Chargement...</target>
+        <jms:reference-file line="30">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="08b5cac42dc3401ce3ea94106c617e2fa9a0ce40" resname="Make sure to enter a valid email address">
+        <source>Make sure to enter a valid email address</source>
+        <target>Assurez-vous de saisir une adresse e-mail valide</target>
+        <jms:reference-file line="19">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="433632ea5cd64cd163c3a390d5e531d33da3c5e5" resname="March">
+        <source>March</source>
+        <target>Mars</target>
+        <jms:reference-file line="34">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c94f479833c5d401cffdfa7afe6c9c2d56448019" resname="May">
+        <source>May</source>
+        <target>Mai</target>
+        <jms:reference-file line="36">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="68f4145fee7dde76afceb910165924ad14cf0d00" resname="Message">
+        <source>Message</source>
+        <target>Message</target>
+        <jms:reference-file line="24">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="260ff8ae7182fc851337b6b2fdb25f8cac2b8d47" resname="Move down">
+        <source>Move down</source>
+        <target state="new">Déplacer vers le bas</target>
+        <jms:reference-file line="47">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b4f57cd0cd5c7d88461c1718646713dea47a36c9" resname="Move up">
+        <source>Move up</source>
+        <target>Déplacer vers le haut</target>
+        <jms:reference-file line="46">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="658e79f9dc7fca34dc164cbb79e1c0be3cdebf23" resname="No results found">
+        <source>No results found</source>
+        <target>Aucun résultat trouvé</target>
+        <jms:reference-file line="14">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="2c924e3088204ee77ba681f72be3444357932fca" resname="Note">
+        <source>Note</source>
+        <target>Note</target>
+        <jms:reference-file line="25">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="3c5bf776f5efcaa22d6e0fd4839db7d2b83e52be" resname="November">
+        <source>November</source>
+        <target>Novembre</target>
+        <jms:reference-file line="42">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="87206ae2363483496c099f8c3aac5b4a8ae2a66a" resname="October">
+        <source>October</source>
+        <target>Octobre</target>
+        <jms:reference-file line="41">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="755779b82e0089c3fcdd40b33668d078eaf80205" resname="Please select the tickets quantity for this order">
+        <source>Please select the tickets quantity for this order</source>
+        <target>Veuillez sélectionner la quantité de billets pour cette commande</target>
+        <jms:reference-file line="31">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4f961d990e7baddfa5f7b5b56eb917d124352974" resname="Please select the tickets quantity you want to buy">
+        <source>Please select the tickets quantity you want to buy</source>
+        <target>Veuillez sélectionner la quantité de billets que vous souhaitez acheter</target>
+        <jms:reference-file line="20">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ad086cf55b834c375e209972840f1342401d8c41" resname="Read more">
+        <source>Read more</source>
+        <target>Lire la suite</target>
+        <jms:reference-file line="18">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e963907dac5cd5c017869b4c96c18021c9bd058b" resname="Remove">
+        <source>Remove</source>
+        <target state="new">Supprimer</target>
+        <jms:reference-file line="45">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="dafa7248adb5e3ac98ca5d913b8a5609c1a6ce27" resname="Remove this event date">
+        <source>Remove this event date</source>
+        <target state="new">Supprimer cette date d'événement</target>
+        <jms:reference-file line="49">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="23bde5a2bf3d7d2922cf116e4efc1397edf5400d" resname="Remove this ticket">
+        <source>Remove this ticket</source>
+        <target state="new">Supprimer ce billet</target>
+        <jms:reference-file line="52">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="19d018e43b7ab4e16b84e6bc6c34561b0def633a" resname="Return to cart">
+        <source>Return to cart</source>
+        <target>Retour au panier</target>
+        <jms:reference-file line="21">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b4a77d9044e9aa495ae2f5a0aa255272c7ed896b" resname="Searching ...">
+        <source>Searching ...</source>
+        <target>Recherche ...</target>
+        <jms:reference-file line="15">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="08d7aa35da9a4d64958e98f3d8476765942facb2" resname="Select an option">
+        <source>Select an option</source>
+        <target>Sélectionnez une option</target>
+        <jms:reference-file line="27">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1c542e79c9b4257e640ccf72974d61fd590a5c26" resname="September">
+        <source>September</source>
+        <target>Septembre</target>
+        <jms:reference-file line="40">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="41460ebaa0e8a69697c767d114aef63eeb9b1dde" resname="Stick">
+        <source>Stick</source>
+        <target>Persévérer</target>
+        <jms:reference-file line="9">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b09448c767edc9d43b2bd21b88aae2e92c22b77b" resname="The email address is not valid">
+        <source>The email address is not valid</source>
+        <target>L'adresse e-mail n'est pas valide</target>
+        <jms:reference-file line="26">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e8ea25fa504baf7b39f1f6f9c4ff0e8fb44faae2" resname="The tickets have been released">
+        <source>The tickets have been released</source>
+        <target>Les billets ont été libérés</target>
+        <jms:reference-file line="23">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e8e59f03eeaf1e35a684160d9ef7fcfada083a94" resname="This feature is disabled in demo mode">
+        <source>This feature is disabled in demo mode</source>
+        <target state="new">Cette fonctionnalité est désactivée en mode démo</target>
+        <jms:reference-file line="772">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Controller\Dashboard\Administrator\SettingsController.php\</jms:reference-file>
+        <jms:reference-file line="59">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="a06072ceccf8d5e91e17c71a20f820651cc4296d" resname="Time's up">
+        <source>Time's up</source>
+        <target>Le temps est écoulé</target>
+        <jms:reference-file line="22">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="e04011826439379fcc95c09305a9b02bf4c43a16" resname="Unstick">
+        <source>Unstick</source>
+        <target>Décoller</target>
+        <jms:reference-file line="10">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="5548ae4f34cbb6e30414532924e2088d915b460f" resname="days">
+        <source>days</source>
+        <target state="new">jours</target>
+        <jms:reference-file line="55">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="51bd95353aeda6615433bea21896c893ef5e62dc" resname="hr">
+        <source>hr</source>
+        <target state="new">heures</target>
+        <jms:reference-file line="56">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b0341dff003570a0c716bda6a4cc9506e1a7bd14" resname="javascript string translation">
+        <source>javascript string translation</source>
+        <target>javascript string translation</target>
+        <jms:reference-file line="8">\..\..\..\..\..\C:/wamp64/www/Eventic/templates\messages.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b6c935d4f3c7b220fa038613a1f9c1b56b255a86" resname="min">
+        <source>min</source>
+        <target state="new">min</target>
+        <jms:reference-file line="57">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="920a25ef686c4f7ca6ad23dd109d3ad653161832" resname="sec">
+        <source>sec</source>
+        <target state="new">sec</target>
+        <jms:reference-file line="58">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0af64388b588a51f18c267b0252844d8c8484e12" resname="weeks">
+        <source>weeks</source>
+        <target state="new">sem</target>
+        <jms:reference-file line="54">\..\..\..\..\..\C:/wamp64/www/Eventic/src\Translation\javascript.html.twig\</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

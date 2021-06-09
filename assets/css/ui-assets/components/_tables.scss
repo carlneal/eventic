@@ -1,0 +1,12 @@
+.table-vcenter td, .table-vcenter th {
+    vertical-align: middle;
+}
+
+.table thead th {
+    border-bottom: 2px solid $gray;
+    border-top: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: $gray;
+}

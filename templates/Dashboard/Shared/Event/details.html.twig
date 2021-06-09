@@ -1,0 +1,430 @@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="table-responsive">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-file-alt fa-fw text-muted"></i> {{ "General information"|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="30%">{{ "Status"|trans }}</td>
+                        <td><span class="badge badge-{{ event.stringifyStatusClass }}">{{ event.stringifyStatus|trans }}</span></td>
+                    </tr>
+                    <tr>
+                        <td width="30%">{{ "Title"|trans }}</td>
+                        <td>{{ event.name }}</td>
+                    </tr>
+                    {% if is_granted('ROLE_ADMINISTRATOR') %}
+                        <tr>
+                            <td>{{ "Organizer"|trans }}</td>
+                            <td>{{ event.organizer.name }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>{{ "Reference"|trans }}</td>
+                        <td>{{ event.reference }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ "Creation date"|trans }}</td>
+                        <td>{{ event.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                    </tr>
+                    {% if event.updatedAt %}
+                        <tr>
+                            <td>{{ "Update date"|trans }}</td>
+                            <td>{{ event.updatedAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.deletedAt %}
+                        <tr>
+                            <td>{{ "Deletion date"|trans }}</td>
+                            <td>{{ event.deletedAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>{{ "Views"|trans }}</td>
+                        <td>{{ event.views }} {{ "view(s)"|trans }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ "Added to favorites by"|trans }}</td>
+                        <td>{{ event.addedtofavoritesby|length }} {{ "user(s)"|trans }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ "Category"|trans }}</td>
+                        <td>{{ event.category.name }}</td>
+                    </tr>
+                    {% if event.languages|length %}
+                        <tr>
+                            <td>{{ "Languages"|trans }}</td>
+                            <td>{{ event.displayLanguages }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.subtitles|length %}
+                        <tr>
+                            <td>{{ "Subtitles"|trans }}</td>
+                            <td>{{ event.displaySubtitles }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.audiences|length %}
+                        <tr>
+                            <td>{{ "Audiences"|trans }}</td>
+                            <td>{{ event.displayAudiences }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.country %}
+                        <tr>
+                            <td>{{ "Country"|trans }}</td>
+                            <td>{{ event.country.name }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.artists %}
+                        <tr>
+                            <td>{{ "Artists"|trans }}</td>
+                            <td>{{ event.artists }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.tags %}
+                        <tr>
+                            <td>{{ "Tags"|trans }}</td>
+                            <td>{{ event.tags }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.year %}
+                        <tr>
+                            <td>{{ "Year"|trans }}</td>
+                            <td>{{ event.year }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if event.youtubeurl %}
+                        <tr>
+                            <td>{{ "Youtube video"|trans }}</td>
+                            <td>{{ event.youtubeurl }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>{{ "Publicly show attendees"|trans }}</td>
+                        <td>{{ event.showattendees ? 'Yes'|trans : 'No'|trans }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ "Allow attendees to leave reviews"|trans }}</td>
+                        <td>{{ event.enablereviews ? 'Yes'|trans : 'No'|trans }}</td>
+                    </tr>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="table-responsive">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-image fa-fw text-muted"></i> {{ "Images"|trans }}</th>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <td width="30%">{{ "Main image"|trans }}</td>
+                        <td>
+                            <a class="fancybox" href="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" data-toggle="tooltip" title="{{ "Enlarge"|trans }}">
+                                <img src="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" class="img-thumbnail img-100-100" />
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ "Gallery"|trans }}</td>
+                        <td>
+                            {{ event.images|length }} {{ "image(s)"|trans }}
+                            <div class="gallery photos-gallery clearfix">
+                                {% for image in event.images %}
+                                    <figure>
+                                        <a href="{{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }}">
+                                            <img class="img-50-50" src="{{ image.getImagePath|imagine_filter('thumbnail') }}" alt="{{ event.name }}" />
+                                        </a>
+                                    </figure>
+                                {% endfor %}
+
+                            </div>
+
+                        </td>
+                    </tr>
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-borderless table-sm">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar fa-fw text-muted"></i> {{ "Event dates"|trans }}</th>
+                        <th><i class="fas fa-ticket-alt fa-fw text-muted"></i> {{ "Tickets"|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for eventdate in event.eventdates %}
+                        <tr>
+                            <td width="50%">
+                                <h6>{{ "Event date"|trans }} {{ loop.index }}</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless table-striped table-hover table-sm">
+                                        <tbody>
+                                            {% if eventdate.payoutRequested %}
+                                                <tr>
+                                                    <td width="30%">{{ "Payout request"|trans }}</td>
+                                                    <td>
+                                                        <a href="{{ path("dashboard_organizer_payout_requests", {eventdate: eventdate.reference}) }}"><i class="fas fa-file-invoice-dollar"></i> {{ "View details"|trans }}</a>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td width="30%">{{ "Status"|trans }}</td>
+                                                <td>
+                                                    <span class="badge badge-{{ eventdate.stringifyStatusClass }}">{{ eventdate.stringifyStatus|trans }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ "Sales"|trans }}</td>
+                                                <td>
+                                                    {{ eventdate.getOrderElementsQuantitySum(1) }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ "Reference"|trans }}</td>
+                                                <td>{{ eventdate.reference }}</td>
+                                            </tr>
+                                            {% if eventdate.venue %}
+                                                <tr>
+                                                    <td width="50%">{{ "Venue"|trans }}</td>
+                                                    <td>{{ eventdate.venue.name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Address"|trans }}</td>
+                                                    <td>{{ eventdate.venue.stringifyAddress }}</td>
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td width="50%">{{ "Where"|trans }}</td>
+                                                    <td>{{ "Online"|trans }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td>{{ "Tickets types"|trans }}</td>
+                                                <td>{{ eventdate.tickets|length }}</td>
+                                            </tr>
+                                            {% if eventdate.startdate|length %}
+                                                <tr>
+                                                    <td>{{ "Start date"|trans }}</td>
+                                                    <td>{{ eventdate.startdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if eventdate.enddate|length %}
+                                                <tr>
+                                                    <td>{{ "End date"|trans }}</td>
+                                                    <td>{{ eventdate.enddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format)}}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if eventdate.scanners|length %}
+                                                <tr>
+                                                    <td>{{ "Scanners"|trans }}</td>
+                                                    <td>{{ eventdate.displayScannersNames }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            {% if eventdate.pointofsales|length %}
+                                                <tr>
+                                                    <td>{{ "Point of sales"|trans }}</td>
+                                                    <td>{{ eventdate.displayPosNames }}</td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                            <td>
+                                {% for eventicket in eventdate.tickets %}
+                                    <h6>{{ "Ticket"|trans }} {{ loop.index }}</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless table-striped table-hover table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="30%">{{ "Status"|trans }}</td>
+                                                    <td>
+                                                        <span class="badge badge-{{ eventicket.stringifyStatusClass }}">{{ eventicket.stringifyStatus|trans }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Sales"|trans }}</td>
+                                                    <td>
+                                                        {{ eventicket.getOrderElementsQuantitySum(1) }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Price"|trans }}</td>
+                                                    <td>
+                                                        {{ eventicket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ eventicket.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                    </td>
+                                                </tr>
+                                                {% if not eventicket.free and eventicket.promotionalprice %}
+                                                    <tr>
+                                                        <td>{{ "Promotional price"|trans }}</td>
+                                                        <td>
+                                                            {{ services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '' }}{{ eventicket.getPromotionalprice() }}{{ services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '' }}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if eventicket.quantity %}
+                                                    <tr>
+                                                        <td>{{ "Quantity"|trans }}</td>
+                                                        <td>{{ eventicket.quantity }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if eventicket.ticketsperattendee %}
+                                                    <tr>
+                                                        <td>{{ "Tickets per attendee"|trans }}</td>
+                                                        <td>{{ eventicket.ticketsperattendee }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ "Reference"|trans }}</td>
+                                                    <td>{{ eventicket.reference }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{{ "Name"|trans }}</td>
+                                                    <td>{{ eventicket.name }}</td>
+                                                </tr>
+                                                {% if eventicket.salesstartdate|length %}
+                                                    <tr>
+                                                        <td>{{ "Sales start date"|trans }}</td>
+                                                        <td>{{ eventicket.salesstartdate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                {% if eventicket.salesenddate|length %}
+                                                    <tr>
+                                                        <td>{{ "Sales end date"|trans }}</td>
+                                                        <td>{{ eventicket.salesenddate|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>{{ "Currently in cart"|trans }}</td>
+                                                    <td>{{ eventicket.cartelements|length }}</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% if event.hasContactAndSocialMedia %}
+        <div class="col-lg-6">
+            <div class="table-responsive">
+                <table class="table table-borderless table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th colspan="2"><i class="fas fa-at fa-fw text-muted"></i> {{ "Contact & Social media"|trans }}</th>
+                        </tr>
+                    <tbody>
+                        {% if event.externallink %}
+                            <tr>
+                                <td>{{ "External link"|trans }}</td>
+                                <td>{{ event.externallink }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.email %}
+                            <tr>
+                                <td>{{ "Email"|trans }}</td>
+                                <td>{{ event.email }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.phonenumber %}
+                            <tr>
+                                <td>{{ "Phone number"|trans }}</td>
+                                <td>{{ event.phonenumber }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.facebook %}
+                            <tr>
+                                <td>{{ "Facebook"|trans }}</td>
+                                <td>{{ event.facebook }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.twitter %}
+                            <tr>
+                                <td>{{ "Twitter"|trans }}</td>
+                                <td>{{ event.twitter }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.googleplus %}
+                            <tr>
+                                <td>{{ "Google plus"|trans }}</td>
+                                <td>{{ event.googleplus }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.instagram %}
+                            <tr>
+                                <td>{{ "Instagram"|trans }}</td>
+                                <td>{{ event.instagram }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if event.linkedin %}
+                            <tr>
+                                <td>{{ "Linkedin"|trans }}</td>
+                                <td>{{ event.linkedin }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    <div class="col-lg-6">
+        <div class="table-responsive">
+            <table class="table table-borderless table-striped table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th colspan="2"><i class="fas fa-star fa-fw text-muted"></i> {{ "Reviews"|trans }}</th>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <td width="30%">{{ "Count"|trans }}</td>
+                        <td>{{ event.reviews|length }}</td>
+                    </tr>
+                    {% if event.reviews|length %}
+                        <tr>
+                            <td>{{ "Rating"|trans }}</td>
+                            <td>
+                                <div class="rating-wrap">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{event.getRatingPercentage}}%" class="stars-active">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <div class="label-rating">{{ event.getRatingAvg }} {{"out of 5 stars"|trans|lower}}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>

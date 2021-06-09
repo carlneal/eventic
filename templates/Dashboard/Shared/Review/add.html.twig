@@ -1,0 +1,115 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Add your review for %eventname%'|trans({'%eventname%': event.name}) %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{'events': 'Events'|trans, "current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+
+            <div class="row mb-5 event-scorecard">
+                <div class="col-12 col-lg-6">
+                    {% set runtimeConfig = {"scale": {"dim": [150, 150] }} %}
+                    <img class="img-lazy-load" src="{{ asset('assets/img/loader.gif') }}" data-src="{{ event.getImagePath|imagine_filter('scale', runtimeConfig) }}" />
+                    <div class="ml-5 display-inline-block">
+                        <h3><a href="{{ path('event', { slug: event.slug }) }}">{{ event.name }}</a></h3>
+                        <div class="rating-wrap">
+                            <ul class="rating-stars">
+                                <li style="width:{{event.getRatingPercentage}}%" class="stars-active">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </li>
+                                <li>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </li>
+                            </ul>
+                            <div class="label-rating">{{ event.getRatingAvg }} {{"out of 5 stars"|trans|lower}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="side">
+                        <div>{{ "5 stars"|trans }}</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{ event.getRatingsPercentageForRating(5) }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div class="text-muted">{{ event.getRatingsPercentageForRating(5) }}%</div>
+                    </div>
+                    <div class="side">
+                        <div>{{ "4 stars"|trans }}</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{ event.getRatingsPercentageForRating(4) }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div class="text-muted">{{ event.getRatingsPercentageForRating(4) }}%</div>
+                    </div>
+                    <div class="side">
+                        <div>{{ "3 stars"|trans }}</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{ event.getRatingsPercentageForRating(3) }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div class="text-muted">{{ event.getRatingsPercentageForRating(3) }}%</div>
+                    </div>
+                    <div class="side">
+                        <div>{{ "2 stars"|trans }}</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{ event.getRatingsPercentageForRating(2) }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div class="text-muted">{{ event.getRatingsPercentageForRating(2) }}%</div>
+                    </div>
+                    <div class="side">
+                        <div>{{ "1 star"|trans }}</div>
+                    </div>
+                    <div class="middle">
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{ event.getRatingsPercentageForRating(1) }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="side right">
+                        <div class="text-muted">{{ event.getRatingsPercentageForRating(1) }}%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

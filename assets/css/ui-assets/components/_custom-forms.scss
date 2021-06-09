@@ -1,0 +1,32 @@
+.custom-file, .custom-file-input, .custom-file-label, .custom-file-label::after {
+    height: calc(2.75rem + 2px);
+}
+
+.custom-file-label {
+    border: 1px solid $gray;
+    border-radius: .25rem;
+    background-clip: padding-box;
+    box-shadow: none;
+    background-color: $gray;
+    line-height: 2.5;
+    color: #8898aa;
+    font-size: 0.805rem;
+}
+
+.custom-file-label::after {
+    line-height: 2.5;
+    height: calc(2.75rem) !important;
+}
+
+.invalid-feedback ~ .vich-image {
+    border-color: #e95b35;
+}
+
+.custom-control {
+    padding-left: 1.5rem;
+}
+
+.custom-control-label::before, .custom-control-label::after {
+    left: -1.5rem;
+    content: "" !important;
+}

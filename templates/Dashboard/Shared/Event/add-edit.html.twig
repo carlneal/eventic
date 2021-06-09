@@ -1,0 +1,71 @@
+{% extends "Global/layout.html.twig" %}
+
+{% form_theme form 'Global/jquery.collection.html.twig' %}
+
+{% set pagetitle = 'Add a new event' | trans %}
+
+{% if event.id %}{% set pagetitle = 'Update the event' | trans %}{% endif %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans),  "dashboard_organizer_event": ('My events' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white {{ "event_add" in app.request.get("_route") ? "add-event" : "edit-event" }}">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {% include "Global/message.html.twig" with { type: "info", icon: "fas fa-info-circle", message: ("The fields preceded with a red * are mandatory"|trans) } %}
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+        {% if event.id %}
+            {% for eventDate in event.eventdates if eventDate.payoutRequested %}
+                    $('.event-date-reference').each(function () {
+                        if ($(this).val() == "{{eventDate.reference}}") {
+                            $(this).closest("fieldset").prop('disabled', true);
+                            $(this).closest("fieldset").prepend('<p class="alert alert-danger alert-icon"><i class="fas fa-exclamation-circle"></i> {{ "This event date is locked because a payout request has been submitted"|trans }}</p>');
+                        }
+                    });
+            {% endfor %}
+            {% for eventDate in event.eventdates %}
+                {% for eventDateTicket in eventDate.tickets if eventDateTicket.isOnSale and eventDateTicket.getOrderElementsQuantitySum() > 0 %}
+                        $('.event-date-ticket-reference').each(function () {
+                            if ($(this).val() == "{{eventDateTicket.reference}}") {
+                                $(this).closest("fieldset").find('.event-date-ticket-quantity').trigger("touchspin.updatesettings", {min: {{ eventDateTicket.getOrderElementsQuantitySum() }}});
+                                $(this).closest("fieldset").find('.event-date-ticket-quantity').attr("data-min", {{ eventDateTicket.getOrderElementsQuantitySum() }});
+                            }
+                        });
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+                $(document).on('submit', 'form[name="event"]', function () {
+                    $('form[name="event"]').find('fieldset').prop('disabled', false);
+                });
+
+            });
+    </script>
+
+{% endblock %}

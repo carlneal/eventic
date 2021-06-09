@@ -1,0 +1,48 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        category_image:
+            uri_prefix: /uploads/categories
+            upload_destination: '%kernel.project_dir%/public/uploads/categories'
+            namer: vich_uploader.namer_uniqid
+        event_image:
+            uri_prefix: /uploads/events
+            upload_destination: '%kernel.project_dir%/public/uploads/events'
+            namer: vich_uploader.namer_uniqid
+        audience_image:
+            uri_prefix: /uploads/audiences
+            upload_destination: '%kernel.project_dir%/public/uploads/audiences'
+            namer: vich_uploader.namer_uniqid
+        venue_image:
+            uri_prefix: /uploads/venues
+            upload_destination: '%kernel.project_dir%/public/uploads/venues'
+            namer: vich_uploader.namer_uniqid
+        organizer_logo:
+            uri_prefix: /uploads/organizers
+            upload_destination: '%kernel.project_dir%/public/uploads/organizers'
+            namer: vich_uploader.namer_uniqid
+        organizer_cover:
+            uri_prefix: /uploads/organizers/covers
+            upload_destination: '%kernel.project_dir%/public/uploads/organizers/covers'
+            namer: vich_uploader.namer_uniqid
+        blog_post_image:
+            uri_prefix: /uploads/blog
+            upload_destination: '%kernel.project_dir%/public/uploads/blog'
+            namer: vich_uploader.namer_uniqid
+        homepage_hero_custom_background:
+            uri_prefix: /uploads/homepage/hero
+            upload_destination: '%kernel.project_dir%/public/uploads/homepage/hero'
+            namer: vich_uploader.namer_uniqid
+        user_avatar:
+            uri_prefix: /uploads/users/avatars
+            upload_destination: '%kernel.project_dir%/public/uploads/users/avatars'
+            namer: vich_uploader.namer_uniqid
+        payment_gateway:
+            uri_prefix: /uploads/payment/gateways
+            upload_destination: '%kernel.project_dir%/public/uploads/payment/gateways'
+            namer: vich_uploader.namer_uniqid
+        app_layout:
+            uri_prefix: /uploads/layout
+            upload_destination: '%kernel.project_dir%/public/uploads/layout'
+            namer: vich_uploader.namer_uniqid

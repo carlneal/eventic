@@ -1,0 +1,20 @@
+{% set runtimeConfig = {"thumbnail": {"size": thumbnailsize }} %}
+<div class="card mb-4 shadow-none blog-post-card">
+    <a href="{{ path('blog_article', { slug : blogpost.slug }) }}">
+        <img class="card-img-top img-lazy-load" src="{{ asset('assets/img/loader.svg') }}" data-src="{{ blogpost.imageName ? (blogpost.getImagePath|imagine_filter('thumbnail', runtimeConfig)) : blogpost.getImagePlaceholder }}" alt="{{ blogpost.name }}">
+    </a>
+    <div class="card-body">
+        <p class="card-text">
+            {% if blogpost.category %}
+                <small class="text-muted mr-3"><a href="{{ path('blog', { category: blogpost.category.slug }) }}" class="text-dark"><i class="fas fa-sitemap"></i> {{ blogpost.category.name }}</a></small>
+            {% endif %}
+            {% if showdate is defined %}
+                <small class="text-muted mr-3"><i class="far fa-clock"></i> {{ blogpost.createdAt|ago }}</small>
+            {% endif %}
+            {% if blogpost.readtime %}
+                <small class="text-muted"><i class="fas fa-book-reader"></i> {{ blogpost.readtime }} {{ "min read"|trans }}</small>
+            {% endif %}
+        </p>
+        <h5 class="card-title"><a href="{{ path('blog_article', { slug : blogpost.slug }) }}" class="text-dark">{{ blogpost.name }}</a></h5>
+    </div>
+</div>

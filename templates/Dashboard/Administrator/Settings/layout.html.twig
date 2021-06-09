@@ -1,0 +1,188 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Layout settings' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_row(form.app_environment) }}
+                            {{ form_row(form.app_debug) }}
+                            {{ form_row(form.app_secret) }}
+                            {{ form_row(form.maintenance_mode) }}
+                            {{ form_row(form.maintenance_mode_custom_message) }}
+                            {{ form_row(form.date_format) }}
+                            {{ form_row(form.date_format_simple) }}
+                            {{ form_row(form.date_format_date_only) }}
+                            {{ form_row(form.date_timezone) }}
+                            {{ form_row(form.default_locale) }}
+                            {{ form_row(form.app_locales) }}
+                            {{ form_row(form.website_name) }}
+                            {{ form_row(form.website_slug) }}
+                            {{ form_row(form.website_url) }}
+                            {{ form_row(form.website_root_url) }}
+
+                            <ul class="nav nav-pills mb-3">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#website_description_en">Website description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_description_fr">Description du site</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_description_es">Descripción del lugar</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_description_ar">وصف الموقع</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} active" id="website_description_en">
+                                    {{ form_row(form.website_description_en) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_description_fr">
+                                    {{ form_row(form.website_description_fr) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_description_es">
+                                    {{ form_row(form.website_description_es) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_description_ar">
+                                    {{ form_row(form.website_description_ar) }}
+                                </div>
+                            </div>
+
+                            <ul class="nav nav-pills mb-3">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#website_keywords_en">Website keywords</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_keywords_fr">Mots clés du site</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_keywords_es">Palabras clave del sitio</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#website_keywords_ar">الكلمات الرئيسية للموقع</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} active" id="website_keywords_en">
+                                    {{ form_row(form.website_keywords_en) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_keywords_fr">
+                                    {{ form_row(form.website_keywords_fr) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_keywords_es">
+                                    {{ form_row(form.website_keywords_es) }}
+                                </div>
+                                <div class="tab-pane {{ services.getSetting("app_layout") }} fade" id="website_keywords_ar">
+                                    {{ form_row(form.website_keywords_ar) }}
+                                </div>
+                            </div>
+
+                            {{ form_row(form.contact_email) }}
+                            {{ form_row(form.contact_phone) }}
+                            {{ form_row(form.contact_fax) }}
+                            {{ form_row(form.contact_address) }}
+                            {{ form_row(form.facebook_url) }}
+                            {{ form_row(form.instagram_url) }}
+                            {{ form_row(form.youtube_url) }}
+                            {{ form_row(form.twitter_url) }}
+                            {{ form_row(form.app_layout) }}
+                            {{ form_row(form.app_theme) }}
+                            <div class="form-group">
+                                <div id="appThemeColorPreview" class="shadow img-sm"></div>
+                            </div>
+                            {{ form_row(form.primary_color) }}
+                            {{ form_row(form.no_reply_email) }}
+                            {{ form_row(form.logoFile) }}
+                            {{ form_row(form.faviconFile) }}
+                            {{ form_row(form.ogImageFile) }}
+                            {{ form_row(form.show_back_to_top_button) }}
+                            {{ form_row(form.show_terms_of_service_page) }}
+                            {{ form_row(form.terms_of_service_page_slug) }}
+                            {{ form_row(form.show_privacy_policy_page) }}
+                            {{ form_row(form.privacy_policy_page_slug) }}
+                            {{ form_row(form.show_cookie_policy_page) }}
+                            {{ form_row(form.cookie_policy_page_slug) }}
+                            {{ form_row(form.show_cookie_policy_bar) }}
+                            {{ form_row(form.show_gdpr_compliance_page) }}
+                            {{ form_row(form.gdpr_compliance_page_slug) }}
+                            {{ form_row(form.custom_css) }}
+                            {{ form_row(form.google_analytics_code) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function () {
+            $('input[name="app_layout_settings[app_theme]"]').change(function () {
+                if ($(this).is(':checked')) {
+                    switch ($(this).val()) {
+                        case 'orange':
+                            $('#app_layout_settings_primary_color').val('#f67611');
+                            $('#appThemeColorPreview').css('background-color', '#f67611');
+                            break;
+                        case 'lightblue':
+                            $('#app_layout_settings_primary_color').val('#90ccf4');
+                            $('#appThemeColorPreview').css('background-color', '#90ccf4');
+                            break;
+                        case 'darkblue':
+                            $('#app_layout_settings_primary_color').val('#3500d3');
+                            $('#appThemeColorPreview').css('background-color', '#3500d3');
+                            break;
+                        case 'yellow':
+                            $('#app_layout_settings_primary_color').val('#ffbd54');
+                            $('#appThemeColorPreview').css('background-color', '#ffbd54');
+                            break;
+                        case 'purple':
+                            $('#app_layout_settings_primary_color').val('#44318d');
+                            $('#appThemeColorPreview').css('background-color', '#44318d');
+                            break;
+                        case 'pink':
+                            $('#app_layout_settings_primary_color').val('#d83f87');
+                            $('#appThemeColorPreview').css('background-color', '#d83f87');
+                            break;
+                        case 'red':
+                            $('#app_layout_settings_primary_color').val('#c3073f');
+                            $('#appThemeColorPreview').css('background-color', '#c3073f');
+                            break;
+                        case 'green':
+                            $('#app_layout_settings_primary_color').val('#35CE8D');
+                            $('#appThemeColorPreview').css('background-color', '#35CE8D');
+                            break;
+                        case 'dark':
+                            $('#app_layout_settings_primary_color').val('#1a1a1d');
+                            $('#appThemeColorPreview').css('background-color', '#1a1a1d');
+                            break;
+                        default:
+                    }
+                }
+            });
+            $('input[name="app_layout_settings[app_theme]"]').trigger('change');
+        });
+    </script>
+
+{% endblock %}

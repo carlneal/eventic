@@ -1,0 +1,47 @@
+.comment{
+    display: flex;
+}
+
+.comment.author-comment{
+    justify-content: flex-end;
+}
+
+.comment.author-comment .info{
+    order: 3;
+}
+
+.comment.author-comment .avatar{
+    order: 2;
+}
+
+.comment.author-comment p{
+    order: 1;
+}
+
+@media (max-width: 800px){
+    /* Reverse the order of elements in the user comments,
+    so that the avatar and info appear after the text. */
+    .comment.user-comment .info{
+        order: 3;
+    }
+
+    .comment.user-comment .avatar{
+        order: 2;
+    }
+
+    .comment.user-comment p{
+        order: 1;
+    }
+
+    /* Make the paragraph in the comments take up the whole width,
+    forcing the avatar and user info to wrap to the next line*/
+    .comment p{
+        width: 100%;
+    }
+
+    /* Align toward the beginning of the container (to the left)
+    all the elements inside the author comments. */
+    .comment.author-comment{
+        justify-content: flex-start;
+    }
+}

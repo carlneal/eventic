@@ -1,0 +1,39 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Account settings' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box">
+                        <div class="card-body">
+
+                            <div class="form-group bg-light p-3 d-none d-xl-block">
+                                <span>{{ "Account status"|trans }}</span> <span class="badge badge-info ml-2"><i class="fas fa-user-check fa-fw"></i> {{ "Enabled"|trans }}</span>
+                                <span class="ml-3">{{ "Last login"|trans }}</span> <span class="badge badge-info ml-3"><i class="fas fa-sign-in-alt fa-fw"></i> {{ app.user.lastLogin|ago }}</span>
+                                <span class="ml-3">{{ "Member since"|trans }}</span> <span class="badge badge-info ml-3"><i class="fas fa-user-plus fa-fw"></i> {{ app.user.createdAt|localizeddate('none', 'none', app.request.locale, date_timezone, date_format) }}</span>
+                            </div>
+
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Translation' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index":("Dashboard"|trans), "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-info', message: "Please wait a few seconds if the translation interface freezes at page load, or edit the files in translations/ folder at root of the project directly in your favorite text editor"|trans } %}
+                    {% include 'Global/message.html.twig' with { type: 'info',icon: 'fas fa-info', message: "After editing a translation message, go to the Console page and execute the following command: cache:clear --env=prod in order to apply the changes in the production environment"|trans } %}
+                    {#                    {% include 'Global/message.html.twig' with { type: 'info',icon: 'fas fa-info', message: "After editing a translation in the javascript domain, go to the Console page and execute the following command to update the related files: bazinga:js-translation:dump assets/js --format=js --merge-domains"|trans } %}#}
+
+                    <div class="card box p-0">
+                        <div class="card-bod p-0y">
+                            <iframe src="{{ path('jms_translation_index') }}" width="100%" height="1000" style="border:none;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

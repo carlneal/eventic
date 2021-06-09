@@ -1,0 +1,30 @@
+{% extends "Global/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% set pagetitle = 'Check your email inbox'|trans({}, 'messages') %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card box">
+                        <div class="card-body">
+                            <div class="col-12 col-md-6 mx-auto">
+                                <p class="text-center"><i class="fas fa-inbox fa-8x text-success"></i></p>
+                                <p class="text-center">
+                                    {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

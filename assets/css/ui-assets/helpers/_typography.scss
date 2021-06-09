@@ -1,0 +1,71 @@
+/* --------------------- titles ---------------------- */
+.section-heading{ margin-bottom:30px;}
+.title-section{padding-right:15px; font-weight: 600;}
+.title-text{margin-top:45px; margin-bottom:20px;}
+.title-category{margin:0; padding: 1rem 1rem; }
+.title-bg{padding:7px 15px; color:#fff;}
+
+.font-title{font-family:$font-title;}
+.font-size-3rem{font-size: 3rem;}
+.font-size-15rem{font-size: 1.5rem;}
+.font-size-1rem{font-size: 1rem;}
+.font-size-10px{font-size: 10px !important;}
+
+.text-lg{font-size:125%;}
+.text-sm{font-size:90%;}
+.text-gray{color:$gray !important;}
+.word-limit{
+    height:40px;
+    line-height:20px;
+}
+/* ==================  title element ================ */
+.heading-line{position: relative;
+              .title-section{
+                  position: relative;
+                  display: inline-block;
+                  padding-right: 15px;
+                  background-color: inherit;
+                  z-index: 2;
+              }
+}
+.heading-line::before {
+    top: 43%;
+    border-top-style: solid;
+    content: "";
+    position: absolute;
+    left: auto;
+    right: 0;
+    width: 100%;
+    height: 0;
+    border: 3px solid #E9EAEF;
+    overflow: hidden;
+}
+
+.b{font-weight:600;}
+
+.white{color:#fff}
+.black, .dark{color:#000 !important}
+
+/* ==================  title helpers ================ */
+.rtl{direction:rtl;}
+.ltr{direction:ltr;}
+
+
+.lh-sm{line-height: 1.2;}
+.lh-lg{line-height: 1.6;}
+
+.line-height-2 {
+    line-height: 2;
+}
+
+dt {
+    margin-bottom: 0.25rem;
+}
+
+@media all and (max-width: 1200px) {
+
+    h1, .h1 {
+        font-size: 1.75rem;
+    }
+
+}

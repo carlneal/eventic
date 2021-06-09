@@ -1,0 +1,80 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Manage menus' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    {% if menus|length > 0 %}
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-vcenter text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{'Name' | trans}}</th>
+                                                    <th>{{'Header' | trans}}</th>
+                                                    <th>{{'Elements' | trans}}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for menu in menus %}
+
+                                                    <tr>
+                                                        <td>
+                                                            {{ menu.name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ menu.header }}
+                                                        </td>
+                                                        <td>
+                                                            {{ menu.menuElements|length }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="item-action dropdown">
+                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a href="{{ path('dashboard_administrator_settings_menus_edit', { slug : menu.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No menus found'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

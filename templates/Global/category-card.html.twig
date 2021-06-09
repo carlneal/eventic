@@ -1,0 +1,8 @@
+<a href="{{ path('events', { category: category.slug }) }}" class="zoom-wrap">
+    <div class="card-banner mb-3">
+        <div class="card-body zoom-in img-lazy-load" data-src="{{ category.imageName ? asset(category.getImagePath) : category.getImagePlaceholder }}" style="height:250px; background-repeat: no-repeat; background-position: center center;">
+            <div class="loader"></div>
+        </div>
+        <div class="text-bottom"><h4 class="title">{{ category.name }}</h4></div>
+    </div>
+</a>

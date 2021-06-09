@@ -1,0 +1,16 @@
+welp_mailchimp:
+    api_key: 542673602536197ee271b0d4d78164da-us20
+    lists:
+        b6909a170e:
+            subscriber_provider: 'eventic_mailchimp_fos_subscriber_provider'
+            merge_fields:
+                -
+                    tag: FNAME
+                    name: First Name
+                    type: text
+                    public: true
+                -
+                    tag: LNAME
+                    name: Last Name
+                    type: text
+                    public: true

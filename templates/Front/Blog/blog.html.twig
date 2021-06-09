@@ -1,0 +1,43 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Blog'|trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+
+            <div class="box shadow-none bg-gray mb-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-3 text-center text-lg-left mb-3 mb-lg-0">
+                        <span class="center-lg-y text-muted">{{ "%resultsCount% post(s) found"|trans({'%resultsCount%': blogposts.getTotalItemCount}) }}</span>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 offset-lg-3 text-center text-lg-right">
+                        <form>
+                            <input type="text" class="form-control bg-white col-6 display-inline" name="keyword" placeholder="{{ "Search blog posts"|trans }}" value="{{ app.request.get('keyword') }}" />
+                            <button type="submit" class="btn btn-primary display-inline"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for blogpost in blogposts %}
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        {% include "Global/blog-card.html.twig" with {blogpost: blogpost, thumbnailsize: [397, 397], showdate: 1} %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {{ knp_pagination_render(blogposts, null, {}, {'align': 'center'}) }}
+
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+<article class="card mb-3 card-hover">
+    <div class="card-body">
+        <div class="row">
+            <aside class="col-md-3">
+                {% set runtimeConfig = {"thumbnail": {"size": [200, 200] }} %}
+                <div class="img-wrap">
+                    <a href="{{ path('venue', { slug : venue.slug }) }}">
+                        <img class="img-lazy-load" src="{{ asset('assets/img/loader.gif') }}" data-src="{{ venue.images|length > 0 ? venue.getFirstImageOrPlaceholder| imagine_filter('thumbnail', runtimeConfig) : venue.getFirstImageOrPlaceholder }}" alt="{{ venue.name }}" />
+                    </a>
+                </div>
+            </aside>
+            <article class="col-md-6 mt-3 mt-md-0">
+
+                <h4 class="title"><a href="{{ path('venue', { slug : venue.slug }) }}">{{ venue.name }}</a></h4>
+                <p class="text-muted">{{ venue.type.name }}</p>
+                <p class="text-muted">{{ venue.description|striptags|slice(0, 175)|raw }}...</p>
+                <dl class="dlist-align">
+                    <dt>{{ "Location"|trans }}</dt>
+                    <dd>{{ venue.stringifyAddress }}</dd>
+                </dl>
+                {% if venue.seatedguests or venue.standingguests %}
+                    <dl class="dlist-align">
+                        <dt>{{ "Guests"|trans }}</dt>
+                        <dd>
+                            {% if venue.seatedguests %}
+                                {{"Seated"|trans ~ ": " ~ venue.seatedguests}}
+                            {% endif %}
+                            {% if venue.standingguests %}
+                                -
+                                {{"Standing"|trans ~ ": " ~ venue.standingguests}}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                {% endif %}
+            </article>
+            <aside class="col-md-3 {% if app.request.locale=="ar" %}border-right{% else %}border-left{% endif %} mt-3 mt-md-0">
+                <div class="action-wrap center-lg-y">
+                    {% if venue.amenities|length > 0 %}
+                        <ul class="fa-ul list-lg list-inline">
+                            {% for amenity in venue.amenities %}
+                                <li class="list-inline-item text-muted mb-5 {% if not loop.last %}mr-5{% endif %}"><span class="fa-li" data-toggle="tooltip" title="{{ amenity.name }}"><i class="{{ amenity.icon }} fa-lg"></i></span></li>
+                                    {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <p class="text-center">
+                        <a href="{{ path('venue', { slug : venue.slug }) }}" class="btn btn-primary"><i class="far fa-building"></i> {{ "More details"|trans }}</a>
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,674 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = event.name %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block meta_dynamic_seo %}
+    <meta name="description" content="{{ event.description|raw|nl2br|striptags|slice(0, 200)|raw }}..." />
+    {% if event.tags %}
+        <meta name="keywords" content="{{ event.name }}, {{ event.category.name }}, {% for tag in event.tags|split(',') %}{{ tag }}{{ not loop.last ? ', ' : '' }}{% endfor %}" />
+    {% else %}
+        <meta name="keywords" content="{{ services.getSetting("website_keywords_" ~ app.request.get('_locale')) }}" />
+    {% endif %}
+    <meta property="og:title" content="{{ event.name }}" />
+    <meta property="og:image" content="{{ app.request.getSchemeAndHttpHost() }}{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" />
+    <meta property="og:description" content="{{ event.description|raw|nl2br|striptags|slice(0, 200)|raw }}..." />
+    <meta name="twitter:title" content="{{ event.name }}" />
+    <meta name="twitter:image" content="{{ app.request.getSchemeAndHttpHost() }}{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" />
+    <meta name="twitter:image:alt" content="{{ event.name }}" />
+    <meta name="twitter:description" content="{{ event.description|raw|nl2br|striptags|slice(0, 200)|raw }}..." />
+{% endblock %}
+
+{% block content %}
+
+    {% if is_granted('ROLE_ADMINISTRATOR') %}
+        {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('<a href="'~ path('dashboard_administrator_event', {slug: event.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage this event'|trans) } %}
+    {% endif %}
+    {% if is_granted('ROLE_ORGANIZER') %}
+        {% if event.organizer == app.user.organizer %}
+            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: ('<a href="'~ path('dashboard_organizer_event', {slug: event.slug}) ~'">' ~ 'Click here'|trans ~ '</a> ' ~ 'to manage your event'|trans) } %}
+        {% endif %}
+    {% endif %}
+    {% if is_granted('ROLE_ATTENDEE') %}
+        {% if app.user.hasBoughtATicketForEvent(event) %}
+            {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-ticket-alt', message: ('You are going to this event'|trans ~ ' ' ~ '<a href="'~ path('dashboard_attendee_orders', {event: event.slug}) ~'">' ~ 'My tickets'|trans ~ '</a>') } %}
+        {% endif %}
+    {% endif %}
+
+    {% set navigation = [{"events": "Events"|trans, "current" : (pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <div class="row no-gutters">
+        <div class="col-12 p-0">
+            <section class="section-main">
+                <div class="owl-init slider-main owl-carousel" data-items="1" data-dots="false" data-nav="false" data-autoplay="false">
+                    <div class="item-slide d-flex">
+                        <img class="slider-img justify-content-center align-self-center img-lazy-load" src="{{ asset('assets/img/loader.gif') }}" data-src="{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}" alt="{{ event.name }}" />
+                        <div class="slider-blured-background" style="background-image: url('{{ event.imageName ? asset(event.getImagePath) : event.getImagePlaceholder }}');"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="card">
+                <div class="row">
+                    <div class="col-12 col-lg-8 {% if app.request.locale !="ar" %}border-right{% endif %} order-1 order-lg-0">
+                        <div class="card-body">
+                            <h1 class="card-title b d-none d-lg-block">{{ event.name }}</h1>
+                            {% set reviewscount = services.getReviews({"count": true, "event": event.slug}).getQuery().getSingleScalarResult() %}
+                            {% if event.enablereviews %}
+                                <div class="rating-wrap d-none d-lg-block">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{event.getRatingPercentage}}%" class="stars-active">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <div class="label-rating">{{ reviewscount }} {{"Review(s)"|trans|lower}}</div>
+                                </div>
+                            {% endif %}
+                            {% if event.description %}
+                                <dl class="mt-5 event-description">
+                                    <dt class="text-muted">{{"Description"|trans}}</dt>
+                                    <dd class="line-height-2 readmore" data-collapsed-height="500" data-height-margin="20">
+                                        {{ event.description|raw|nl2br }}
+                                    </dd>
+                                </dl>
+                            {% endif %}
+                            <ul class="list-group list-group-flush mt-5 mb-5 p-0">
+                                <li class="list-group-item pl-0 pr-0">
+                                    {% if event.category %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Category"|trans}}</dt>
+                                            <dd class="text-right">{{ event.category.name }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.country %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Country"|trans}}</dt>
+                                            <dd class="text-right"><span class="flag flag-{{event.country.code|lower}}"></span> {{ event.country.name }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.languages|length > 0 %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Languages"|trans}}</dt>
+                                            <dd class="text-right">{{ event.displayLanguages }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.subtitles|length > 0 %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Subtitles"|trans}}</dt>
+                                            <dd class="text-right">{{ event.displaySubtitles }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.artists %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Artists"|trans}}</dt>
+                                            <dd class="text-right">{{ event.artists }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.year %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Year"|trans}}</dt>
+                                            <dd class="text-right">{{ event.year }}</dd>
+                                        </dl>
+                                    {% endif %}
+                                    {% if event.audiences|length > 0 %}
+                                        <dl class="dlist-align">
+                                            <dt class="text-muted">{{"Audience"|trans}}</dt>
+                                            <dd class="text-right">
+                                                <ul class="list-inline">
+                                                    {% for audience in event.audiences %}
+                                                        <li class="list-inline-item" data-toggle="tooltip" title="{{ audience.name }}"><img src="{{ audience.imageName ? asset(audience.getImagePath) : audience.getImagePlaceholder }}" class="img-xxs" alt="{{ audience.name }}" /></li>
+                                                        {% endfor %}
+                                                </ul>
+                                            </dd>
+                                        </dl>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                            {% if event.images|length > 0 %}
+                                <dl class="mt-5">
+                                    <dt class="text-muted">{{"Photos"|trans}}</dt>
+                                    <dd class="mr-0">
+                                        <div class="gallery photos-gallery clearfix">
+                                            {% for image in event.images %}
+                                                <figure>
+                                                    <a href="{{ asset(image.getImagePath) }}" data-size="{{ image.imageDimensions[0] }}x{{ image.imageDimensions[1] }}">
+                                                        <img class="img-lazy-load" src="{{ asset('assets/img/loader.gif') }}" data-src="{{ image.getImagePath|imagine_filter('thumbnail') }}" alt="{{ event.name }}" />
+                                                    </a>
+                                                </figure>
+                                            {% endfor %}
+
+                                        </div>
+                                    </dd>
+                                </dl>
+                            {% endif %}
+                            {% if event.youtubeurl %}
+                                <dl class="mt-5">
+                                    <dt class="text-muted">{{"Video"|trans}}</dt>
+                                    <dd class="mr-0">
+                                        <iframe class="w-100 border-0" height="400" src="https://www.youtube.com/embed/{{event.youtubeurl|split('=')[1]}}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </dd>
+                                </dl>
+                            {% endif %}
+                            {% if event.hasContactAndSocialMedia %}
+                                <dl class="mt-5">
+                                    <dt class="text-muted">{{"Contact & Social media"|trans}}</dt>
+                                    <dd class="mr-0">
+                                        <ul class="list-icon row no-gutters">
+                                            {% if event.externallink %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.externallink and 'https://' not in event.externallink %}http://{% endif %}{{ event.externallink }}" class="pl-4" target="_blank"><i class="icon fas fa-globe fa-fw"></i><span>{{ event.externallink }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.email %}
+                                                <li class="col-md-6"><a href="mailto:{{ event.email }}" class="pl-4"><i class="icon fas fa-at fa-fw"></i><span>{{ event.email }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.phonenumber %}
+                                                <li class="col-md-6"><a href="tel:{{ event.phonenumber }}" class="pl-4"><i class="icon fas fa-phone fa-fw"></i><span>{{ event.phonenumber }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.facebook %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.facebook and 'https://' not in event.facebook %}http://{% endif %}{{ event.facebook }}" class="pl-4" target="_blank"><i class="icon fab fa-facebook-f fa-fw"></i><span>{{ event.facebook }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.twitter %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.twitter and 'https://' not in event.twitter %}http://{% endif %}{{ event.twitter }}" class="pl-4" target="_blank"><i class="icon fab fa-twitter fa-fw"></i><span>{{ event.twitter }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.googleplus %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.googleplus and 'https://' not in event.googleplus %}http://{% endif %}{{ event.googleplus }}" class="pl-4" target="_blank"><i class="icon fab fa-google-plus fa-fw"></i><span>{{ event.googleplus }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.instagram %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.instagram and 'https://' not in event.instagram %}http://{% endif %}{{ event.instagram }}" class="pl-4" target="_blank"><i class="icon fab fa-instagram fa-fw"></i><span>{{ event.instagram }}</span></a></li>
+                                                        {% endif %}
+                                                        {% if event.linkedin %}
+                                                <li class="col-md-6"><a href="{% if 'http://' not in event.linkedin and 'https://' not in event.linkedin %}http://{% endif %}{{ event.linkedin }}" class="pl-4" target="_blank"><i class="icon fab fa-linkedin fa-fw"></i><span>{{ event.linkedin }}</span></a></li>
+                                                        {% endif %}
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            {% endif %}
+                            <dl class="mt-5">
+                                <dt class="text-muted">{{ "Share"|trans }}</dt>
+                                <dd class="mr-0">
+                                    <div class="sharer"></div>
+                                </dd>
+                            </dl>
+                            {% if event.tags %}
+                                <hr class="mt-5">
+                                <div class="row">
+                                    <div class="col">
+                                        {% for tag in event.tags|split(',') %}
+                                            <a href="{{ path('events', { keyword : tag }) }}" class="btn btn-sm btn-default mr-3 mb-3 mt-3">{{ tag }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if event.enablereviews %}
+                                <hr class="mb-5">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6 mb-5">
+                                        <h3 class="mb-1">{{ reviewscount }} {{ "review"|trans|lower }}</h3>
+                                        <div class="rating-wrap">
+                                            <ul class="rating-stars">
+                                                <li style="width:{{event.getRatingPercentage}}%" class="stars-active">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </li>
+                                                <li>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </li>
+                                            </ul>
+                                            <div class="label-rating">{{ event.getRatingAvg }} {{"out of 5 stars"|trans|lower}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 text-sm-right">
+                                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                            {% if is_granted('ROLE_ATTENDEE') %}
+                                                {% if event.isRatedBy(app.user) %}
+                                                    <a href="{{ path('dashboard_attendee_reviews', { slug: event.isRatedBy(app.user).slug }) }}" class="btn btn-outline-primary"><i class="far fa-star"></i> {{ "My review"|trans }}</a>
+                                                {% else %}
+                                                    <a href="{{ path('dashboard_attendee_reviews_add', { slug: event.slug }) }}" class="btn btn-outline-primary"><i class="far fa-star"></i> {{ "Add your review"|trans }}</a>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% else %}
+                                            <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary"><i class="far fa-star"></i> {{ "Add your review"|trans }}</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-5 event-scorecard">
+                                    <div class="col-12">
+                                        <div class="side">
+                                            <div>{{ "5 stars"|trans }}</div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar" style="width: {{ event.getRatingsPercentageForRating(5) }}%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div class="text-muted">{{ event.getRatingsPercentageForRating(5) }}%</div>
+                                        </div>
+                                        <div class="side">
+                                            <div>{{ "4 stars"|trans }}</div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar" style="width: {{ event.getRatingsPercentageForRating(4) }}%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div class="text-muted">{{ event.getRatingsPercentageForRating(4) }}%</div>
+                                        </div>
+                                        <div class="side">
+                                            <div>{{ "3 stars"|trans }}</div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar" style="width: {{ event.getRatingsPercentageForRating(3) }}%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div class="text-muted">{{ event.getRatingsPercentageForRating(3) }}%</div>
+                                        </div>
+                                        <div class="side">
+                                            <div>{{ "2 stars"|trans }}</div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar" style="width: {{ event.getRatingsPercentageForRating(2) }}%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div class="text-muted">{{ event.getRatingsPercentageForRating(2) }}%</div>
+                                        </div>
+                                        <div class="side">
+                                            <div>{{ "1 star"|trans }}</div>
+                                        </div>
+                                        <div class="middle">
+                                            <div class="bar-container">
+                                                <div class="bar" style="width: {{ event.getRatingsPercentageForRating(1) }}%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="side right">
+                                            <div class="text-muted">{{ event.getRatingsPercentageForRating(1) }}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if reviewscount|length %}
+                                    <div id="reviews" class="row">
+                                        <div class="col-12">
+                                            {% for review in services.getReviews({"event": event.slug, "limit": 8}).getQuery().getResult() %}
+                                                {% include "Global/user-review.html.twig" with { review : review, showuser: 1 } %}
+                                            {% endfor %}
+                                            {% if reviewscount > 8 %}
+                                                <a href="{{ path('event_reviews') }}" class="btn btn-outline-primary mx-auto"><i class="far fa-star-half-full"></i> {{ "See all %reviewscount% reviews"|trans({'%reviewscount%': reviewscount}) }}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4 order-0 order-lg-1 {% if app.request.locale=="ar" %}border-right{% endif %}">
+                        <div class="card-body">
+                            <h1 class="card-title b d-lg-none text-center">{{ event.name }}</h1>
+                            {% if event.enablereviews %}
+                                <div class="rating-wrap mb-5 d-lg-none text-center">
+                                    <ul class="rating-stars">
+                                        <li style="width:{{event.getRatingPercentage}}%" class="stars-active">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </li>
+                                    </ul>
+                                    <div class="label-rating">{{ reviewscount }} {{"Reviews"|trans|lower}}</div>
+                                </div>
+                            {% endif %}
+                            {% if event.hasAnEventDateOnSale %}
+
+                                {# Event Dates calendar used on multi date events #}
+                                {% if event.hasTwoOrMoreEventDatesOnSale %}
+                                    {% set eventDatesCalendar = [] %}
+                                    {% for eventDate in event.eventdates if eventDate.isOnSale %}
+                                        {% set eventDatesCalendar = eventDatesCalendar|merge([{"Date": eventDate.startdate|date('Y-m-d'), "Title": eventDate.startdate|date('g:i A'), "Link": eventDate.reference}]) %}
+                                    {% endfor %}
+                                    {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: "Click on a date to view tickets" } %}
+
+                                    <div id="event-dates-calendar" class="mt-5" data-event-dates="{{ eventDatesCalendar|json_encode() }}"></div>
+                                    {% if is_granted('ROLE_ATTENDEE') %}
+                                        <button id="add-to-cart-button" type="button" class="btn btn-primary btn-block mt-3 mb-3"><i class="fas fa-cart-plus"></i> {{ "Add to cart"|trans }}</button>
+                                    {% endif %}
+
+                                {% endif %}
+
+                                <form id="add-to-cart-form" action="{{ path('dashboard_attendee_cart_add') }}" method="post">
+                                    {% for eventDate in event.eventdates if eventDate.isOnSale %}
+
+                                        <div id="eventDate-{{eventDate.reference}}-wrapper" class="event-eventDate-wrapper">
+                                            <dl>
+                                                <dt class="text-muted">
+                                                    <span>{{ "Dates"|trans }}</span>
+                                                </dt>
+                                                <dd>
+                                                    <div class="text-center">
+                                                        {# for the add to calendar link #}
+                                                        {% set eventstartdate = "" %}
+                                                        {% set eventenddate = "" %}
+                                                        {% set eventlocation = "" %}
+                                                        {% if eventDate.venue %}
+                                                            {% set eventlocation = eventDate.venue.name ~ ': ' ~ eventDate.venue.stringifyAddress %}
+                                                        {% else %}
+                                                            {% set eventlocation = "Online"|trans %}
+                                                        {% endif %}
+                                                        {% if eventDate.startdate %}
+                                                            <div class="display-inline-block">
+                                                                <div class="display-inline-block">
+                                                                    <span class="font-size-3rem">{{ eventDate.startdate|date('d') }}</span>
+                                                                </div>
+                                                                <div class="display-inline-block mr-3">
+                                                                    <div><span class="font-size-1rem">{{ eventDate.startdate|localizeddate('none', 'none', app.request.locale, null, "MMMM")|capitalize|slice(0, 3) }}</span></div>
+                                                                    <div><span>{{ eventDate.startdate|date('Y') }}</span></div>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <span class="text-muted b">
+                                                                        {{ eventDate.startdate|date('g:i a')|upper }}
+                                                                        {% if eventDate.enddate %}
+                                                                            {% if eventDate.enddate|date('Y-m-d') == eventDate.startdate|date('Y-m-d') %}
+                                                                                - {{ eventDate.enddate|date('g:i a')|upper }}
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            {% set eventstartdate = eventDate.startdate|date('F d, Y H:i') %}
+                                                        {% endif %}
+                                                        {% if eventDate.enddate %}
+                                                            {% if eventDate.enddate|date('Y-m-d') != eventDate.startdate|date('Y-m-d') %}
+                                                                <div class="display-inline-block">
+                                                                    <div class="display-inline-block">
+                                                                        <span class="font-size-3rem">{{ eventDate.enddate|date('d') }}</span>
+                                                                    </div>
+                                                                    <div class="display-inline-block">
+                                                                        <div><span class="font-size-1rem">{{ eventDate.enddate|localizeddate('none', 'none', app.request.locale, null, "MMMM")|capitalize|slice(0, 3) }}</span></div>
+                                                                        <div><span>{{ eventDate.enddate|date('Y') }}</span></div>
+                                                                    </div>
+                                                                    <div class="mb-2"><span class="text-muted b">{{ eventDate.enddate|date('g:i a')|upper }}</span></div>
+                                                                </div>
+                                                            {% endif %}
+                                                            {% set eventstartdate = eventDate.enddate|date('F d, Y H:i') %}
+                                                        {% endif %}
+                                                        <div class="clearfix"></div>
+                                                        <a id="add-to-calendar-link" data-toggle="modal" data-target="#add-to-calendar-modal" href="javascript:void(0)" data-title="{{ event.name }}" data-start="{{ eventstartdate }}" data-end="{{ eventenddate }}" data-address="{{ eventlocation }}" data-description="{{ event.description|striptags|slice(0, 250)|raw|nl2br }}"><i class="fas fa-calendar-plus"></i> {{ "Add to calendar"|trans }}</a>
+                                                        <div class="modal fade" id="add-to-calendar-modal">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title"><i class="fas fa-calendar-plus"></i> {{ "Add to calendar"|trans }}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div id="add-to-calendar" class="modal-body">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </dd>
+                                            </dl>
+                                            <hr class="hr-md">
+                                            {% if eventDate.venue %}
+                                                <dl>
+                                                    <dt class="text-muted">
+                                                        <span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Venue"|trans }}</span>
+                                                        {% if eventDate.venue.listedondirectory %}
+                                                            <a href="{{ path('venue', { slug: eventDate.venue.slug }) }}" class="{% if app.request.locale == "ar" %}float-left{% else %}float-right{% endif %} text-sm"><i class="far fa-building"></i> {{ "Details"|trans }}</a>
+                                                        {% endif %}
+                                                        <div class="clearfix"></div>
+                                                    </dt>
+                                                    <dd class="mr-0">
+                                                        <h4 class="text-center">{{ eventDate.venue.name }}</h4>
+                                                        <p>{{ eventDate.venue.stringifyAddress }}</p>
+                                                        <div class="d-flex mb-3">
+                                                            <ul class="list-inline mx-auto">
+                                                                <li class="list-inline-item"><a href="https://www.google.com/maps/dir/?api=1&destination={{ eventDate.venue.lat }},{{ eventDate.venue.lng }}&travelmode=driving" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary driving"|trans }}" target="_blank"><i class="fas fa-car fa-fw"></i></a></li>
+                                                                <li class="list-inline-item"><a href="https://www.google.com/maps/dir/?api=1&destination={{ eventDate.venue.lat }},{{ eventDate.venue.lng }}&travelmode=walking" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary walking"|trans }}" target="_blank"><i class="fas fa-walking fa-fw"></i></a></li>
+                                                                <li class="list-inline-item"><a href="https://www.google.com/maps/dir/?api=1&destination={{ eventDate.venue.lat }},{{ eventDate.venue.lng }}&travelmode=transit" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary on public transportation"|trans }}" target="_blank"><i class="fas fa-bus fa-fw"></i></a></li>
+                                                                <li class="list-inline-item"><a href="https://www.google.com/maps/dir/?api=1&destination={{ eventDate.venue.lat }},{{ eventDate.venue.lng }}&travelmode=bicycling" class="text-black-50" data-toggle="tooltip" title="{{ "Display itinerary bicycling"|trans }}" target="_blank"><i class="fas fa-bicycle fa-fw"></i></a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <iframe class="w-100 border-0 venue-map" height="300" src="https://maps.google.com/maps?q={{ eventDate.venue.name|url_encode ~ '%20' ~ eventDate.venue.stringifyAddress|url_encode }}&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+                                                    </dd>
+                                                </dl>
+                                            {% else %}
+                                                <dl>
+                                                    <dt class="text-muted">
+                                                        <span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Venue" }}</span>
+
+                                                    </dt>
+                                                    <dd>
+                                                        <br>
+                                                        <h4 class="text-center">{{ "Online"|trans }}</h4>
+                                                    </dd>
+                                                </dl>
+                                            {% endif %}
+                                            <hr class="hr-md">
+                                            <dl class="mt-5">
+                                                <dt class="text-muted">{{ "Tickets"|trans }}</dt>
+                                                <dd class="mr-0">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-condensed">
+                                                            <tbody>
+                                                                {% for ticket in eventDate.tickets %}
+                                                                    {% if ticket.active %}
+                                                                        <tr class="bg-gray">
+                                                                            <td class="border-top-white" style="width: 75%;">
+                                                                                {{ ticket.name }}
+                                                                            </td>
+                                                                            <td class="border-top-white text-right">
+                                                                                {% if not ticket.isOnSale %}
+                                                                                    <span class="badge badge-{{ ticket.stringifyStatusClass }}">{{ ticket.stringifyStatus|trans }}</span>
+                                                                                {% else %}
+                                                                                    {{ ticket.free ? "Free"|trans : ((services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getSalePrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '')) }}
+                                                                                    {% if ticket.promotionalprice and not ticket.free %}
+                                                                                        <del class="price-old">{{ (services.getSetting('currency_position') == 'left' ? services.getSetting('currency_symbol') : '') ~ ticket.getPrice() ~ (services.getSetting('currency_position') == 'right' ? services.getSetting('currency_symbol') : '') }}</del>
+                                                                                    {% endif %}
+                                                                                {% endif %}
+                                                                        </tr>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE') %}
+                                                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                            <a href="#" class="btn btn-primary btn-block mb-2 buy-tickets-modal-button" data-toggle="modal" data-target="#buy-tickets-modal-eventDate-{{ eventDate.reference }}"><i class="fas fa-ticket-alt"></i> {{ "Tickets"|trans }}</a>
+                                                            {% include "Dashboard/Attendee/Cart/add-to-cart-modal.html.twig" with { eventdate: eventDate } %}
+                                                        {% else %}
+                                                            <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-primary btn-block"><i class="fas fa-ticket-alt"></i> {{ "Tickets"|trans }}</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </dd>
+                                            </dl>
+                                        </div>
+
+                                    {% endfor %}
+                                </form>
+
+                                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE') %}
+                                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                        {% if event.isAddedToFavoritesBy(app.user) %}
+                                            <button class="event-favorites-remove btn btn-outline-primary btn-block" data-target="{{ path('dashboard_attendee_favorites_remove', { slug : event.slug }) }}" data-toggle="tooltip" title="" data-placement="bottom"><i class="fas fa-heart"></i> {{ "Remove from favorites"|trans }}</button>
+                                        {% else %}
+                                            <button class="event-favorites-add btn btn-outline-primary btn-block" data-target="{{ path('dashboard_attendee_favorites_add', { slug : event.slug }) }}" data-toggle="tooltip" title="" data-placement="bottom"><i class="far fa-heart"></i> {{ "Add to favorites"|trans }}</button>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-outline-primary btn-block"><i class="far fa-heart"></i> {{ "Add to favorites"|trans }}</a>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% else %}
+                                {% include "Global/message.html.twig" with { type: 'info', icon: 'fas fa-info-circle', message: "No tickets on sale at this moment" } %}
+                            {% endif %}
+                            <hr class="hr-md">
+
+                            <dl class="mt-5 mb-5">
+                                <dt class="text-muted">
+                                    <span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Organizer"|trans }}</span>
+                                    <a href="{{ path('organizer', { slug : event.organizer.slug }) }}" class="{% if app.request.locale == "ar" %}float-left{% else %}float-right{% endif %} text-sm"><i class="far fa-id-card"></i> {{ "Details"|trans }}</a>
+                                    <div class="clearfix"></div>
+                                </dt>
+                                <dd class="mr-0">
+                                    <div class="card-banner {{ event.organizer.coverName ? '' : 'organizer-preview-no-cover' }}"{% if event.organizer.coverName %} style="height:250px;background-image: url('{{asset(event.organizer.getCoverPath)}}');" {% endif %}>
+                                        <article class="overlay bottom text-center">
+                                            <h4 class="card-title"><a href="{{ path('organizer', { slug : event.organizer.slug }) }}">{{ event.organizer.name }}</a></h4>
+                                                {% if event.organizer.logoName %}
+                                                <img src="{{asset(event.organizer.getLogoPath)}}" class="img-100-100 d-block mx-auto mb-3 img-thumbnail" alt="{{ event.organizer.name }}" />
+                                            {% endif %}
+                                            {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') or is_granted('ROLE_ATTENDEE') %}
+                                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                                    {% if event.organizer.isFollowedBy(app.user) %}
+                                                        <button class="organizer-unfollow btn btn-primary btn-sm" data-target="{{ path('dashboard_attendee_following_remove', { slug : event.organizer.slug }) }}"><i class="fas fa-folder-minus"></i> {{ "Unfollow"|trans }}</button>
+                                                    {% else %}
+                                                        <button class="organizer-follow btn btn-primary btn-sm" data-target="{{ path('dashboard_attendee_following_add', { slug : event.organizer.slug }) }}"><i class="fas fa-folder-plus"></i> {{ "Follow"|trans }}</button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <a href="{{ path('fos_user_security_login')~'?_target_path='~app.request.getPathInfo }}" class="btn btn-primary btn-sm"><i class="fas fa-folder-plus"></i> {{ "Follow"|trans }}</a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </article>
+                                    </div>
+                                </dd>
+                            </dl>
+                            {% if event.showattendees %}
+                                {% set attendeescount = event.getTotalOrderElementsQuantitySum(1, 'all', 'ROLE_ATTENDEE') %}
+                                {% if attendeescount %}
+                                    <hr>
+                                    <dl class="mt-5">
+                                        <dt class="text-muted mb-3">
+                                            <span class="{% if app.request.locale == "ar" %}float-right{% else %}float-left{% endif %}">{{ "Attendees"|trans }} <b>({{attendeescount}})</b></span>
+                                            <a href="#" class="{% if app.request.locale == "ar" %}float-left{% else %}float-right{% endif %} text-sm" data-toggle="modal" data-target="#attendees-modal"><i class="fas fa-users"></i> {{ "See all"|trans }}</a>
+                                            <div class="modal fade" id="attendees-modal">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <div class="modal-title h4">{{ "Attendees"|trans }} ({{attendeescount}})</div>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="card border-0 card-body overflow-auto text-nowrap">
+                                                                <div class="avatar-list py-4">
+                                                                    {% for user in services.getUsers({"hasboughtticketfor": event.slug, "role": "attendee"}).getQuery().getResult() %}
+                                                                        {% include "Global/user-avatar.html.twig" with { user: user, showusernametooltip: true } %}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close"|trans }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </dt>
+                                        <dd class="mr-0">
+                                            <div class="card border-0 card-body">
+                                                <div class="avatar-list avatar-list-stacked">
+                                                    {% for user in services.getUsers({"hasboughtticketfor": event.slug, "limit": 12, "role": "attendee"}).getQuery().getResult() %}
+                                                        {% include "Global/user-avatar.html.twig" with { user: user, showusernametooltip: true } %}
+                                                    {% endfor %}
+                                                    {% if attendeescount > 12 %}
+                                                        <span class="avatar">{{ attendeescount - 12 }}</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                {% endif %}
+                            {% endif %}
+                            {% if services.getSetting("newsletter_enabled") == "yes" and services.getSetting("mailchimp_api_key") and services.getSetting("mailchimp_list_id") %}
+                                <div class="mt-5">
+                                    {% include "Global/newsletter-box.html.twig" %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% set othereventsbythisorganizer = services.getEvents({"organizer" : event.organizer.slug, "limit" : 8, "otherthan": event.slug}).getQuery().getResult() %}
+            {% if othereventsbythisorganizer|length > 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="mt-5 mb-4 text-center">{{ "Other events by %organizername%"|trans({'%organizername%' : event.organizer.name}) }}</h3>
+                        <div class="owl-init owl-carousel" data-margin="15" data-items="4" data-dots="false" data-nav="true" data-autoplay="true" data-loop="false">
+                            {% for event in othereventsbythisorganizer %}
+                                {% include "Global/event-card.html.twig" with {event: event} %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% set similareventscriteria = {"category" : event.category.slug, "limit" : 8, "otherthan": event.slug} %}
+            {% if event.getFirstVenue %}
+                {% set similareventscriteria = similareventscriteria|merge({"country" : event.getFirstVenue.country.slug}) %}
+            {% endif %}
+            {% set similarevents = services.getEvents(similareventscriteria).getQuery().getResult() %}
+
+            {% if similarevents|length > 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="mt-5 mb-4 text-center">{{ "Similar events" }}</h3>
+                        <div class="owl-init owl-carousel" data-margin="15" data-items="4" data-dots="false" data-nav="true" data-autoplay="true" data-loop="false">
+                            {% for event in similarevents %}
+                                {% include "Global/event-card.html.twig" with {event: event} %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('event') }}
+{% endblock %}

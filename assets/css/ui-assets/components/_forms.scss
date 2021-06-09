@@ -1,0 +1,55 @@
+.form-control {
+    height: calc(2.75rem + 2px);
+    padding: .625rem .75rem;
+    transition: all .2s cubic-bezier(.68,-.55,.265,1.55);
+    color: #8898aa;
+    border: 1px solid #f1f3f7;
+    border-radius: .25rem;
+    background-clip: padding-box;
+    box-shadow: none;
+    background-color: #f1f3f7;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
+label, .col-form-label {
+    font-weight: 600;
+}
+
+label.required:after, .col-form-label.required:after {
+    content:"*";
+    color: $danger;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.75rem + 2px);
+}
+
+textarea {
+    height: auto !important;
+}
+
+.custom-checkbox label {
+    margin-top: 3px;
+}
+
+.invalid-feedback {
+    color: $danger;
+    font-weight: normal;
+    font-size: 85%;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group-text {
+    border: none;
+    border-radius: 0;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: $input-disabled-bg !important;
+}

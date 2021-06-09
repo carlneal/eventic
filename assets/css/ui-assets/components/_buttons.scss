@@ -1,0 +1,30 @@
+.btn {
+    font-size: .875rem;
+    transition: all .2s ease;
+    letter-spacing: .025em;
+    text-transform: uppercase;
+    font-weight: 600;
+    line-height: 1.5;
+    padding: .625rem 1.25rem;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-radius: 50px;
+    box-shadow: $btn-box-shadow;
+
+}
+
+.btn-sm, .btn-group-sm > .btn {
+    padding: 0.25rem 1.5rem;
+    font-size: 0.66563rem !important;
+    line-height: 1.5 !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+}
+.btn-facebook{background-color: #405D9D; color:#fff; &:hover{color:#fff} }
+.btn-instagram{background-color:#E52D27 ; color:#fff; &:hover{color:#fff}}
+.btn-youtube{background-color: #C8046C; color:#fff; &:hover{color:#fff}}
+.btn-twitter{background-color:#42AEEC ; color:#fff; &:hover{color:#fff}}

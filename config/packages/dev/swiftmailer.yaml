@@ -1,0 +1,11 @@
+# See https://symfony.com/doc/current/email/dev_environment.html
+swiftmailer:
+    # send all emails to a specific address
+    #delivery_addresses: ['youremailaddress']
+    #transport:        gmail
+    #username:         yourusername
+    #password:         yourpassword
+    #host:             localhost
+    #port:             465
+    #encryption:       ssl
+    #auth-mode:        login

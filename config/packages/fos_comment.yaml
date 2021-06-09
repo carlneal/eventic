@@ -1,0 +1,33 @@
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: App\Entity\Comment
+            thread: App\Entity\Thread
+            vote: App\Entity\Vote
+    acl: true
+    service:
+        acl:
+            thread:  fos_comment.acl.thread.roles
+            comment: fos_comment.acl.comment.roles
+            vote:    fos_comment.acl.vote.roles
+        manager:
+            thread:  fos_comment.manager.thread.acl
+            comment: fos_comment.manager.comment.acl
+            vote:    fos_comment.manager.vote.acl
+    acl_roles:
+        comment:
+            create: IS_AUTHENTICATED_REMEMBERED
+            view: IS_AUTHENTICATED_ANONYMOUSLY
+            edit: ROLE_ADMINISTRATOR
+            delete: ROLE_ADMINISTRATOR
+        thread:
+            create: IS_AUTHENTICATED_ANONYMOUSLY
+            view: IS_AUTHENTICATED_ANONYMOUSLY
+            edit: ROLE_ADMINISTRATOR
+            delete: ROLE_ADMINISTRATOR
+        vote:
+            create: IS_AUTHENTICATED_REMEMBERED
+            view: IS_AUTHENTICATED_ANONYMOUSLY
+            edit: ROLE_ADMINISTRATOR
+            delete: ROLE_ADMINISTRATOR

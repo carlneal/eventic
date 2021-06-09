@@ -1,0 +1,94 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Manage pages' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': pages.getTotalItemCount}) }}</span>
+                            </div>
+
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                                <a href="{{ path('dashboard_administrator_page_add') }}" class="btn btn-primary ml-3" data-toggle="tooltip" title="{{'Add a new page' | trans}}"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if pages.getTotalItemCount > 0 %}
+
+                        <div class="row">
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-vcenter text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{'Title' | trans}}</th>
+                                                    <th>{{'Slug' | trans}}</th>
+                                                    <th>{{'Link' | trans}}</th>
+                                                    <th class="text-center"><i class="fas fa-cog"></i></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for page in pages %}
+
+                                                    <tr>
+                                                        <td>
+                                                            {{ page.title }}
+                                                        </td>
+                                                        <td>
+                                                            {{ page.slug }}
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ path('page', { slug : page.slug }) }}" target="_blank">{{ path('page', { slug : page.slug }) }}</a>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div class="item-action dropdown">
+                                                                <a href="javascript:void(0)" data-toggle="dropdown" data-boundary="window" class="icon"><i class="fas fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a href="{{ path('dashboard_administrator_page_edit', { slug : page.slug }) }}" class="dropdown-item"><i class="dropdown-icon fas fa-edit fa-fw text-muted"></i> {{ "Edit"|trans }}</a>
+                                                                    <span data-target="{{ path('dashboard_administrator_page_delete', { slug : page.slug }) }}" class="dropdown-item requires-confirmation" data-confirmation-text="{{ "You are about to delete the page PERMANENTLY"|trans }}"><i class="dropdown-icon fas fa-trash fa-fw text-muted"></i> {{ "Delete permanently"|trans }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{ knp_pagination_render(pages, null, {}, {'align': 'center'}) }}
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No pages found'|trans), icon: "fas fa-exclamation-circle" } %}
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

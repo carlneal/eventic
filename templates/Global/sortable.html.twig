@@ -1,0 +1,22 @@
+{% set href = "" %}
+{% set direction = "" %}
+{% set criteria = "" %}
+
+{% for attr, value in options %}
+
+    {% if(attr == "href") %}
+        {% set href = value %}
+    {% endif %}
+
+    {% if(attr == "direction") %}
+        {% set direction = value %}
+    {% endif %}
+
+    {% if(attr == "criteria") %}
+        {% set criteria = value %}
+    {% endif %}
+
+{% endfor %}
+
+
+<option data-direction="{{ direction }}" data-criteria="{{ criteria }}" value="{{ href }}">{{ title }}</option>

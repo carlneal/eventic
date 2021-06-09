@@ -1,0 +1,56 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Execute Symfony commands' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{"dashboard_index":("Dashboard"|trans), "current":(pagetitle)}] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+                    <div class="card box p-0">
+                        <div class="card-body">
+
+                            {% include 'Global/message.html.twig' with { type: 'warning',icon: 'fas fa-info', message: "An error might occur if the command execution time reaches your PHP max_execution_time directive"|trans } %}
+
+                            <div class="row mb-5 mt-5">
+                                <div class="col-md-8">
+                                    <h5 class="mt-2">
+                                        <i class="fas fa-long-arrow-alt-{{ app.request.locale == 'ar' ? 'left' : 'right' }}"></i>
+                                        {{ "Clear the application cache for the production environment"|trans }}
+                                        <i class="fas fa-question-circle text-primary ml-1" data-toggle="tooltip" data-title="{{ "Execute this command after editing a file in the application source code or after modifying a string in the translations files"|trans }}"></i>
+                                    </h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-primary btn-block ajax-loading" data-title="{{ "Response"|trans }}" data-url="{{ path('dashboard_administrator_console_execute_command', {command: 'cache:clear', optionKey: '--env', optionValue: 'prod'}) }}"><i class="fas fa-check"></i> {{ "Execute command"|trans }}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="mt-2">
+                                        <i class="fas fa-long-arrow-alt-{{ app.request.locale == 'ar' ? 'left' : 'right' }}"></i>
+                                        {{ "Clear the application cache for the development environment"|trans }}
+                                        <i class="fas fa-question-circle text-primary ml-1" data-toggle="tooltip" data-title="{{ "Execute this command if you are in the development mode and the modifications you applied in the application did take effect"|trans }}"></i>
+                                    </h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-primary btn-block ajax-loading" data-title="{{ "Response"|trans }}" data-url="{{ path('dashboard_administrator_console_execute_command', {command: 'cache:clear', optionKey: '--env', optionValue: 'dev'}) }}"><i class="fas fa-check"></i> {{ "Execute command"|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

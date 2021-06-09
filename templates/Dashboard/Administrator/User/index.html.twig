@@ -1,0 +1,172 @@
+{% extends "Global/layout.html.twig" %}
+
+{% set pagetitle = 'Manage users' | trans %}
+
+{% block title %}{{pagetitle}}{% endblock %}
+
+{% block content %}
+
+    {% set navigation = [{ "dashboard_index": ('Dashboard' | trans), "current":(pagetitle) }] %}
+    {% include "Global/navigation.html.twig" with navigation %}
+
+    <section class="section-content padding-y bg-white">
+        <div class="{{ services.getSetting("app_layout") }}">
+            <div class="row">
+                <aside class="col-lg-3 pt-3 pt-lg-0">
+                    {% include "Dashboard/sidebar.html.twig" %}
+                </aside>
+                <div class="col-lg-9 mt-4 mt-lg-0">
+
+                    <div class="box shadow-none bg-gray mb-4">
+                        <div class="row">
+                            <div class="col-sm-12 col-lg-4 text-center text-lg-left mb-3 mb-lg-0">
+                                <span class="center-lg-y text-muted">{{ "%resultsCount% result(s) found"|trans({'%resultsCount%': users.getTotalItemCount}) }}</span>
+                            </div>
+                            <div class="col-sm-12 col-lg-6 text-center text-lg-right">
+                                <label for="sortable-select" class="display-inline">{{ "Sort by"|trans }}
+                                    <select id="sortable-select" class="form-control display-inline-block bg-white select2 ml-3" data-placeholder="{{ "Select an option"|trans }}" style="width: 50%;">
+                                        {{ knp_pagination_sortable(users, "Registration date"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.createdAt", {"direction": "desc", "criteria": "u.createdAt"}) }}
+                                        {{ knp_pagination_sortable(users, "Registration date"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.createdAt", {"direction": "asc", "criteria": "u.createdAt"}) }}
+                                        {{ knp_pagination_sortable(users, "Last login"|trans ~ ' (' ~ "desc"|trans ~ ')', "u.lastLogin", {"direction": "desc", "criteria": "u.lastLogin"}) }}
+                                        {{ knp_pagination_sortable(users, "Last login"|trans ~ ' (' ~ "asc"|trans ~ ')', "u.lastLogin", {"direction": "asc", "criteria": "u.lastLogin"}) }}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-sm-12 col-lg-2 text-center text-lg-right">
+                                <a href="#search-filters" class="btn btn-primary has-tooltip" data-toggle="collapse" title="{{ "Toggle display the search filters"|trans }}" aria-expanded="false" aria-controls="search-filters"><i class="fab fa-searchengin fa-lg"></i></a>
+                            </div>
+                            <div id="search-filters" class="col-sm-12 col-lg-12 text-center mb-3 mb-lg-0 collapse show">
+                                <hr>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="role">{{ "Role"|trans }}</label>
+                                            <select id="role" name="role" class="form-control bg-white select2">
+                                                <option value="all">{{ "All"|trans }}</option>
+                                                <option value="organizer">{{ "Organizer"|trans }}</option>
+                                                <option value="attendee">{{ "Attendee"|trans }}</option>
+                                                <option value="pointofsale">{{ "Point of sale"|trans }}</option>
+                                                <option value="scanner">{{ "Scanner"|trans }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="createdbyorganizerslug">{{ "Created by organizer"|trans }} <i class="fas fa-info-circle" data-toggle="tooltip" title="{{ "Select parent of 'Point of sale' or 'Scanner'"|trans }}"></i></label>
+                                            <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="createdbyorganizerslug" name="createdbyorganizerslug" data-url-list="{{ path('get_organizers') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="organizername">{{ "Organizer name"|trans }}</label>
+                                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 bg-white" id="organizername" name="organizername" value="{{ app.request.get('organizername') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="username">{{ "Username"|trans }}</label>
+                                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 bg-white" id="username" name="username" value="{{ app.request.get('username') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="email">{{ "Email"|trans }}</label>
+                                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 bg-white" id="email" name="email" value="{{ app.request.get('email') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="firstname">{{ "First name"|trans }}</label>
+                                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 bg-white" id="firstname" name="firstname" value="{{ app.request.get('firstname') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="lastname">{{ "Last name"|trans }}</label>
+                                            <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0 bg-white" id="lastname" name="lastname" value="{{ app.request.get('lastname') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="enabled-filter-all" type="radio" name="enabled" value="all" class="custom-control-input">
+                                                <label for="enabled-filter-all" class="custom-control-label">{{ "All"|trans }}</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="enabled-filter-yes" type="radio" name="enabled" value="1" class="custom-control-input">
+                                                <label for="enabled-filter-yes" class="custom-control-label">{{ "Enabled only"|trans }}</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="enabled-filter-no" type="radio" name="enabled" value="0" class="custom-control-input">
+                                                <label for="enabled-filter-no" class="custom-control-label">{{ "Disabled only"|trans }}</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <label for="countryslug">{{ "Country"|trans }}</label>
+                                            <input type="text" class="mr-sm-2 mb-2 mb-sm-0 autocomplete bg-white" id="countryslug" name="countryslug" data-url-list="{{ path('get_countries') }}">
+                                        </div>
+                                        <div class="col-12 col-sm-4 text-left mb-4">
+                                            <button type="submit" class="btn btn-primary" data-toggle="tooltip" title="{{ "Search"|trans }}"><i class="fas fa-search"></i></button>
+                                            <button type="reset" class="btn btn-primary" data-toggle="tooltip" title="{{ "Reset"|trans }}"><i class="fas fa-search-minus"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if users.getTotalItemCount > 0 %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    {% include "Dashboard/Administrator/User/manage-users-table.html.twig" with {users: users} %}
+                                </div>
+                                {{ knp_pagination_render(users, null, {}, {'align': 'center'}) }}
+                            </div>
+                        </div>
+                    {% else %}
+                        {% include "Global/message.html.twig" with { type: "info", message: ('No users found'|trans), icon: "fas fa-exclamation-circle" } %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        $(document).ready(function () {
+
+            if (getURLParameter("createdbyorganizerslug")) {
+                var url = "{{ path('get_organizer', { slug : "organizerslug" }) }}";
+                url = url.replace("organizerslug", getURLParameter("createdbyorganizerslug"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_createdbyorganizerslug').select2('data', {id: data.slug, text: data.text});
+                    $('#createdbyorganizerslug').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter("countryslug")) {
+                var url = "{{ path('get_country', { slug : "countryslug" }) }}";
+                url = url.replace("countryslug", getURLParameter("countryslug"));
+                $.ajax({
+                    type: 'GET',
+                    url: url
+                }).then(function (data) {
+                    $('#fake_countryslug').select2('data', {id: data.slug, text: data.text});
+                    $('#countryslug').val(data.slug).change();
+                });
+
+            }
+
+            if (getURLParameter('role')) {
+                $('#role').val(getURLParameter('role')).change();
+            }
+
+            if (getURLParameter('enabled')) {
+                $('input[type="radio"][name="enabled"][value="' + getURLParameter('enabled') + '"]').attr("checked", "checked");
+            }
+
+            if (getURLParameter('countryslug')) {
+                $('#countryslug').val(getURLParameter('countryslug'));
+            }
+
+        });
+
+    </script>
+
+{% endblock %}

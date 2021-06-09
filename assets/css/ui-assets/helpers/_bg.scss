@@ -1,0 +1,44 @@
+
+
+.bg-white{background-color:#fff!important}
+
+.bg-white-50{background-color:rgba(#fff,.5)}
+.bg-dark-50{background-color:rgba(#000,.5)}
+.bg-dark{background-color:$bg-dark;}
+.bg-gray{background-color:$gray !important;}
+
+.bg-grad-primary{
+    @include diagonalGradient($primary-dark, $primary-light);
+}
+
+.bg{background-color:$bg!important;}
+.bg2{background-color:$bg-dark!important;}
+.bg-purple {   background-color: $purple;}
+.bg-orange {   background-color: $orange;}
+.bg-green {   background-color: $green;}
+.bg-blue {   background-color: $blue;}
+
+.bg-img{ overflow: hidden;
+         background-color:#ddd;
+         background-image: -webkit-linear-gradient(315deg, rgba($primary-light, .8), rgba($primary-dark, .9));
+         background-image: linear-gradient(135deg, rgba($primary-light, .8), rgba($primary-dark, .9));
+         background-position: 0px 0px, 50% 50%;
+         background-size: auto  cover;
+}
+
+.help-center-hero-bg{ overflow: hidden;
+                      background-color:#ddd;
+                      background-image: -webkit-linear-gradient(315deg, rgba($primary-light, .8), rgba($primary-dark, .9)), url("../../../img/backgrounds/help-center-hero-background.jpg");
+                      background-image: linear-gradient(135deg, rgba($primary-light, .8), rgba($primary-dark, .9)), url("../../../img/backgrounds/help-center-hero-background.jpg");
+                      background-position: 0px 0px, 50% 50%;
+                      background-size: cover;
+                      background-repeat: no-repeat;
+}
+
+.overlay-grad {position:relative;
+               &:before{position:absolute; content:""; display:block; top:0; left:0; right:0; bottom:0;
+                        opacity:.6; transition:.5s;
+                        @include diagonalGradient($primary, $secondary);
+               }
+               &:hover:before{opacity:.9;}
+}
